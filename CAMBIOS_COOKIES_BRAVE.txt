@@ -1,0 +1,9 @@
+CORRECCIÓN DEL AVISO DE PRIVACIDAD / COOKIES
+
+1. Se eliminó la capa oscura (overlay) que bloqueaba toda la página.
+2. El aviso ahora inicia oculto y solo aparece si no existe una decisión guardada.
+3. Se corrigió el error que hacía que reapareciera en cada visita.
+4. La decisión se guarda en localStorage y también en una cookie de respaldo por 180 días.
+5. Se cambiaron los nombres genéricos cookie-banner/cookie-overlay por nombres neutrales para evitar filtros cosméticos de Brave y otros bloqueadores.
+6. Si un bloqueador oculta el aviso, la página continúa siendo utilizable porque ya no existe una capa bloqueante.
+7. Se aumentó la versión del CSS y config.js a v=5 para evitar caché antigua.

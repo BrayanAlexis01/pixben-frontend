@@ -1,0 +1,498 @@
+/* RESET */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/*logo de pixben*/
+.logo img{
+    width: 165px;
+    height: auto;
+    object-fit: contain;
+}
+/* GENERAL */
+body{
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    color: #111;
+    overflow-x: hidden;
+}
+
+/* HEADER */
+header{
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+}
+
+.logo h2{
+    font-size: 28px;
+    font-weight: bold;
+}
+
+nav{
+    display: flex;
+    gap: 30px;
+}
+
+.acciones-header{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+nav a{
+    text-decoration: none;
+    color: white;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+nav a:hover{
+    color: #8a2be2;
+}
+
+/* BUSCADOR */
+.buscador{
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: 20px;
+}
+
+/* ICONO */
+.buscador i{
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+/* INPUT OCULTO */
+.buscador input{
+    position: absolute;
+    right: 0;
+    width: 0;
+    opacity: 0;
+    padding: 8px;
+    transition: 0.4s ease;
+}
+
+/* ACTIVO */
+.buscador.activo input{
+    width: 180px;
+    opacity: 1;
+    padding: 8px 35px 8px 10px;
+}
+
+.carrito a{
+    color: #ffffff;
+    font-size:25px;
+}
+
+
+
+
+
+
+/* CONTENEDOR */
+.carrito-container{
+    padding: 50px 70px;
+    background: #f8f8f8;
+}
+
+/* TITULO */
+.carrito-titulo{
+    margin-bottom: 40px;
+}
+
+.carrito-titulo h1{
+    font-size: 50px;
+    margin-bottom: 10px;
+}
+
+.carrito-titulo p{
+    color: #555;
+}
+
+/* CONTENIDO */
+.carrito-contenido{
+    display: flex;
+    gap: 30px;
+}
+
+/* LISTA */
+.lista-carrito{
+    flex: 2;
+}
+
+/* PRODUCTO */
+.producto-carrito{
+    background: white;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.producto-carrito img{
+    width: 120px;
+    border-radius: 10px;
+}
+
+/* INFO */
+.producto-info{
+    flex: 1;
+}
+
+.producto-info h3{
+    margin-bottom: 10px;
+}
+
+.precio{
+    color: #8a2be2;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* CANTIDAD */
+.cantidad-producto{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cantidad-producto button{
+    width: 35px;
+    height: 35px;
+    border: none;
+    background: #8a2be2;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.cantidad-producto input{
+    width: 60px;
+    text-align: center;
+    padding: 8px;
+}
+
+/* SUBTOTAL */
+.subtotal-producto{
+    width: 120px;
+    text-align: center;
+}
+
+/* ELIMINAR */
+.eliminar-producto button{
+    padding: 10px 15px;
+    border: none;
+    background: red;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* RESUMEN */
+.resumen-carrito{
+    flex: 1;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    height: fit-content;
+}
+
+.resumen-carrito h2{
+    margin-bottom: 25px;
+}
+
+/* ITEMS */
+.resumen-item{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.total{
+    font-weight: bold;
+    font-size: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+/* BOTON CHECKOUT */
+.btn-checkout{
+    width: 100%;
+    padding: 15px;
+    background: #8a2be2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+/* SEGUIR COMPRANDO */
+.seguir-comprando{
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #8a2be2;
+    font-weight: bold;
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+
+    .carrito-contenido{
+        flex-direction: column;
+    }
+
+    .producto-carrito{
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+
+
+
+
+
+
+/* BENEFICIOS FOOTER */
+.beneficios{
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 30px;
+    flex-wrap: wrap;
+}
+
+.beneficio{
+    width: 250px;
+}
+
+.beneficio h3{
+    margin-bottom: 10px;
+}
+
+/* FOOTER PRINCIPAL */
+footer{
+    background-color: black;
+    color: white;
+}
+
+.footer-contenido{
+    display: flex;
+    justify-content: space-around;
+    padding: 50px;
+    flex-wrap: wrap;
+}
+
+.footer-logo,
+.footer-links,
+.footer-info,
+.footer-redes{
+    width: 220px;
+}
+
+.footer-contenido h3{
+    margin-bottom: 20px;
+}
+
+.footer-contenido a{
+    display: block;
+    text-decoration: none;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.footer-contenido a:hover{
+    color: #8a2be2;
+}
+
+/* COPYRIGHT */
+.footer-copy{
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid gray;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px){
+
+    header{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    nav{
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .banner{
+        padding: 30px;
+        height: auto;
+    }
+
+    .contenido-banner h1{
+        font-size: 40px;
+    }
+
+    .footer-contenido{
+        text-align: center;
+        gap: 30px;
+    }
+}
+
+.btn-eliminar{
+    background: #e53935;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-eliminar:hover{
+    background: #c62828;
+}
+
+
+
+.modal{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.6);
+    z-index:9999;
+    justify-content:center;
+    align-items:center;
+}
+
+.modal-contenido{
+    background:white;
+    width:450px;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.3);
+}
+
+.modal-contenido h2{
+    text-align:center;
+    margin-bottom:20px;
+    color:#111;
+}
+
+.modal-contenido input,
+.modal-contenido select{
+    width:100%;
+    padding:12px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+.modal-contenido button{
+    width:100%;
+    padding:12px;
+    border:none;
+    background:#8a2be2;
+    color:white;
+    font-size:16px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.modal-contenido button:hover{
+    background:#6d1cc7;
+}
+
+.cerrar{
+    float:right;
+    font-size:28px;
+    cursor:pointer;
+    color:#111;
+}
+
+.btn-vaciar{
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px;
+    border: none;
+    background: #dc3545;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-vaciar:hover{
+    background: #b02a37;
+}
+
+
+.usuario-menu{
+    position: relative;
+}
+
+.usuario-icono{
+    color: white;
+    cursor: pointer;
+    font-size: 22px;
+}
+
+.menu-usuario{
+    display: none;
+    position: absolute;
+    top: 35px;
+    right: 0;
+    background: white;
+    min-width: 220px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 999;
+}
+
+.menu-usuario a{
+    display: block;
+    padding: 12px 15px;
+    color: #111;
+    text-decoration: none;
+}
+
+.menu-usuario a:hover{
+    background: #f3f3f3;
+}.producto-personalizado{border-left:5px solid #7d2cba}.etiqueta-personalizado{display:inline-block;background:#efe2f8;color:#6b249a;border-radius:999px;padding:4px 8px;font-size:12px;font-weight:800}.precio-pendiente{color:#7a2ab7!important}.mensaje-admin-carrito{background:#fff4d9;border-radius:8px;padding:8px;font-size:13px}.btn-aceptar-cotizacion{border:0;background:#7d2cba;color:#fff;border-radius:8px;padding:9px 12px;font-weight:700}.resumen-pendientes{color:#72500b;background:#fff4d9;border-radius:9px;padding:10px;font-size:13px;line-height:1.4;min-height:0}.resumen-pendientes:empty{display:none}
+
+/* Checkout manual PixBen: Yape, Plin, BCP y envío por coordinar */
+#envioResumen{color:#7a2ab7;font-weight:800}
+.subtotal-linea{font-size:13px;color:#666;margin-top:5px}
+.estado-carrito,.error-carrito{background:#fff;padding:22px;border-radius:12px}.error-carrito{color:#b42335}
+.carrito-vacio{text-align:center;background:#fff;border-radius:16px;padding:45px 20px;color:#666}.carrito-vacio i{font-size:42px;color:#8a2be2;margin-bottom:12px}.carrito-vacio h3{color:#222;margin-bottom:8px}
+.checkout-contenido{width:min(900px,94vw);max-height:92vh;overflow:auto;border-radius:20px;padding:30px;background:#f7f5f9}
+.checkout-contenido .cerrar{float:none;position:sticky;top:0;margin-left:auto;display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;background:#fff;color:#111;z-index:3;box-shadow:0 4px 16px #0002;font-size:27px}
+.checkout-encabezado{text-align:center;margin:-36px auto 24px;max-width:650px}.checkout-encabezado h2{margin:5px 0 8px}.checkout-encabezado p{color:#666;line-height:1.5}.checkout-etiqueta{color:#7d2cba;font-size:12px;font-weight:900;letter-spacing:2px}
+.checkout-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.checkout-bloque{background:#fff;border:1px solid #ece5f1;border-radius:16px;padding:20px}.checkout-bloque h3{margin:0 0 16px;font-size:18px;color:#222}.checkout-bloque h3 i{color:#8a2be2;margin-right:7px}.checkout-bloque label{display:block;margin:11px 0 6px;font-size:13px;font-weight:800;color:#3c3540}.checkout-bloque input,.checkout-bloque select{margin:0!important;border-radius:10px!important;border:1px solid #d8d0dc!important;background:#fff}.ayuda-checkout{margin-top:12px;padding:11px;border-radius:10px;background:#f4eafa;color:#67258c;font-size:13px;line-height:1.45}
+.checkout-pago{margin-top:16px}.contenedor-pago{margin:14px 0}.pago-vacio{background:#faf8fb;border:1px dashed #d9cce2;border-radius:12px;padding:18px;color:#777;text-align:center}.tarjeta-metodo-pago{display:grid;grid-template-columns:1fr minmax(180px,300px);gap:18px;align-items:center;background:linear-gradient(135deg,#f7edff,#fff);border:1px solid #e3d1ee;border-radius:16px;padding:16px}.tarjeta-metodo-pago img{width:100%;max-height:280px;object-fit:contain;border-radius:12px;background:#fff}.pago-texto span{display:inline-block;background:#e9d4f7;color:#6d238f;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:900}.pago-texto h4{font-size:22px;margin:10px 0}.pago-texto p{line-height:1.5}.pago-texto small{display:block;margin-top:10px;color:#666;line-height:1.4}.aviso-verificacion{margin:13px 0 0;background:#fff8df;color:#6f5411;border-radius:10px;padding:12px;font-size:13px;line-height:1.5}
+.checkout-total-final{margin:16px 0;background:#111;color:#fff;border-radius:15px;padding:18px 20px;display:grid;grid-template-columns:1fr auto;align-items:center}.checkout-total-final strong{font-size:25px}.checkout-total-final small{grid-column:1/-1;color:#d8d8d8;margin-top:4px}.btn-confirmar-pedido{background:linear-gradient(135deg,#8a2be2,#5d1696)!important;border-radius:12px!important;font-weight:900!important;min-height:52px}.btn-confirmar-pedido:disabled{opacity:.7;cursor:wait}
+@media(max-width:720px){.checkout-grid{grid-template-columns:1fr}.tarjeta-metodo-pago{grid-template-columns:1fr}.tarjeta-metodo-pago img{max-height:240px}.checkout-contenido{padding:20px 14px}.checkout-encabezado{margin:-35px 30px 20px}.producto-carrito{align-items:stretch}}
+
+#envioResumen{max-width:190px;text-align:right;line-height:1.25}
+.aviso-envio-directo{background:#eefaf4;border:1px solid #ccebdc;color:#176b43;border-radius:12px;padding:12px;font-size:13px;line-height:1.5}
+
+/* Compra sin cuenta */
+.aviso-compra-invitado{display:flex;align-items:flex-start;gap:10px;background:#f2e9ff;border:1px solid #d8bdf2;color:#5f2188;border-radius:12px;padding:12px 14px;margin:12px 0;font-size:13px;line-height:1.45}.aviso-compra-invitado i{margin-top:2px}.aviso-compra-invitado[hidden]{display:none!important}

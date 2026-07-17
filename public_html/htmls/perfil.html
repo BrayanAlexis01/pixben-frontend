@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../imagensponsor/favicon.ico" sizes="any">
+    <link rel="icon" type="image/webp" href="../imagensponsor/favicon.webp">
+    <link rel="apple-touch-icon" href="../imagensponsor/favicon-192.png">
+    <link rel="manifest" href="../site.webmanifest">
+    <meta name="theme-color" content="#8a2be2">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PixBen">
+
+    <meta name="robots" content="noindex,nofollow">
+    <title>Mi perfil | PixBen</title>
+    <link href="../css/css index.css" rel="stylesheet">
+    <link href="../css/perfil.css?v=4" rel="stylesheet">
+    <link href="../css/responsive-global.css?v=3" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link rel="stylesheet" href="../css/pwa-premium.css?v=2">
+    <script src="../js/pwa-premium.js?v=2" defer></script>
+</head>
+<body>
+<header>
+    <div class="logo"><a href="../index.html"><img src="../imagensponsor/logopixben.webp" alt="PixBen"></a></div>
+    <nav>
+        <a href="../index.html">Inicio</a>
+        <a href="productos.html">Productos</a>
+        <a href="personaliza.html">Personaliza</a>
+        <a href="nosotros.html">Nosotros</a>
+        <a href="contacto.html">Contacto</a>
+    </nav>
+</header>
+
+<main class="perfil-shell">
+    <aside class="perfil-sidebar">
+        <div class="avatar-perfil-wrap">
+            <img id="fotoPerfil" class="foto-perfil" alt="Foto de perfil">
+            <label for="inputFotoPerfil" class="boton-cambiar-foto" title="Cambiar foto">
+                <i class="fa-solid fa-camera"></i>
+            </label>
+            <input id="inputFotoPerfil" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+        </div>
+        <h2 id="nombreUsuario">Usuario</h2>
+        <p id="aliasSidebar">Cliente PixBen</p>
+        <nav class="menu-perfil" aria-label="Menú de la cuenta">
+            <a href="mis-pedidos.html"><i class="fa-solid fa-box"></i> Mis pedidos</a>
+            <a href="favoritos.html"><i class="fa-solid fa-heart"></i> Favoritos</a>
+            <a href="historial.html"><i class="fa-solid fa-clock-rotate-left"></i> Historial</a>
+            <a href="#configuracion"><i class="fa-solid fa-gear"></i> Configuración</a>
+            <button type="button" id="btnCerrarSesionPerfil"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
+        </nav>
+    </aside>
+
+    <section class="contenido-perfil">
+        <section class="bienvenida">
+            <div>
+                <span class="eyebrow">TU CUENTA</span>
+                <h1 id="saludoUsuario">Hola 👋</h1>
+                <p>Administra tus datos, preferencias y actividad en PixBen.</p>
+            </div>
+            <img id="fotoBienvenida" class="avatar-bienvenida" alt="Avatar del usuario">
+        </section>
+
+        <section class="resumen-cards" aria-label="Resumen de la cuenta">
+            <a class="card-resumen" href="mis-pedidos.html"><i class="fa-solid fa-box"></i><span>Pedidos</span><strong id="totalPedidos">0</strong></a>
+            <a class="card-resumen" href="favoritos.html"><i class="fa-solid fa-heart"></i><span>Favoritos</span><strong id="totalFavoritos">0</strong></a>
+            <a class="card-resumen" href="historial.html"><i class="fa-solid fa-clock-rotate-left"></i><span>Historial</span><strong id="totalHistorial">0</strong></a>
+        </section>
+
+        <section class="tarjeta-info">
+            <div class="encabezado-tarjeta">
+                <div><span class="eyebrow">PERFIL</span><h2>Información personal</h2></div>
+                <span class="chip-rol" id="rolUsuario">Cliente</span>
+            </div>
+            <dl class="datos-perfil">
+                <div><dt>Nombre</dt><dd id="nombreCompleto">—</dd></div>
+                <div><dt>Alias público</dt><dd id="aliasUsuario">—</dd></div>
+                <div><dt>Correo</dt><dd id="correoUsuario">—</dd></div>
+            </dl>
+        </section>
+
+        <section id="configuracion" class="configuracion-grid">
+            <form id="formPerfil" class="tarjeta-configuracion">
+                <div class="encabezado-tarjeta"><div><span class="eyebrow">CONFIGURACIÓN</span><h2>Datos públicos</h2></div><i class="fa-solid fa-user-pen icono-tarjeta"></i></div>
+                <p class="texto-ayuda">El alias y la foto se mostrarán en tus reseñas. Si no eliges una foto, aparecerá el avatar gris.</p>
+                <div class="grid-campos">
+                    <label>Nombre<input id="editarNombre" type="text" maxlength="80" required></label>
+                    <label>Apellido<input id="editarApellido" type="text" maxlength="100"></label>
+                    <label class="campo-completo">Alias o apodo<input id="editarAlias" type="text" maxlength="60" placeholder="Ej. SebasDesign"></label>
+                </div>
+                <button class="btn-principal" type="submit"><i class="fa-solid fa-floppy-disk"></i> Guardar cambios</button>
+                <p id="estadoPerfil" class="estado-formulario" aria-live="polite"></p>
+            </form>
+
+            <form id="formPassword" class="tarjeta-configuracion">
+                <div class="encabezado-tarjeta"><div><span class="eyebrow">SEGURIDAD</span><h2>Cambiar contraseña</h2></div><i class="fa-solid fa-shield-halved icono-tarjeta"></i></div>
+                <p class="texto-ayuda">Usa al menos 8 caracteres y evita repetir una contraseña anterior.</p>
+                <label>Contraseña actual<input id="passwordActual" type="password" autocomplete="current-password" required></label>
+                <label>Nueva contraseña<input id="passwordNueva" type="password" autocomplete="new-password" minlength="8" required></label>
+                <label>Confirmar nueva contraseña<input id="confirmarPassword" type="password" autocomplete="new-password" minlength="8" required></label>
+                <button class="btn-secundario-perfil" type="submit"><i class="fa-solid fa-key"></i> Actualizar contraseña</button>
+                <p id="estadoPassword" class="estado-formulario" aria-live="polite"></p>
+            </form>
+        </section>
+    </section>
+</main>
+
+<script src="../js/config.js?v=14"></script>
+<script src="../js/analitica.js?v=3"></script>
+<script src="../js/paginas/perfil.js?v=4"></script>
+<script src="../js/eventos-html.js?v=2"></script>
+<script src="../js/responsive-menu.js?v=4"></script>
+</body>
+</html>

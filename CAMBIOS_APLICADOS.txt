@@ -1,0 +1,26 @@
+CORRECCIONES PRINCIPALES
+
+1. config.js incluye obtenerUrlImagen():
+   - Usa directamente las URLs completas de Cloudinary.
+   - Convierte los nombres antiguos (ej. polomessi.webp) en
+     https://pixben-backend-1.onrender.com/imagen/polomessi.webp
+
+2. El carrito ya no usa el nombre fijo "Sebastian".
+   Usa el usuario guardado en localStorage.
+
+3. Se corrigió el HTML inválido de las imágenes del carrito.
+
+4. La página de detalles fue renombrada a:
+   htmls/detalles-producto.html
+   y su CSS a:
+   css/detalles-producto.css
+
+5. Se actualizaron los enlaces de Inicio, Productos, Favoritos e Historial.
+
+6. La página de detalles carga la imagen principal y las miniaturas,
+   admitiendo nombres locales y URLs de Cloudinary.
+
+PASOS
+- Reemplaza el contenido de tu repositorio frontend por este proyecto.
+- Haz commit y push.
+- Netlify desplegará los cambios automáticamente.

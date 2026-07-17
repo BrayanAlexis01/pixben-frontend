@@ -1,0 +1,13 @@
+CAMBIOS APLICADOS
+
+1. Catálogo con filtros funcionales por categoría, precio, color, talla y stock.
+2. Categorías generadas automáticamente desde los productos del backend.
+3. Orden por destacados, menor/mayor precio y nombre.
+4. Búsqueda integrada con todos los filtros.
+5. Tazas, mousepads, gorras, bolsos y accesorios no solicitan talla.
+6. Prendas como polos, poleras y hoodies sí solicitan talla.
+7. En el carrito, los accesorios muestran "Presentación: Unidad" en lugar de talla.
+8. El panel admin muestra si la categoría usa talla o se vende por unidad.
+9. Se agregaron imágenes de respaldo si una URL no carga.
+
+IMPORTANTE: El filtro de color detecta palabras como negro, blanco, azul, etc. en el nombre o descripción, porque el modelo Producto actual todavía no tiene un campo "color" en la base de datos.

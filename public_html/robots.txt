@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /htmls/admin.html
+Disallow: /htmls/perfil.html
+Disallow: /htmls/mis-pedidos.html
+Disallow: /htmls/favoritos.html
+Disallow: /htmls/historial.html
+Disallow: /htmls/carrito%20de%20compras.html
+Sitemap: https://pixben.netlify.app/sitemap.xml

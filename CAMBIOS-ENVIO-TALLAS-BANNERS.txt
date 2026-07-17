@@ -1,0 +1,35 @@
+PIXBEN - CAMBIOS DE FRONTEND (julio 2026)
+
+1. Carrusel oficial:
+   - Polos
+   - Poleras
+   - Film
+   - Bolsos
+   Los cuatro banners están en public_html/imagensponsor/banners/.
+
+2. Nuevo icono de pestaña:
+   - favicon.ico
+   - favicon.webp
+   - favicon-192.png
+   - favicon-512.png
+   También se agregó site.webmanifest.
+
+3. Páginas informativas rediseñadas:
+   - Política de envíos
+   - Cambios y devoluciones
+   - Preguntas frecuentes
+   - Términos y condiciones
+   - Política de privacidad
+
+4. Envío:
+   PixBen cobra solo los productos.
+   El cliente paga el envío directamente a Shalom o al conductor de InDrive.
+
+5. Tallas:
+   El panel administrador permite seleccionar XS, S, M, L, XL y XXL.
+   En detalles solo aparecen las tallas habilitadas para ese producto.
+
+IMPORTANTE:
+- Publica primero el backend y luego el frontend.
+- Después del despliegue, usa Ctrl + F5.
+- Las políticas son una base operativa y deben ser revisadas por el negocio antes de usar un dominio comercial definitivo.

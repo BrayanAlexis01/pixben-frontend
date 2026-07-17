@@ -1,0 +1,13 @@
+PIXBEN - PAGOS, ENVÍOS Y PERSONALIZADOR
+
+1. Checkout manual con Yape, Plin y transferencia BCP.
+2. Se incluyen los QR/datos proporcionados por el propietario.
+3. Se solicita código o número de operación y el pago queda POR_VERIFICAR.
+4. Envío mediante Shalom o InDrive; el costo queda POR_COTIZAR y no se suma automáticamente.
+5. Comprar ahora agrega el producto al carrito y abre el checkout.
+6. Botones de carrito, favoritos y compra con diseño coherente.
+7. El administrador marca qué productos están disponibles en el personalizador.
+8. El editor carga solo productos personalizables.
+9. El fondo del lienzo puede cambiar de color y la prenda base puede desbloquearse para moverla o redimensionarla.
+10. El administrador puede asignar costo de envío y actualizar estados de pedido, pago y envío.
+11. El administrador puede borrar analítica antigua o toda la analítica.

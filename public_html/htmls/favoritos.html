@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../imagensponsor/favicon.ico" sizes="any">
+    <link rel="icon" type="image/webp" href="../imagensponsor/favicon.webp">
+    <link rel="apple-touch-icon" href="../imagensponsor/favicon-192.png">
+    <link rel="manifest" href="../site.webmanifest">
+    <meta name="theme-color" content="#8a2be2">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PixBen">
+
+    <meta name="robots" content="noindex,nofollow">
+    <title>Mis favoritos | PixBen</title>
+    <link rel="stylesheet" href="../css/cuenta-listados.css?v=5">
+    <link rel="stylesheet" href="../css/responsive-global.css?v=3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link rel="stylesheet" href="../css/pwa-premium.css?v=2">
+    <script src="../js/pwa-premium.js?v=2" defer></script>
+</head>
+<body class="pagina-cuenta-listado">
+<header class="cuenta-header">
+    <a class="cuenta-marca" href="../index.html"><img src="../imagensponsor/logopixben.webp" alt="PixBen"></a>
+    <nav><a href="productos.html">Productos</a><a href="carrito de compras.html">Carrito</a><a href="perfil.html">Mi perfil</a></nav>
+</header>
+<main class="cuenta-contenedor">
+    <section class="cuenta-hero hero-favoritos">
+        <div><span class="cuenta-eyebrow">TU COLECCIÓN</span><h1>Productos favoritos</h1><p>Guarda tus diseños preferidos y vuelve a ellos cuando quieras.</p></div>
+        <div class="hero-icono"><i class="fa-solid fa-heart"></i></div>
+    </section>
+    <div class="barra-listado"><p id="resumenFavoritos">Cargando favoritos...</p><a href="productos.html" class="btn-volver"><i class="fa-solid fa-arrow-left"></i> Explorar productos</a></div>
+    <section id="favoritos" class="grid-cuenta-productos" aria-live="polite"></section>
+</main>
+
+<script src="../js/config.js?v=14"></script>
+<script src="../js/analitica.js?v=3"></script>
+<script src="../js/paginas/favoritos.js?v=4"></script>
+<script src="../js/responsive-menu.js?v=4"></script>
+</body>
+</html>

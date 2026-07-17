@@ -1,0 +1,37 @@
+PIXBen - cambios de cuentas, perfil, historial, reseñas y analítica
+==================================================================
+
+1. Sesiones de usuario
+- Se normaliza la respuesta del login para impedir nombres "undefined".
+- Se conserva id, nombre, apellido, correo, rol, alias y foto de perfil.
+- Carrito, favoritos, historial y pedidos consultan primero por usuarioId y mantienen compatibilidad con datos antiguos guardados por nombre/correo.
+- Después de desplegar esta versión, cerrar sesión e iniciar sesión una vez para renovar la sesión guardada.
+
+2. Perfil y configuración
+- Edición de nombre, apellido y alias.
+- Cambio de contraseña con contraseña actual, nueva y confirmación.
+- Foto de perfil PNG/JPG/WEBP mediante Cloudinary.
+- Avatar gris predeterminado cuando no hay foto.
+- Resumen de pedidos, favoritos e historial.
+
+3. Historial y favoritos
+- Diseño responsive con tarjetas y estados vacíos.
+- Eliminar un elemento del historial o limpiar todo.
+- El backend conserva como máximo 100 productos recientes por usuario.
+
+4. Reseñas
+- Se muestran 6 por página y el botón "Ver más comentarios" carga la siguiente página.
+- Alias y foto del perfil; avatar predeterminado si no hay foto.
+- Corazón de utilidad con contador por usuario registrado.
+- Botón de favoritos rediseñado en detalles del producto.
+
+5. Analítica privada
+- Nueva sección Analítica en el panel administrador.
+- Cuenta visitas anónimas sin guardar IP ni identidad personal.
+- Para sesiones iniciadas muestra el correo registrado y la ruta visitada.
+- Los datos se conservan durante seis meses.
+
+6. Publicación
+- El backend debe desplegarse primero.
+- El frontend usa https://pixben-backend.onrender.com.
+- Después del despliegue del frontend, recargar con Ctrl+F5.

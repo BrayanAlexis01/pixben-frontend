@@ -1,0 +1,338 @@
+<html lang="es">
+    <head>
+        <link href="../css/css carrito de compras.css?v=7" rel="stylesheet" type="text/css"/>
+        <title>PixBen</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../imagensponsor/favicon.ico" sizes="any">
+    <link rel="icon" type="image/webp" href="../imagensponsor/favicon.webp">
+    <link rel="apple-touch-icon" href="../imagensponsor/favicon-192.png">
+    <link rel="manifest" href="../site.webmanifest">
+    <meta name="theme-color" content="#8a2be2">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PixBen">
+
+    <meta name="robots" content="noindex,nofollow">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link href="../css/responsive-global.css?v=2" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../css/pwa-premium.css?v=2">
+    <script src="../js/pwa-premium.js?v=2" defer></script>
+</head>
+    <body>
+
+        <!-- HEADER -->
+        <header>
+            <div class="logo">
+                <a href="../index.html">
+                    <img src="../imagensponsor/logopixben.webp" alt="">
+                </a>
+            </div>
+
+            <nav>
+               <a href="../index.html">Inicio</a>
+                <a href="productos.html">Productos</a>
+                <a href="personaliza.html">Personaliza</a>
+                <a href="nosotros.html">Nosotros</a>
+                <a href="contacto.html">Contacto</a>
+            </nav>
+
+            <!-- AGRUPAR -->
+            <div class="acciones-header">
+<div class="carrito">
+                    <a href="carrito de compras.html">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </a>
+                </div>
+                 <div class="usuario-menu">
+
+                    <div class="usuario-icono" >
+                        <i class="fa-solid fa-user"></i>
+                        <span id="nombreUsuario"></span>
+                    </div>
+
+                    <div id="menuUsuario" class="menu-usuario">
+
+                        <a href="login.html" id="btnLogin">
+                            Iniciar sesión
+                        </a>
+
+                        <a href="registro.html" id="btnRegistro">
+                            Registrarse
+                        </a>
+
+                        <a href="perfil.html" id="btnPerfil">
+                            Mi perfil
+                        </a>
+
+                        <a href="mis-pedidos.html" id="btnPedidos">
+                            Mis pedidos
+                        </a>
+
+                        <a href="historial.html" id="btnHistorial">
+                            Historial
+                        </a>
+
+                        <a href="favoritos.html" id="btnFavoritos">
+                            Favoritos
+                        </a>
+
+                        <a href="admin.html" id="btnAdmin">
+                            Panel Admin
+                        </a>
+
+                        <a href="#" id="btnCerrarSesion">
+                            Cerrar sesión
+                        </a>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </header>
+
+
+
+        <main class="carrito-container">
+
+            <!-- TITULO -->
+            <section class="carrito-titulo">
+                <h1>MI CARRITO</h1>
+                <p>Revisa tus productos antes de finalizar la compra.</p>
+            </section>
+
+            <!-- CONTENIDO -->
+            <section class="carrito-contenido">
+
+                <!-- LISTA PRODUCTOS -->
+                <div class="lista-carrito" id="listaCarrito">
+
+                
+
+                </div>
+
+
+
+
+                <!-- RESUMEN -->
+                <aside class="resumen-carrito">
+
+                    <h2>Resumen del pedido</h2>
+
+                    <div class="resumen-item">
+                        <p>Subtotal</p>
+                        <p id="subtotal">S/ 0.00</p>
+                    </div>
+
+                    <div class="resumen-item">
+                        <p>Envío</p>
+                        <p id="envioResumen">Pago directo al transportista</p>
+                    </div>
+
+                    <div class="resumen-item total">
+                        <p>Total a pagar a PixBen</p>
+                        <p id="total">S/ 0.00</p>
+                    </div>
+
+                    <p id="resumenPendientes" class="resumen-pendientes"></p>
+                    <div id="avisoCompraInvitado" class="aviso-compra-invitado" hidden>
+                        <i class="fa-solid fa-user-check"></i>
+                        <span>Puedes pagar como invitado. No es necesario crear una cuenta.</span>
+                    </div>
+
+                    <button
+                        class="btn-checkout"
+                        id="btnAbrirCheckout">
+                        Pagar productos
+                    </button>
+
+                    <button class="btn-vaciar"
+                            id="btnVaciarCarrito">
+                        Vaciar carrito
+                    </button>
+
+
+                    <a href="productos.html" class="seguir-comprando">
+                        Seguir comprando
+                    </a>
+
+                </aside>
+
+            </section>
+
+        </main>
+
+
+
+
+        <!-- FOOTER -->
+        <footer>
+
+            <!-- BENEFICIOS -->
+            <section class="beneficios">
+
+                <div class="beneficio">
+                    <h3>Calidad Premium</h3>
+                    <p>Usamos materiales de alta calidad.</p>
+                </div>
+
+                <div class="beneficio">
+                    <h3>Diseños únicos</h3>
+                    <p>Crea algo que nadie más tendrá.</p>
+                </div>
+
+                <div class="beneficio">
+                    <h3>Envíos a todo el país</h3>
+                    <p>Llegamos a donde estés.</p>
+                </div>
+
+                <div class="beneficio">
+                    <h3>Pagos seguros</h3>
+                    <p>Compra con tranquilidad y seguridad.</p>
+                </div>
+
+            </section>
+
+
+            <!-- CONTENIDO PRINCIPAL FOOTER -->
+            <section class="footer-contenido">
+
+                <!-- LOGO -->
+                <div class="footer-logo">
+                    <h2>PixBen</h2>
+                    <p>Ropa personalizada hecha para destacar tu estilo.</p>
+                </div>
+
+                <!-- NAVEGACIÓN -->
+                <div class="footer-links">
+                    <h3>Navegación</h3>
+                    <a href="../index.html">Inicio</a>
+                    <a href="productos.html">Productos</a>
+                    <a href="personaliza.html">Personaliza</a>
+                    <a href="nosotros.html">Nosotros</a>
+                    <a href="contacto.html">Contacto</a>
+                </div>
+
+                <!-- INFORMACIÓN -->
+                <div class="footer-info">
+                    <h3>Información</h3>
+                    <a href="preguntas frecuentes.html">Preguntas frecuentes</a>
+                    <a href="politica de envios.html">Política de envíos</a>
+                    <a href="cambios y devoluciones.html">Cambios y devoluciones</a>
+                    <a href="terminos y condiciones.html">Términos y condiciones</a>
+                    <a href="politica de privacidad.html">Política de privacidad</a>
+                </div>
+
+                <!-- REDES -->
+                <div class="footer-redes">
+                    <h3>Síguenos</h3>
+                    <a href="#">
+                        <i class="fa-brands fa-instagram"></i>
+                        Instagram
+                    </a>
+                    <a href="https://www.tiktok.com/@pixbengrafic?_r=1&_t=ZS-966MGlwLQhc" target="_blank" rel="noopener noreferrer">
+                        <i class="fa-brands fa-tiktok"></i>
+                        TikTok
+                    </a>
+                    <a href="https://www.facebook.com/profile.php?id=61588434001028&locale=es_LA" target="_blank" rel="noopener noreferrer">
+                        <i class="fa-brands fa-facebook"></i>
+                        Facebook
+                    </a>
+                    <a href="https://wa.me/51933626970?text=Hola%20PixBen%2C%20necesito%20ayuda%20con%20un%20pedido%20personalizado" target="_blank" rel="noopener noreferrer">
+                        <i class="fa-brands fa-whatsapp"></i>
+                        WhatsApp
+                    </a>
+                </div>
+
+            </section>
+
+
+            <!-- COPYRIGHT -->
+            <section class="footer-copy">
+                <p>© 2026 PIXBEN. Todos los derechos reservados.</p>
+            </section>
+
+        </footer>
+        
+                
+<script src="../js/config.js?v=14"></script>
+<script src="../js/analitica.js?v=3"></script>
+<script src="../js/paginas/carrito.js?v=7" type="text/javascript"></script>
+
+
+<script src="../js/paginas/carrito-metodo-pago.js?v=3" type="text/javascript"></script>
+
+
+
+        <div id="modalCheckout" class="modal" role="dialog" aria-modal="true" aria-labelledby="tituloCheckout">
+            <div class="modal-contenido checkout-contenido">
+                <button type="button" class="cerrar" id="btnCerrarCheckout" aria-label="Cerrar">&times;</button>
+                <div class="checkout-encabezado">
+                    <span class="checkout-etiqueta">PEDIDO PIXBEN</span>
+                    <h2 id="tituloCheckout">Finalizar compra</h2>
+                    <p>Este pago cubre únicamente los productos. El envío se paga directamente a Shalom o al conductor de InDrive.</p>
+                </div>
+
+                <div class="checkout-grid">
+                    <section class="checkout-bloque">
+                        <h3><i class="fa-solid fa-user"></i> Datos de contacto</h3>
+                        <label for="nombre">Nombre completo</label>
+                        <input type="text" id="nombre" maxlength="120" autocomplete="name" placeholder="Nombre y apellido">
+                        <label for="correoCheckout">Correo de contacto</label>
+                        <input type="email" id="correoCheckout" maxlength="160" autocomplete="email" placeholder="tu-correo@ejemplo.com">
+                        <label for="telefono">Teléfono</label>
+                        <input type="tel" id="telefono" maxlength="20" autocomplete="tel" placeholder="Ej. 987 654 321">
+                        <p class="ayuda-checkout">Usaremos estos datos únicamente para confirmar el pago y coordinar el pedido.</p>
+                    </section>
+
+                    <section class="checkout-bloque">
+                        <h3><i class="fa-solid fa-truck-fast"></i> Entrega</h3>
+                        <label for="metodoEnvio">Método de envío</label>
+                        <select id="metodoEnvio">
+                            <option value="">Selecciona una opción</option>
+                            <option value="SHALOM">Shalom</option>
+                            <option value="INDRIVE">InDrive</option>
+                        </select>
+                        <label for="direccion" id="labelDireccion">Destino o dirección</label>
+                        <input type="text" id="direccion" maxlength="220" placeholder="Selecciona primero el método de envío">
+                        <label for="referenciaEnvio">Referencia adicional</label>
+                        <input type="text" id="referenciaEnvio" maxlength="220" placeholder="Agencia, distrito, punto de referencia, horario, etc.">
+                        <div id="ayudaEnvio" class="ayuda-checkout">El costo del envío no lo cobra PixBen: lo pagarás directamente al transportista cuando se coordine el despacho.</div>
+                    </section>
+                </div>
+
+                <section class="checkout-bloque checkout-pago">
+                    <h3><i class="fa-solid fa-wallet"></i> Método de pago</h3>
+                    <label for="metodoPago">Selecciona cómo pagarás</label>
+                    <select id="metodoPago">
+                        <option value="">Selecciona un método</option>
+                        <option value="YAPE">Yape</option>
+                        <option value="PLIN">Plin</option>
+                        <option value="BCP">Transferencia BCP</option>
+                    </select>
+                    <div id="contenedorPago" class="contenedor-pago"></div>
+                    <label for="referenciaPago">Código o número de operación</label>
+                    <input type="text" id="referenciaPago" maxlength="80" placeholder="Escríbelo después de realizar el pago">
+                    <p class="aviso-verificacion"><i class="fa-solid fa-circle-info"></i> El pedido quedará como <b>pago por verificar</b>. PixBen comprobará manualmente la operación antes de producir o enviar.</p>
+                </section>
+
+                <div class="checkout-total-final">
+                    <span>Total a pagar a PixBen</span>
+                    <strong id="totalCheckout">S/ 0.00</strong>
+                    <small>Envío no incluido: pago directo al transportista</small>
+                </div>
+
+                <button id="btnConfirmarCompra" class="btn-confirmar-pedido">
+                    <i class="fa-solid fa-lock"></i> Registrar pago de productos
+                </button>
+            </div>
+        </div>
+
+                        <script src="../js/paginas/carrito-sesion.js?v=1" type="text/javascript"></script>
+           
+        <script src="../js/eventos-html.js?v=2" type="text/javascript"></script>
+    <script src="../js/responsive-menu.js?v=4" type="text/javascript"></script>
+</body>
+</html>

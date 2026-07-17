@@ -1,0 +1,24 @@
+PIXBen - JavaScript separado de los HTML
+
+Se extrajeron todos los bloques JavaScript que estaban escritos dentro de etiquetas
+<script>...</script> en los archivos HTML.
+
+Los nuevos archivos están en:
+public_html/js/paginas/
+
+También se retiraron de los HTML los eventos escritos directamente como onclick,
+onchange y onerror. Esos eventos ahora se enlazan desde:
+public_html/js/eventos-html.js
+
+Se conservaron:
+- El mismo orden de ejecución de los bloques originales.
+- Las rutas relativas correctas para index.html y htmls/*.html.
+- Los archivos existentes config.js, productos.js, admin.js, login.js,
+  registro.js y personaliza.js.
+- Las correcciones previas de filtros, tallas, imágenes y privacidad.
+
+Comprobaciones realizadas:
+- Ningún HTML contiene bloques <script> con código interno.
+- Ningún HTML contiene atributos onclick, onchange u onerror.
+- Todas las rutas locales indicadas por <script src="..."> existen.
+- Todos los archivos JavaScript pasan la comprobación de sintaxis de Node.js.

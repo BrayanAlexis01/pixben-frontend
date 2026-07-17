@@ -1,0 +1,99 @@
+{
+  "id": "/",
+  "name": "PixBen - Ropa y productos personalizados",
+  "short_name": "PixBen",
+  "description": "Diseña, personaliza y compra ropa, tazas y accesorios únicos desde PixBen.",
+  "lang": "es-PE",
+  "dir": "ltr",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "any",
+  "background_color": "#07040a",
+  "theme_color": "#8a2be2",
+  "categories": [
+    "shopping",
+    "lifestyle",
+    "business"
+  ],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/imagensponsor/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/imagensponsor/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Ver productos",
+      "short_name": "Productos",
+      "description": "Explora el catálogo de PixBen",
+      "url": "/htmls/productos.html?source=shortcut",
+      "icons": [
+        {
+          "src": "/imagensponsor/favicon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Crear diseño",
+      "short_name": "Personalizar",
+      "description": "Abre el personalizador de PixBen",
+      "url": "/htmls/personaliza.html?source=shortcut",
+      "icons": [
+        {
+          "src": "/imagensponsor/favicon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Mi carrito",
+      "short_name": "Carrito",
+      "description": "Continúa con tus productos",
+      "url": "/htmls/carrito%20de%20compras.html?source=shortcut",
+      "icons": [
+        {
+          "src": "/imagensponsor/favicon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Mis pedidos",
+      "short_name": "Pedidos",
+      "description": "Consulta el estado de tus pedidos",
+      "url": "/htmls/mis-pedidos.html?source=shortcut",
+      "icons": [
+        {
+          "src": "/imagensponsor/favicon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "launch_handler": {
+    "client_mode": [
+      "navigate-existing",
+      "auto"
+    ]
+  },
+  "handle_links": "preferred"
+}
