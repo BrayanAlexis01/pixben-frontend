@@ -1,0 +1,33 @@
+PIXBEN - CAMBIOS RESPONSIVE
+============================
+
+1. Menú hamburguesa global
+- Se agregó public_html/js/responsive-menu.js.
+- El botón se crea automáticamente en las páginas que tienen <header> y <nav>.
+- En celulares y tablets abre un panel lateral.
+- El panel puede cerrarse con el botón, el fondo oscuro, la tecla Escape o al elegir un enlace.
+- Mientras el menú está abierto se bloquea el desplazamiento de la página.
+- Incluye atributos ARIA y control de foco básico.
+
+2. Fondo oscuro
+- Se crea una capa semitransparente detrás del panel lateral.
+- El contenido principal queda resaltado y no recibe clics mientras el menú está abierto.
+
+3. CSS responsive global
+- Se agregó public_html/css/responsive-global.css.
+- Se carga al final en todas las páginas para unificar el comportamiento responsive.
+- Se corrigieron cabeceras, pies de página, catálogos, formularios, carrito, detalles,
+  personalización, perfil, panel de administración, modales, tablas, favoritos e historial.
+- Se agregaron ajustes para tablets (hasta 900 px) y celulares (hasta 600 px).
+
+4. Correcciones adicionales
+- Se agregó meta viewport a todas las páginas que no lo tenían.
+- Se corrigió el enlace del logo en páginas dentro de /htmls para volver a ../index.html.
+- Se eliminaron referencias a hojas CSS que no existían y producían errores 404.
+- Se mantuvo todo el JavaScript separado de los HTML.
+
+Prueba recomendada
+------------------
+- 1440 x 900: navegación horizontal.
+- 768 x 1024: menú hamburguesa y panel lateral.
+- 390 x 844: menú hamburguesa, contenido en una columna y sin scroll horizontal.

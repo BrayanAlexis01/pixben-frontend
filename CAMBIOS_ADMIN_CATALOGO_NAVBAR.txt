@@ -1,0 +1,29 @@
+PIXBEN - CORRECCIONES DE CATÁLOGO, ADMIN Y CABECERA
+
+1. Se eliminó la precarga de productos locales del catálogo.
+   - La tienda ahora muestra únicamente productos que existen en la API/base de datos.
+   - Mientras Render inicia se muestran esqueletos de carga, no productos falsos.
+   - Así, lo que se edita o elimina en el Panel Admin se refleja en la tienda.
+
+2. Panel Administrador > Productos
+   - Buscador por todo, nombre, categoría o ID.
+   - Filtro por categoría.
+   - Orden por ID, nombre, categoría o stock.
+   - Miniatura de cada producto.
+   - Vista previa en modal con galería, precio, stock, tallas, colores y descripción.
+   - Paginación de 20 productos.
+   - Selección múltiple y eliminación en lote con confirmación.
+   - Categorías sugeridas unificadas: Polos, Hoodies / Poleras, Gorras, Tazas, Mousepads, Bolsos / Totebags, Accesorios.
+
+3. Cabecera / navbar
+   - Todas las vistas públicas usan la misma estructura y geometría que el index.
+   - Admin conserva su propia cabecera.
+   - Carrito y menú de usuario quedan en el mismo lugar.
+   - El buscador de Productos pasó al área del catálogo para no cambiar la cabecera.
+
+4. Backend
+   - Se eliminó CatalogoInicialConfig: los productos generados ya no se vuelven a crear al reiniciar Render.
+   - Los productos que ya están en la BD permanecen hasta que el administrador los edite o elimine.
+
+5. Imágenes
+   - Se entrega aparte PIXBEN-IMAGENES-PARA-SUBIR.zip con 20 imágenes únicas organizadas por categoría para subir manualmente desde Admin.

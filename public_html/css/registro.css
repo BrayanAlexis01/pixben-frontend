@@ -1,0 +1,81 @@
+
+
+.registro-container{
+    min-height:80vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:50px 20px;
+}
+
+.registro-card{
+    width:420px;
+    background:white;
+    padding:40px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.15);
+}
+
+.registro-card h1{
+    text-align:center;
+    margin-bottom:10px;
+}
+
+.registro-card p{
+    text-align:center;
+    color:#666;
+    margin-bottom:30px;
+}
+
+.grupo-input{
+    margin-bottom:20px;
+}
+
+.grupo-input label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:bold;
+}
+
+.grupo-input input{
+    width:100%;
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    font-size:15px;
+}
+
+.grupo-input input:focus{
+    outline:none;
+    border-color:#8a2be2;
+}
+
+.btn-registro{
+    width:100%;
+    background:#8a2be2;
+    color:white;
+    border:none;
+    padding:14px;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.btn-registro:hover{
+    background:#6d1cc7;
+}
+
+.link-login{
+    text-align:center;
+    margin-top:20px;
+}
+
+.link-login a{
+    color:#8a2be2;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+
+.ayuda-registro{display:block;margin-top:7px;color:#666;font-size:12px;line-height:1.35}

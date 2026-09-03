@@ -1,0 +1,339 @@
+/* =========================================================
+   PIXBEN - HEADER GLOBAL V2
+   Misma cabecera del index en todas las vistas públicas.
+   Funciona antes y después de que responsive-menu.js mueva
+   nav + acciones dentro de .site-drawer.
+   ========================================================= */
+
+body > header.site-header-pixben{
+    width:100%;
+    min-height:82px;
+    padding:18px clamp(28px,4vw,64px) !important;
+    display:flex !important;
+    flex-direction:row !important;
+    flex-wrap:nowrap !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:28px !important;
+    background:#050505 !important;
+    color:#fff !important;
+    position:relative;
+    z-index:1100;
+}
+
+body > header.site-header-pixben > .logo{
+    flex:0 0 165px !important;
+    display:flex !important;
+    align-items:center !important;
+    margin:0 !important;
+}
+
+body > header.site-header-pixben > .logo a{
+    display:flex !important;
+    align-items:center !important;
+    text-decoration:none !important;
+}
+
+body > header.site-header-pixben > .logo img{
+    display:block !important;
+    width:165px !important;
+    max-width:100% !important;
+    height:auto !important;
+    margin:0 !important;
+}
+
+/* En escritorio responsive-menu.js envuelve nav y acciones aquí. */
+body > header.site-header-pixben > .site-drawer{
+    flex:1 1 auto !important;
+    min-width:0 !important;
+    display:flex !important;
+    flex-direction:row !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:28px !important;
+    margin:0 !important;
+    padding:0 !important;
+    position:static;
+    width:auto;
+    height:auto;
+    background:transparent;
+    box-shadow:none;
+    transform:none;
+    visibility:visible;
+    overflow:visible;
+}
+
+/* Fallback antes de que JS construya .site-drawer + estado normal posterior. */
+body > header.site-header-pixben > nav,
+body > header.site-header-pixben > .site-drawer > nav{
+    display:flex !important;
+    flex:1 1 auto !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:30px !important;
+    margin:0 !important;
+    padding:0 !important;
+    text-align:center !important;
+}
+
+body > header.site-header-pixben > nav a,
+body > header.site-header-pixben > .site-drawer > nav a,
+body > header.site-header-pixben > nav a:visited,
+body > header.site-header-pixben > .site-drawer > nav a:visited{
+    display:inline-flex !important;
+    align-items:center !important;
+    color:#fff !important;
+    text-decoration:none !important;
+    font-size:15px !important;
+    line-height:1.2 !important;
+    font-weight:500 !important;
+    white-space:nowrap !important;
+    position:relative !important;
+    padding:8px 0 !important;
+    margin:0 !important;
+    background:transparent !important;
+}
+
+body > header.site-header-pixben > nav a:hover,
+body > header.site-header-pixben > nav a.activo,
+body > header.site-header-pixben > .site-drawer > nav a:hover,
+body > header.site-header-pixben > .site-drawer > nav a.activo{
+    color:#b75cff !important;
+}
+
+body > header.site-header-pixben > nav a.activo::after,
+body > header.site-header-pixben > .site-drawer > nav a.activo::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:-8px;
+    height:2px;
+    background:#9d43df;
+    border-radius:99px;
+}
+
+body > header.site-header-pixben > .acciones-header,
+body > header.site-header-pixben > .site-drawer > .acciones-header{
+    flex:0 0 165px !important;
+    min-width:165px !important;
+    display:flex !important;
+    flex-direction:row !important;
+    align-items:center !important;
+    justify-content:flex-end !important;
+    gap:18px !important;
+    margin:0 !important;
+    padding:0 !important;
+    border:0 !important;
+}
+
+body > header.site-header-pixben .carrito{
+    display:flex !important;
+    align-items:center !important;
+    margin:0 !important;
+}
+
+body > header.site-header-pixben .carrito a,
+body > header.site-header-pixben .carrito a:visited{
+    width:auto !important;
+    min-height:0 !important;
+    display:grid !important;
+    place-items:center !important;
+    padding:7px 0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    color:#fff !important;
+    font-size:24px !important;
+    line-height:1 !important;
+    text-decoration:none !important;
+}
+
+body > header.site-header-pixben .usuario-menu{
+    position:relative !important;
+    width:auto !important;
+    margin:0 !important;
+}
+
+body > header.site-header-pixben .usuario-icono{
+    appearance:none;
+    width:auto !important;
+    min-height:0 !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    color:#fff !important;
+    display:flex !important;
+    flex-direction:row !important;
+    align-items:center !important;
+    justify-content:flex-start !important;
+    gap:9px !important;
+    padding:7px 0 !important;
+    margin:0 !important;
+    cursor:pointer;
+    white-space:nowrap;
+    font-weight:700 !important;
+    line-height:1 !important;
+}
+
+body > header.site-header-pixben .usuario-icono i{
+    font-size:21px !important;
+    color:#fff !important;
+}
+
+body > header.site-header-pixben #nombreUsuarioHeader{
+    color:#fff !important;
+    font-size:16px !important;
+    line-height:1 !important;
+}
+
+body > header.site-header-pixben .menu-usuario{
+    display:none;
+    position:absolute !important;
+    right:0 !important;
+    top:calc(100% + 10px) !important;
+    width:auto !important;
+    min-width:205px !important;
+    margin:0 !important;
+    padding:0 !important;
+    background:#fff !important;
+    border:1px solid #e7e7e7 !important;
+    border-radius:12px !important;
+    box-shadow:0 18px 45px rgba(0,0,0,.2) !important;
+    overflow:hidden !important;
+    z-index:1200 !important;
+}
+
+body > header.site-header-pixben .menu-usuario.abierto{
+    display:block !important;
+}
+
+body > header.site-header-pixben .menu-usuario a,
+body > header.site-header-pixben .menu-usuario a:visited{
+    display:block !important;
+    padding:12px 14px !important;
+    margin:0 !important;
+    color:#171717 !important;
+    background:#fff !important;
+    text-decoration:none !important;
+    font-size:14px !important;
+    line-height:1.25 !important;
+    font-weight:500 !important;
+    white-space:nowrap !important;
+}
+
+
+/* Estado de sesión: esta clase gana incluso sobre los estilos antiguos que
+   fuerzan display:block en los enlaces del menú. */
+body > header.site-header-pixben .menu-usuario a.sesion-oculto{
+    display:none !important;
+}
+
+body > header.site-header-pixben .menu-usuario a:hover{
+    background:#f6effc !important;
+    color:#7624b0 !important;
+}
+
+/* responsive-global.css controla el drawer móvil. Solo mantenemos logo/cabecera. */
+@media(max-width:1100px){
+    body > header.site-header-pixben{
+        min-height:72px;
+        padding:12px 16px !important;
+        gap:12px !important;
+    }
+
+    body > header.site-header-pixben > .logo{
+        flex-basis:auto !important;
+    }
+
+    body > header.site-header-pixben > .logo img{
+        width:clamp(112px,32vw,145px) !important;
+    }
+
+    /* Restablece el comportamiento de drawer definido en responsive-global.css. */
+    body > header.site-header-pixben > .site-drawer{
+        position:fixed !important;
+        top:0 !important;
+        right:0 !important;
+        z-index:1110 !important;
+        width:var(--pixben-drawer) !important;
+        height:100dvh !important;
+        margin:0 !important;
+        padding:78px 22px 26px !important;
+        display:flex !important;
+        flex-direction:column !important;
+        align-items:stretch !important;
+        justify-content:flex-start !important;
+        gap:24px !important;
+        overflow-y:auto !important;
+        background:linear-gradient(180deg,#090909 0%,#151515 100%) !important;
+        box-shadow:-12px 0 35px rgba(0,0,0,.3) !important;
+        transform:translateX(105%) !important;
+        visibility:hidden !important;
+    }
+
+    body.menu-movil-abierto > header.site-header-pixben > .site-drawer{
+        transform:translateX(0) !important;
+        visibility:visible !important;
+    }
+
+    body > header.site-header-pixben > .site-drawer > nav{
+        width:100% !important;
+        flex:0 0 auto !important;
+        flex-direction:column !important;
+        align-items:stretch !important;
+        justify-content:flex-start !important;
+        gap:4px !important;
+        text-align:left !important;
+    }
+
+    body > header.site-header-pixben > .site-drawer > nav a,
+    body > header.site-header-pixben > .site-drawer > nav a:visited{
+        display:flex !important;
+        min-height:48px !important;
+        padding:12px 14px !important;
+        border-radius:9px !important;
+        font-size:16px !important;
+        text-align:left !important;
+    }
+
+    body > header.site-header-pixben > .site-drawer > nav a.activo::after{
+        display:none !important;
+    }
+
+    body > header.site-header-pixben > .site-drawer > .acciones-header{
+        width:100% !important;
+        min-width:0 !important;
+        flex:0 0 auto !important;
+        margin-top:auto !important;
+        padding-top:18px !important;
+        border-top:1px solid rgba(255,255,255,.16) !important;
+        flex-direction:column !important;
+        align-items:stretch !important;
+        gap:12px !important;
+    }
+
+    body > header.site-header-pixben .carrito a,
+    body > header.site-header-pixben .usuario-icono{
+        width:100% !important;
+        min-height:46px !important;
+        padding:10px 13px !important;
+        border-radius:9px !important;
+        background:rgba(255,255,255,.07) !important;
+    }
+
+    body > header.site-header-pixben .usuario-menu{
+        width:100% !important;
+    }
+
+    body > header.site-header-pixben .menu-usuario{
+        position:static !important;
+        top:auto !important;
+        right:auto !important;
+        width:100% !important;
+        min-width:0 !important;
+        max-height:46vh !important;
+        overflow-y:auto !important;
+        margin-top:8px !important;
+        box-shadow:none !important;
+    }
+}

@@ -1,0 +1,30 @@
+PIXBEN - VARIANTES DE COLOR, CARRITO INVITADO Y SEGUIMIENTO
+Fecha: 2026-07-28
+
+CAMBIOS DEL FRONTEND
+1. Selector visual de color en el detalle del producto.
+2. Cada color muestra su stock y abre automáticamente la imagen que le corresponde.
+3. El comprador debe elegir color antes de agregar al carrito o comprar.
+4. Carrito separado por producto + talla + color.
+5. El carrito muestra color, talla e imagen de la variante elegida.
+6. Los favoritos guardan y muestran la variante escogida.
+7. El administrador configura hasta 7 colores, stock por color y correspondencia con las imágenes.
+8. El panel de pedidos muestra código, cliente/invitado, teléfono, color, talla y cantidad.
+9. Un visitante puede guardar productos en el carrito mediante localStorage sin iniciar sesión.
+10. Un visitante puede finalizar su pedido sin crear una cuenta.
+11. Después de comprar se genera y guarda localmente un código PX-XXXXXXXX.
+12. La página Mis pedidos permite consultar con código + correo.
+13. Los pedidos del mismo navegador aparecen automáticamente y se actualizan periódicamente.
+14. Los productos antiguos del carrito que no tienen color seleccionado quedan marcados para corregir la variante antes de pagar.
+15. Se actualizó el Service Worker para evitar que la PWA conserve archivos anteriores.
+
+ORDEN DE PUBLICACIÓN
+1. Publicar primero el backend actualizado en Render.
+2. Cuando Render esté activo, publicar este frontend en Netlify.
+3. En un celular con la PWA instalada, cerrar y abrir la app para recibir la actualización.
+
+USO DEL ADMINISTRADOR
+- Agrega una fila por cada color.
+- Escribe nombre, elige la muestra y coloca stock.
+- Sube las imágenes en el mismo orden que los colores.
+- Ejemplo: Beige = Imagen 1, Blanco = Imagen 2, Negro = Imagen 3.

@@ -1,0 +1,11 @@
+CAMBIOS APLICADOS
+
+- Productos normales pueden agregarse al carrito y pagarse sin iniciar sesión.
+- El checkout de invitado solicita nombre, correo y teléfono.
+- Si el visitante inicia sesión, su carrito local se migra automáticamente a su cuenta.
+- Comprar ahora funciona para visitantes.
+- Personalizador inicia con un lienzo libre y el producto base es opcional.
+- Se agregó una tarjeta de ayuda por WhatsApp.
+
+EDITAR WHATSAPP:
+Abrir public_html/htmls/personaliza.html y reemplazar 51XXXXXXXXX por el número real, incluyendo el prefijo 51.

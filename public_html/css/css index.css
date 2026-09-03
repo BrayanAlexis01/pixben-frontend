@@ -1,0 +1,631 @@
+/* RESET */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/*logo de pixben*/
+.logo img{
+    width: 165px;
+    height: auto;
+    object-fit: contain;
+}
+/* GENERAL */
+body{
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    color: #111;
+    overflow-x: hidden;
+}
+
+
+.usuario-menu{
+    position: relative;
+}
+
+.usuario-menu i{
+    font-size: 24px;
+    cursor: pointer;
+    color: white;
+}
+
+.menu-usuario{
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 35px;
+    background: white;
+    min-width: 180px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,.2);
+    overflow: hidden;
+    z-index: 999;
+}
+
+.menu-usuario a{
+    display: block;
+    padding: 12px;
+    color: black;
+    text-decoration: none;
+}
+
+.menu-usuario a:hover{
+    background: #f3f3f3;
+}
+
+
+/* HEADER */
+header{
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+}
+
+.logo h2{
+    font-size: 28px;
+    font-weight: bold;
+}
+
+nav{
+    display: flex;
+    gap: 30px;
+}
+
+.acciones-header{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+nav a{
+    text-decoration: none;
+    color: white;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+nav a:hover{
+    color: #8a2be2;
+}
+
+/* BUSCADOR */
+.buscador{
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: 20px;
+}
+
+/* ICONO */
+.buscador i{
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+/* INPUT OCULTO */
+.buscador input{
+    position: absolute;
+    right: 0;
+    width: 0;
+    opacity: 0;
+    padding: 8px;
+    transition: 0.4s ease;
+}
+
+/* ACTIVO */
+.buscador.activo input{
+    width: 180px;
+    opacity: 1;
+    padding: 8px 35px 8px 10px;
+}
+
+.carrito a{
+    color: #ffffff;
+    font-size:25px;
+}
+
+
+
+.banner{
+    position: relative;
+    width: 100%;
+    height: clamp(390px, 33.55vw, 687px);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    padding: 0 80px;
+
+    /*
+     * Mientras carga el carrusel, se muestra inmediatamente
+     * el primer banner como fondo de respaldo.
+     */
+    background:
+        #09050d
+        url("../imagensponsor/banners/banner-polos.webp")
+        center / cover no-repeat;
+}
+
+/* Contenedor móvil del carrusel */
+.slider{
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    width: max-content;
+    height: 100%;
+
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+
+    /*
+     * La transición del movimiento se controla desde JavaScript.
+     * Aquí solamente hacemos la aparición inicial.
+     */
+    transition: opacity 0.2s ease;
+}
+
+/* Se muestra cuando la primera imagen terminó de cargar */
+.banner.carrusel-listo .slider{
+    opacity: 1;
+}
+
+.slide{
+    flex: 0 0 100vw;
+    width: 100vw;
+    min-width: 100vw;
+    height: 100%;
+
+    display: block;
+
+    background-color: #09050d;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Banners oficiales:
+   1. Polos
+   2. Poleras
+   3. Film
+   4. Bolsos
+*/
+.slide:nth-child(1){
+    background-image:
+        url("../imagensponsor/banners/banner-polos.webp");
+}
+
+.slide:nth-child(2){
+    background-image:
+        url("../imagensponsor/banners/banner-poleras.webp");
+}
+
+.slide:nth-child(3){
+    background-image:
+        url("../imagensponsor/banners/banner-film.webp");
+}
+
+.slide:nth-child(4){
+    background-image:
+        url("../imagensponsor/banners/banner-bolsos.webp");
+}
+
+/* Contenido encima */
+.contenido-banner{
+    position: relative;
+    z-index: 2;
+    color: white;
+}
+
+
+.contenido-banner{
+   color: #fff;
+   max-width: 520px;
+   text-shadow: 0 3px 18px rgba(0,0,0,.72);
+}
+
+
+.fadeIn2{
+        
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  }
+  @-webkit-keyframes fadeIn {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+  }
+  @keyframes fadeIn {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+  } 
+
+   .zoomIn {
+  -webkit-animation-name: zoomIn;
+  animation-name: zoomIn;
+  -webkit-animation-duration: 1.5s;
+  animation-duration: 1.5s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  }
+  @-webkit-keyframes zoomIn {
+  0% {
+  opacity: 0;
+  -webkit-transform: scale3d(.3, .3, .3);
+  transform: scale3d(.3, .3, .3);
+  }
+  50% {
+  opacity: 1;
+  }
+  }
+  @keyframes zoomIn {
+  0% {
+  opacity: 0;
+  -webkit-transform: scale3d(.3, .3, .3);
+  transform: scale3d(.3, .3, .3);
+  }
+  50% {
+  opacity: 1;
+  }
+  } 
+.btn-comprar{
+    display: inline-block;
+    padding: 15px 30px;
+    background: #8a2be2;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.btn-comprar:hover{
+    background: #6d1cc7;
+    transform: translateY(-3px);
+}
+
+.btn-comprar:active{
+    transform: scale(0.98);
+}
+
+.contenido-banner{
+    width: 500px;
+}
+
+.contenido-banner p:first-child{
+    color: #8a2be2;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.contenido-banner h1{
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+
+.contenido-banner p{
+    font-size: 20px;
+    margin-bottom: 25px;
+}
+
+.contenido-banner button{
+    background-color: #8a2be2;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.contenido-banner button:hover{
+    background-color: #6d1db8;
+}
+
+/* PRODUCTOS */
+.productos{
+    padding: 60px;
+    text-align: center;
+}
+
+       .fadeIn {
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
+  -webkit-animation-duration: 3s;
+  animation-duration: 3s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  }
+  @-webkit-keyframes fadeIn {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+  }
+  @keyframes fadeIn {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+  } 
+
+.producto:hover{
+    transform: translateY(-20px);
+    overflow: hidden;
+    transition: 0.8s;
+    cursor: pointer;
+}
+
+.productos h2{
+    margin-bottom: 40px;
+    font-size: 32px;
+}
+
+.contenedor-productos{
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.producto{
+    background-color: white;
+    width: 230px;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.8s ease;
+}
+
+.producto img{
+    width: 100%;
+    border-radius: 10px;
+}
+
+.producto h3{
+    margin: 15px 0 10px;
+}
+
+.producto p{
+    color: #8a2be2;
+    font-weight: bold;
+}
+
+/* PASOS */
+.pasos{
+    padding: 60px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.pasos h2{
+    margin-bottom: 40px;
+    font-size: 32px;
+}
+
+.contenedor-pasos{
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.paso{
+    width: 250px;
+}
+
+.paso2 i{
+    font-size: 40px;
+}
+.paso2 h3{
+  margin-bottom: 20px;
+}
+.paso h3{
+    margin-bottom: 20px;
+}
+.paso i{
+    font-size: 40px;
+}
+/* BENEFICIOS FOOTER */
+.beneficios{
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 30px;
+    flex-wrap: wrap;
+}
+
+.beneficio{
+    width: 250px;
+}
+
+.beneficio h3{
+    margin-bottom: 10px;
+}
+
+/* FOOTER PRINCIPAL */
+footer{
+    background-color: black;
+    color: white;
+}
+
+.footer-contenido{
+    display: flex;
+    justify-content: space-around;
+    padding: 50px;
+    flex-wrap: wrap;
+}
+
+.footer-logo,
+.footer-links,
+.footer-info,
+.footer-redes{
+    width: 220px;
+}
+
+.footer-contenido h3{
+    margin-bottom: 20px;
+}
+
+.footer-contenido a{
+    display: block;
+    text-decoration: none;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.footer-contenido a:hover{
+    color: #8a2be2;
+}
+
+/* COPYRIGHT */
+.footer-copy{
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid gray;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px){
+
+    header{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    nav{
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .banner{
+        padding: 30px;
+        height: auto;
+    }
+
+    .contenido-banner h1{
+        font-size: 40px;
+    }
+
+    .footer-contenido{
+        text-align: center;
+        gap: 30px;
+    }
+}
+
+
+
+/* Aviso de privacidad/cookies
+   No bloquea la página y evita nombres genéricos que algunos bloqueadores ocultan. */
+.privacy-notice{
+    position: fixed;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    background: #111;
+    color: white;
+    padding: 18px 20px;
+    border-radius: 10px;
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    z-index: 2147483647;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+}
+
+.privacy-notice.is-visible{
+    display: flex;
+}
+
+.privacy-notice p{
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.privacy-actions{
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.privacy-notice button{
+    padding: 10px 18px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+#privacyAccept{
+    background: white;
+    color: #111;
+}
+
+#privacyReject{
+    background: transparent;
+    color: white;
+    border: 1px solid rgba(255,255,255,0.7);
+}
+
+@media (max-width: 650px){
+    .privacy-notice{
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .privacy-actions{
+        width: 100%;
+    }
+
+    .privacy-actions button{
+        flex: 1;
+    }
+}
+
+
+
+.usuario-menu{
+    position: relative;
+}
+
+.usuario-icono{
+    color: white;
+    cursor: pointer;
+    font-size: 22px;
+}
+
+.menu-usuario{
+    display: none;
+    position: absolute;
+    top: 35px;
+    right: 0;
+    background: white;
+    min-width: 220px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 999;
+}
+
+.menu-usuario a{
+    display: block;
+    padding: 12px 15px;
+    color: #111;
+    text-decoration: none;
+}
+
+.menu-usuario a:hover{
+    background: #f3f3f3;
+}
+

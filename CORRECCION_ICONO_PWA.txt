@@ -1,0 +1,18 @@
+CORRECCIÓN DEL ICONO PRINCIPAL DE PIXBEN
+
+Problema encontrado:
+- favicon-512.png tenía el logotipo B de solo 125 x 103 px dentro de un lienzo de 512 x 512 px.
+- Android utiliza principalmente el icono de 512 px para la aplicación instalada, por eso se veía pequeño.
+- Los accesos directos usaban el icono de 192 px, donde el logotipo sí ocupaba un tamaño normal.
+
+Cambios realizados:
+- Nuevos iconos app-icon-192.png y app-icon-512.png con la misma proporción visible.
+- Nuevos iconos maskable con fondo oscuro para Android.
+- site.webmanifest actualizado para separar iconos "any" y "maskable".
+- service-worker.js actualizado de pixben-pwa-v4 a pixben-pwa-v5.
+- apple-touch-icon actualizado.
+
+Después de publicar:
+1. Desinstalar PixBen del celular.
+2. Abrir el sitio en Chrome y borrar los datos del sitio si todavía aparece el icono anterior.
+3. Volver a instalar/agregar PixBen a la pantalla principal.

@@ -1,0 +1,8 @@
+CORRECCIÓN NAVBAR V2
+- Corregida la cabecera de Mis pedidos, Historial y Favoritos.
+- Revisadas todas las interfaces públicas: comparten la misma cabecera del index.
+- Panel Admin no fue modificado.
+- Corregido el conflicto entre header-global.css y responsive-menu.js: al envolver nav y acciones en .site-drawer, los estilos de escritorio ya no se perdían.
+- Se fuerza color blanco en enlaces visitados para evitar links morados/subrayados.
+- Se mantiene el drawer/hamburguesa para tablet y móvil.
+- Service Worker actualizado para evitar CSS antiguo en caché.

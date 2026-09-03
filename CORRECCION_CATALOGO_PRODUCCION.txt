@@ -1,0 +1,20 @@
+PIXBEN - CORRECCIÓN CATÁLOGO EN PRODUCCIÓN (03/09/2026)
+
+Problema corregido:
+- El frontend mostraba 40 productos locales durante unos instantes, pero cuando Render
+  respondía con los 7 productos antiguos, esa respuesta reemplazaba por completo la precarga.
+- Por eso la página terminaba mostrando otra vez "7 productos encontrados".
+
+Ahora:
+- 40 productos aparecen inmediatamente.
+- Los 72 productos locales quedan disponibles sin depender de Render.
+- Al responder el backend, sus productos se mezclan con el catálogo local, no lo borran.
+- Los productos que ya existan en PostgreSQL usan su ID real.
+- Si Render todavía no ha sembrado los 72 nuevos, el catálogo visual sigue visible.
+- Resultado esperado con la BD actual de 7 productos: alrededor de 79 productos visibles.
+- Cuando Render termine de sembrar todos los productos, las versiones reales sustituyen
+  automáticamente a las precargadas.
+
+IMPORTANTE PARA NETLIFY:
+Si haces deploy manual (arrastrar ZIP/carpeta), usa PIXBEN-NETLIFY-READY.zip.
+Ese ZIP contiene directamente index.html, htmls/, js/, css/, imagen/, etc. en la raíz.

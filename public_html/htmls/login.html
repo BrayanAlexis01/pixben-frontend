@@ -1,0 +1,107 @@
+<html lang="es">
+<head>
+    <title>Login - PixBen</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../imagensponsor/favicon.ico" sizes="any">
+    <link rel="icon" type="image/webp" href="../imagensponsor/favicon.webp">
+    <link rel="apple-touch-icon" href="../imagensponsor/app-icon-maskable-192.png">
+    <link rel="manifest" href="../site.webmanifest">
+    <meta name="theme-color" content="#8a2be2">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PixBen">
+
+    <meta name="robots" content="noindex,nofollow">
+
+    <link href="../css/css index.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/login.css" rel="stylesheet" type="text/css"/>
+
+    <link href="../css/responsive-global.css?v=2" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../css/pwa-premium.css?v=2">
+    <script src="../js/pwa-premium.js?v=2" defer></script>
+    <link href="../css/header-global.css?v=2" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="site-header-pixben">
+    <div class="logo">
+        <a href="../index.html"><img src="../imagensponsor/logopixben.webp" alt="PixBen"></a>
+    </div>
+    <nav aria-label="Navegación principal">
+            <a href="../index.html">Inicio</a>
+            <a href="productos.html">Productos</a>
+            <a href="personaliza.html">Personaliza</a>
+            <a href="nosotros.html">Nosotros</a>
+            <a href="contacto.html">Contacto</a>
+    </nav>
+    <div class="acciones-header">
+        <div class="carrito">
+            <a href="carrito de compras.html" aria-label="Carrito de compras"><i class="fa-solid fa-cart-shopping"></i></a>
+        </div>
+        <div class="usuario-menu">
+            <button type="button" class="usuario-icono" id="btnUsuarioMenu" aria-label="Abrir menú de usuario" aria-expanded="false">
+                <i class="fa-solid fa-user"></i><span id="nombreUsuarioHeader"></span>
+            </button>
+            <div id="menuUsuario" class="menu-usuario">
+                <a href="login.html" id="btnLogin">Iniciar sesión</a>
+                <a href="registro.html" id="btnRegistro">Registrarse</a>
+                <a href="perfil.html" id="btnPerfil">Mi perfil</a>
+                <a href="mis-pedidos.html" id="btnPedidos">Mis pedidos</a>
+                <a href="historial.html" id="btnHistorial">Historial</a>
+                <a href="favoritos.html" id="btnFavoritos">Favoritos</a>
+                <a href="admin.html" id="btnAdmin">Panel Admin</a>
+                <a href="#" id="btnCerrarSesion">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <main>
+
+        <div class="login-container">
+
+            <div class="login-card">
+
+                <img src="../imagensponsor/logopixben.webp" alt="">
+
+                <h1>Iniciar Sesión</h1>
+
+                <input
+                    type="email"
+                    id="correo"
+                    placeholder="Correo electrónico">
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Contraseña">
+
+                <button id="btnIniciarSesion">
+                    Ingresar
+                </button>
+
+                <p>
+                    ¿No tienes cuenta?
+                    <a href="registro.html">
+                        Regístrate aquí
+                    </a>
+                </p>
+
+            </div>
+
+        </div>
+
+    </main>
+
+<script src="../js/config.js?v=16"></script>
+<script src="../js/header-global.js?v=2"></script>
+<script src="../js/analitica.js?v=3"></script>
+<script src="../js/login.js?v=4" type="text/javascript"></script>
+    <script src="../js/eventos-html.js?v=3" type="text/javascript"></script>
+    <script src="../js/responsive-menu.js?v=4" type="text/javascript"></script>
+</body>
+</html>

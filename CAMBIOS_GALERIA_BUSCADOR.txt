@@ -1,0 +1,22 @@
+CAMBIOS REALIZADOS
+
+1. Buscador del encabezado corregido:
+   - Texto negro y visible.
+   - Campo completamente utilizable.
+   - El menú hamburguesa se activa hasta 1100 px para evitar que el encabezado quede amontonado.
+
+2. Panel administrador:
+   - Permite seleccionar entre 1 y 7 imágenes.
+   - La primera imagen queda como portada.
+   - Muestra contador y vistas previas.
+   - Al editar muestra las imágenes actuales.
+   - Si se editan datos sin seleccionar imágenes nuevas, mantiene la galería anterior.
+
+3. Detalles del producto:
+   - Flechas anterior/siguiente cuando hay más de una imagen.
+   - Miniaturas debajo de la imagen principal.
+   - Contador de imagen.
+   - Navegación con flechas del teclado.
+   - Si solo existe una imagen, no se muestran flechas, miniaturas ni contador.
+
+Este frontend necesita el backend incluido en el ZIP pixben-backend-galeria-7-imagenes.zip.

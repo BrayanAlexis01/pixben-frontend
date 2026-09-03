@@ -1,0 +1,13 @@
+PIXBen frontend final
+
+- Buscador de escritorio corregido.
+- Menú hamburguesa responsive con overlay y bloqueo de scroll.
+- JavaScript separado por archivos.
+- Aviso de privacidad compatible con Brave.
+- Filtros por categoría, precio, color, talla y stock.
+- Tazas, mousepads, gorras, bolsos y accesorios no solicitan talla.
+- Panel administrador permite entre 1 y 7 imágenes.
+- Galería con flechas, miniaturas y contador en detalles.
+- Imágenes Cloudinary y antiguas del backend compatibles.
+- Página Mis pedidos agregada.
+- Rutas locales rotas corregidas.

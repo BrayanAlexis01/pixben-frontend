@@ -1,0 +1,11 @@
+# Netlify: el service worker y el código crítico deben revalidarse tras cada deploy.
+/service-worker.js
+  Cache-Control: no-cache, no-store, must-revalidate
+  Service-Worker-Allowed: /
+  Content-Type: application/javascript; charset=utf-8
+
+/js/*.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/htmls/*.html
+  Cache-Control: public, max-age=0, must-revalidate

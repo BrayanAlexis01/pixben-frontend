@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../imagensponsor/favicon.ico" sizes="any">
+    <link rel="icon" type="image/webp" href="../imagensponsor/favicon.webp">
+    <link rel="apple-touch-icon" href="../imagensponsor/app-icon-maskable-192.png">
+    <link rel="manifest" href="../site.webmanifest">
+    <meta name="theme-color" content="#8a2be2">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PixBen">
+
+    <meta name="robots" content="noindex,nofollow">
+    <title>Mis pedidos | PixBen</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link rel="stylesheet" href="../css/mis-pedidos.css?v=4">
+    <link rel="stylesheet" href="../css/responsive-global.css?v=4">
+    <link rel="stylesheet" href="../css/pwa-premium.css?v=2">
+    <script src="../js/pwa-premium.js?v=2" defer></script>
+    <link href="../css/header-global.css?v=2" rel="stylesheet">
+</head>
+<body class="pagina-pedidos">
+    <header class="site-header-pixben">
+    <div class="logo">
+        <a href="../index.html"><img src="../imagensponsor/logopixben.webp" alt="PixBen"></a>
+    </div>
+    <nav aria-label="Navegación principal">
+            <a href="../index.html">Inicio</a>
+            <a href="productos.html">Productos</a>
+            <a href="personaliza.html">Personaliza</a>
+            <a href="nosotros.html">Nosotros</a>
+            <a href="contacto.html">Contacto</a>
+    </nav>
+    <div class="acciones-header">
+        <div class="carrito">
+            <a href="carrito de compras.html" aria-label="Carrito de compras"><i class="fa-solid fa-cart-shopping"></i></a>
+        </div>
+        <div class="usuario-menu">
+            <button type="button" class="usuario-icono" id="btnUsuarioMenu" aria-label="Abrir menú de usuario" aria-expanded="false">
+                <i class="fa-solid fa-user"></i><span id="nombreUsuarioHeader"></span>
+            </button>
+            <div id="menuUsuario" class="menu-usuario">
+                <a href="login.html" id="btnLogin">Iniciar sesión</a>
+                <a href="registro.html" id="btnRegistro">Registrarse</a>
+                <a href="perfil.html" id="btnPerfil">Mi perfil</a>
+                <a href="mis-pedidos.html" id="btnPedidos">Mis pedidos</a>
+                <a href="historial.html" id="btnHistorial">Historial</a>
+                <a href="favoritos.html" id="btnFavoritos">Favoritos</a>
+                <a href="admin.html" id="btnAdmin">Panel Admin</a>
+                <a href="#" id="btnCerrarSesion">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <main class="contenedor-pedidos">
+        <div class="encabezado-pedidos">
+            <div>
+                <p class="etiqueta-pedidos" id="etiquetaPedidos">TU CUENTA</p>
+                <h1 id="tituloPedidos">Mis pedidos</h1>
+                <p id="descripcionPedidos">Consulta las compras registradas con tu usuario.</p>
+            </div>
+            <a class="boton-volver" href="productos.html">
+                <i class="fa-solid fa-arrow-left"></i> Seguir comprando
+            </a>
+        </div>
+
+        <section id="consultaPedidoInvitado" class="consulta-pedido-invitado" hidden>
+            <div>
+                <span>COMPRA SIN CUENTA</span>
+                <h2>Consulta tu pedido como invitado</h2>
+                <p>Escribe el código de seguimiento y el mismo correo utilizado al comprar.</p>
+            </div>
+            <form id="formConsultaInvitado">
+                <label for="codigoPedidoInvitado">Código de seguimiento</label>
+                <input id="codigoPedidoInvitado" type="text" maxlength="40" placeholder="Ej. PX-A2B3C4D5" autocomplete="off" required>
+                <label for="correoPedidoInvitado">Correo de compra</label>
+                <input id="correoPedidoInvitado" type="email" maxlength="160" placeholder="tu-correo@ejemplo.com" autocomplete="email" required>
+                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> Consultar pedido</button>
+            </form>
+            <div id="pedidosGuardadosInvitado" class="pedidos-guardados-invitado"></div>
+        </section>
+
+        <p id="estadoPedidos" class="estado-pedidos">Cargando pedidos...</p>
+        <section id="listaPedidos" class="lista-pedidos" aria-live="polite"></section>
+    </main>
+    
+<script src="../js/config.js?v=16"></script>
+<script src="../js/header-global.js?v=2"></script>
+<script src="../js/analitica.js?v=3"></script>
+<script src="../js/paginas/mis-pedidos.js?v=6"></script>
+    <script src="../js/eventos-html.js?v=3"></script>
+<script src="../js/responsive-menu.js?v=4"></script>
+</body>
+</html>

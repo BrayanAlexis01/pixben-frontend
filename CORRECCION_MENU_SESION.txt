@@ -1,0 +1,1 @@
+Corrección puntual del menú de usuario: al existir una sesión, Iniciar sesión y Registrarse se ocultan aunque CSS antiguos usen display:block!important. Al cerrar sesión, vuelven a mostrarse. Se actualizó caché del header y Service Worker.

@@ -1,0 +1,1 @@
+Se corrigieron duplicados del catálogo local, se añadieron categorías de Hoodies / Poleras y Gorras, se regeneraron imágenes variadas con más escenarios, y se actualizó la precarga a 40 productos.
