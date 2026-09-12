@@ -1,0 +1,38 @@
+CAMBIOS PWA PREMIUM - PIXBEN
+============================
+
+Se agregó:
+- Pantalla de inicio premium al abrir la aplicación instalada.
+- Service Worker con soporte offline para páginas y recursos visitados.
+- Página offline con identidad visual de PixBen.
+- Aviso elegante cuando hay una versión nueva y botón Actualizar.
+- Botón de instalación propio cuando el navegador permite instalar la PWA.
+- Accesos rápidos: Productos, Personalizar, Carrito y Mis pedidos.
+- Manifest mejorado para Android, Windows e iOS.
+- Notificaciones Web Push reales al cambiar estados de pedidos (requiere las 3 variables VAPID en Render).
+- Avisos locales como respaldo mientras la aplicación está activa.
+
+ARCHIVOS NUEVOS
+- public_html/service-worker.js
+- public_html/offline.html
+- public_html/css/pwa-premium.css
+- public_html/js/pwa-premium.js
+
+ARCHIVOS MODIFICADOS
+- public_html/site.webmanifest
+- Todos los HTML (metadatos y carga PWA)
+- public_html/js/paginas/mis-pedidos.js
+- netlify.toml
+
+IMPORTANTE
+Para recibir notificaciones con la aplicación cerrada debes desplegar también el
+backend actualizado y configurar VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY y VAPID_SUBJECT
+en Render. Las claves generadas se entregan en un archivo separado y la privada no
+debe subirse a GitHub.
+
+DESPLIEGUE
+1. Reemplaza el frontend por esta versión.
+2. Haz commit y push.
+3. Netlify desplegará los archivos nuevos.
+4. Abre la web una vez y actualiza con Ctrl + F5.
+5. En una PWA ya instalada, puede aparecer “Nueva versión disponible”; pulsa Actualizar.

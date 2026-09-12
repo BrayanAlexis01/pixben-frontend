@@ -1,0 +1,40 @@
+PIXBEN FRONTEND - ENTREGA 2026-09-11 / PERSONALIZADOR ESTUDIO V2
+
+Puedes reemplazar el contenido de tu repositorio pixben-frontend por esta versión y hacer push.
+
+IMPORTANTE
+- No se eliminaron ni reemplazaron tus productos o imágenes de base de datos.
+- El panel conserva el flujo actual de hasta 7 imágenes y hasta 7 colores por producto.
+- Color 1 se vincula con imagen 1, color 2 con imagen 2, etc.
+- El carrito ya conserva producto + color + talla como combinación distinta.
+- El botón “Mantener Render activo” es temporal: funciona mientras la pestaña Admin permanezca abierta.
+- La PWA subió a pixben-pwa-v12 para evitar que quede JavaScript viejo en caché.
+
+MEJORAS DE ESTA ENTREGA
+- Filtros de color basados en variantes reales del Admin.
+- Reintentos automáticos cuando Render responde 502/503/504 al despertar.
+- Estado del backend dentro de Admin.
+- SKU/código interno opcional, búsqueda por SKU y aviso de duplicados.
+- Datos estructurados Product (JSON-LD) en el detalle.
+- Cabeceras de seguridad en Netlify.
+
+No necesitas cambiar la URL del backend: continúa usando https://pixben-backend.onrender.com.
+
+
+PERSONALIZADOR ESTUDIO V2
+- Selector visual con 38 tipografías y categorías.
+- Texto avanzado: contorno, sombra, espaciado, interlineado y alineación.
+- Imágenes: drag & drop, calidad, filtros y ajustes.
+- Formas, capas, bloqueo, visibilidad y herramientas de posición.
+- Productos: colores, stock, tallas e imágenes reales del Admin.
+- Borrador automático en IndexedDB.
+- Vista previa de frente y espalda antes de enviar.
+- El carrito personalizado recibe también el color elegido.
+- No requiere cambios de base de datos ni de backend.
+
+Consulta CAMBIOS_PERSONALIZADOR_ESTUDIO_V2.txt para el detalle completo.
+
+ACTUALIZACIÓN 11/09/2026 - GALERÍAS POR COLOR
+- Este frontend incluye Personalizador Estudio v2 + galerías independientes por color.
+- Sube primero el backend correspondiente y espera que Render termine.
+- Luego despliega este frontend.

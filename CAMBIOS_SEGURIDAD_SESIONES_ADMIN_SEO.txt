@@ -1,0 +1,18 @@
+PIXBen - Frontend de seguridad, administración y SEO
+Fecha: 2026-07-15
+
+- Sesión con token y cuenta identificada por ID único.
+- Se eliminó la consulta de carrito, favoritos, historial y pedidos por nombre/apellido.
+- Validación de correo y contraseña en el registro.
+- Corrección de botones para quitar productos en favoritos e historial.
+- Eliminación de mensajes, pedidos y personalizados desde el panel admin.
+- Descarga de respaldo desde el panel admin.
+- Buscador únicamente en Productos; el resto del encabezado conserva su alineación.
+- Herramientas del personalizador fijas y con desplazamiento interno en escritorio/tablet.
+- Títulos, descripciones, canonical, Open Graph, robots.txt y sitemap.xml.
+- Perfil con alias, foto y cambio de contraseña.
+- Reseñas paginadas, avatar y me gusta.
+
+IMPORTANTE
+Cierra sesión e inicia sesión después de publicar. Una sesión antigua sin token será rechazada deliberadamente.
+El acceso con Google o Facebook no se incluyó: requiere crear aplicaciones OAuth oficiales y proporcionar sus credenciales y dominios autorizados.

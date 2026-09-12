@@ -1,0 +1,43 @@
+PIXBEN - UN PRODUCTO, VARIOS COLORES, UNA GALERÍA POR COLOR
+===========================================================
+
+Qué cambia
+----------
+Antes los colores estaban vinculados, como máximo, a una imagen según su posición en la galería.
+Ahora cada color puede tener de 1 a 7 fotografías propias.
+
+Ejemplo
+-------
+Producto: Polo Amiri
+- Negro: negro-frente.webp, negro-espalda.webp, negro-modelo.webp
+- Blanco: blanco-frente.webp, blanco-espalda.webp, blanco-modelo.webp
+- Beige: beige-frente.webp, beige-espalda.webp, beige-modelo.webp
+- Azul: azul-frente.webp, azul-espalda.webp, azul-modelo.webp
+- Rojo: rojo-frente.webp, rojo-espalda.webp, rojo-modelo.webp
+
+El cliente entra a un único Polo Amiri. Al tocar Negro ve solamente la galería negra; al tocar Beige la galería cambia completa a beige, etc.
+
+Panel Admin
+-----------
+- Cada fila de color incluye nombre, muestra, stock y selector de imágenes propio.
+- Se permiten hasta 7 imágenes por color.
+- La primera foto del color es su portada.
+- Al editar un producto se muestran las fotos actuales de cada variante.
+- Si se seleccionan nuevas fotos para un color, se reemplaza solo la galería de ese color.
+- La "Galería general" se oculta cuando existen variantes de color y se usa solo en productos sin colores.
+
+Tienda
+------
+- El primer color con stock se selecciona automáticamente.
+- Cambiar de color sustituye la imagen principal y todas las miniaturas.
+- Stock, carrito y favoritos siguen diferenciando el color seleccionado.
+- Carrito y favoritos muestran la portada correspondiente al color elegido.
+- Productos antiguos continúan funcionando con el sistema anterior hasta que se les carguen galerías por color.
+
+Personalizador
+--------------
+Esta entrega parte del Personalizador Estudio v2. Al seleccionar una variante de color de una prenda personalizable, también utiliza la galería específica de ese color como base del editor.
+
+IMPORTANTE
+----------
+Este ZIP incluye también las mejoras del Personalizador Estudio v2 realizadas inmediatamente antes de esta función. No vuelvas a una versión anterior del frontend después de subirlo.

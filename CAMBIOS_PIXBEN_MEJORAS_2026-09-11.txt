@@ -1,0 +1,9 @@
+PIXBEN - MEJORAS 2026-09-11
+
+- Se conservan productos e imágenes existentes: no se incluyen cargas ni borrados de datos.
+- El filtro por color ahora lee las variantes reales configuradas en Admin.
+- Catálogo y detalle reintentan automáticamente fallos 502/503/504 típicos del arranque de Render.
+- Panel Admin muestra el estado del backend y ofrece “Mantener Render activo” mientras la pestaña permanezca abierta.
+- Admin incorpora SKU/código interno opcional, búsqueda por SKU y advertencia de nombres duplicados.
+- Se actualizó la caché PWA para publicar los cambios sin quedarse con JS antiguo.
+- El backend asociado incorpora /api/health, CORS configurable, rate limiting, cabeceras de seguridad, validación de producto y SKU.

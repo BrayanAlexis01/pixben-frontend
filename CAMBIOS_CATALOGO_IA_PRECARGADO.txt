@@ -1,0 +1,8 @@
+PIXBEN - CATÁLOGO IA / PRECARGA
+
+- Se añadieron 72 productos nuevos: 18 polos, 18 tazas, 18 mousepads y 18 bolsos de tela.
+- Se añadieron 72 imágenes WEBP tipo escena/mockup en public_html/imagen/catalogo.
+- 40 productos quedan precargados en Netlify para mostrarse de inmediato mientras Render despierta.
+- El catálogo muestra un aviso sutil "Cargando más productos..." y reemplaza la precarga por los datos reales al responder el backend.
+- Las imágenes del catálogo inicial se sirven desde Netlify, evitando depender de Render para mostrarlas.
+- Si alguien abre un producto precargado antes de que Render responda, se muestra el detalle y se espera el ID real antes de habilitar compra/favoritos.

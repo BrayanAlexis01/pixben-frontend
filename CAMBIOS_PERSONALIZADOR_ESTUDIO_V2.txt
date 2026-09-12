@@ -1,0 +1,111 @@
+PIXBEN - PERSONALIZADOR / ESTUDIO V2
+Actualización: 11/09/2026
+
+OBJETIVO
+Convertir la sección Personaliza en el núcleo creativo de PixBen, manteniendo Fabric.js 5.3.0 y el flujo actual de cotización por administrador.
+
+MEJORAS IMPLEMENTADAS
+
+1. TIPOGRAFÍAS
+- 38 tipografías entre modernas, impacto, urbanas, elegantes, clásicas, manuscritas y gamer.
+- Selector visual: cada fuente se muestra con una vista previa real de cómo se ve.
+- Buscador de fuentes.
+- Filtros por categoría.
+- Fuentes como Montserrat, Poppins, Bebas Neue, Anton, Archivo Black, Alfa Slab One,
+  Oswald, Bangers, Permanent Marker, Bungee, Playfair Display, Cinzel,
+  Great Vibes, Pacifico, Lobster, Dancing Script, Caveat, Orbitron,
+  Press Start 2P, Chakra Petch, VT323 y otras.
+
+2. EDICIÓN DE TEXTO
+- Tamaño hasta 220 px.
+- Negrita, cursiva y subrayado.
+- Alineación izquierda, centro y derecha.
+- Mayúsculas y minúsculas.
+- Espaciado entre letras.
+- Interlineado.
+- Color.
+- Contorno configurable (color y grosor).
+- Sombra configurable.
+- El texto se agrega como Textbox para manejar frases de varias líneas mejor que antes.
+
+3. IMÁGENES
+- Se pueden subir con el botón o arrastrando directamente al lienzo.
+- Validación PNG/JPG/WEBP, 5 MB y límite de dimensiones.
+- Indicador orientativo de calidad/resolución de la imagen.
+- Presets Normal, Blanco y negro y Sepia.
+- Ajustes de brillo, contraste y saturación.
+- Volteo horizontal y vertical.
+
+4. FORMAS
+- Rectángulo.
+- Círculo.
+- Estrella.
+- Línea.
+- Color de nuevas formas.
+- Relleno, borde y grosor editables al seleccionar una forma.
+
+5. CAPAS Y OBJETOS
+- Panel de capas real.
+- Selección de objetos desde la lista.
+- Mostrar/ocultar capa.
+- Bloquear/desbloquear capa.
+- Duplicar, eliminar, subir y bajar de capa.
+- Centrar horizontal/verticalmente en el área recomendada.
+- Encajar automáticamente el objeto dentro del área de impresión.
+- Opacidad y rotación.
+- Aviso si un elemento está saliendo del área recomendada de estampado.
+
+6. PRODUCTOS REALES DE PIXBEN
+- El personalizador usa las variantes de color configuradas desde Admin cuando existen.
+- Muestra stock real por color.
+- Usa las tallas reales configuradas para cada producto.
+- Respeta productos sin talla, como tazas, gorras, bolsos o mousepads.
+- Si el producto tiene varias imágenes, se muestran miniaturas y el usuario puede elegir
+  qué foto representa el frente y cuál la espalda.
+- La imagen correspondiente a una variante de color se usa como referencia cuando está configurada.
+
+7. FRENTE Y ESPALDA
+- Contador de elementos independiente para frente y espalda.
+- Cada lado conserva su propio diseño.
+- Cada lado puede utilizar una vista distinta del producto base.
+- Vista previa final de ambos lados antes de enviar.
+- Descarga individual de la vista frontal o posterior desde la vista previa.
+
+8. BORRADOR AUTOMÁTICO
+- El diseño se guarda automáticamente en IndexedDB del navegador.
+- Guarda frente, espalda, producto, variante, talla, cantidad, notas y objetos.
+- Si el usuario recarga o vuelve después, PixBen recupera su último borrador.
+- El borrador funciona aunque todavía no haya iniciado sesión.
+- Al enviar correctamente la solicitud, el borrador se elimina.
+
+9. EXPERIENCIA DE USO
+- Interfaz reorganizada en grupos desplegables.
+- Botón Nuevo diseño.
+- Modo enfoque / pantalla completa del lienzo.
+- Mostrar u ocultar las guías del área de impresión.
+- Arrastrar y soltar imágenes.
+- Atajos:
+  * Supr / Backspace: eliminar.
+  * Ctrl+Z: deshacer.
+  * Ctrl+Y o Ctrl+Shift+Z: rehacer.
+  * Ctrl+D: duplicar.
+  * Ctrl+C / Ctrl+V: copiar y pegar objetos dentro del editor.
+  * Flechas: mover 1 px.
+  * Shift + flechas: mover 10 px.
+- Resumen de cuántos elementos existen en cada lado y estado de calidad de imágenes.
+- Contador de caracteres para las indicaciones al diseñador.
+
+10. ENVÍO Y COTIZACIÓN
+- Se mantiene el flujo actual: el cliente diseña y el administrador define el precio.
+- La vista previa se genera antes de enviar.
+- El carrito personalizado ahora recibe también el color seleccionado.
+- No se modificó la estructura de Neon ni MongoDB para esta mejora.
+
+ARCHIVOS PRINCIPALES MODIFICADOS
+- public_html/htmls/personaliza.html
+- public_html/css/css personaliza.css
+- public_html/js/personaliza.js
+- public_html/service-worker.js (cache PixBen PWA v12)
+
+NOTA
+Las tipografías web se cargan mediante Google Fonts y tienen fallback del navegador. Fabric.js continúa en la misma versión 5.3.0 que ya utilizaba PixBen.

@@ -1,0 +1,20 @@
+# Netlify: el service worker y el código crítico deben revalidarse tras cada deploy.
+/service-worker.js
+  Cache-Control: no-cache, no-store, must-revalidate
+  Service-Worker-Allowed: /
+  Content-Type: application/javascript; charset=utf-8
+
+/js/*.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/htmls/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Seguridad global de la interfaz. No se usa CSP estricta todavía porque PixBen
+# consume Font Awesome/Cloudinary y se romperían recursos existentes sin inventariarlos.
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains

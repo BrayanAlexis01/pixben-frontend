@@ -1,0 +1,14 @@
+PIXBEN - CAMBIOS FRONTEND
+
+- Editor de personalización con Fabric.js para frente y espalda.
+- Selección de producto, color, talla y cantidad.
+- Herramientas: imagen, texto, fuentes, tamaño, color, negrita, cursiva, subrayado,
+  duplicar, eliminar, centrar, capas, opacidad, rotación, deshacer, rehacer y limpiar.
+- Validación local: PNG/JPG/WEBP, máximo 5 MB, dimensiones limitadas y SVG rechazado.
+- Precio inicial: Por procesar.
+- La solicitud se guarda en MongoDB, las vistas en Cloudinary y se agrega al carrito.
+- El carrito conserva solicitudes pendientes sin sumarlas al total.
+- El cliente puede aceptar una cotización desde el carrito.
+- Panel admin con productos, solicitudes personalizadas, pedidos normales y mensajes.
+- El formulario Contacto guarda mensajes en MongoDB y no acepta adjuntos.
+- Mis pedidos muestra compras normales y solicitudes personalizadas.
