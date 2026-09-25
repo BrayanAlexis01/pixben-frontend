@@ -81,7 +81,17 @@ async function cargarCarrito() {
             return;
         }
 
-        const completos = await Promise.all(carrito.map(cargarItemCompleto));
+        const necesitaCatalogo = carrito.some(item => !item.personalizado || item.productoId != null);
+        let productosPorId = new Map();
+        if (necesitaCatalogo) {
+            const respuestaProductos = await fetch(`${API_URL}/productos`);
+            if (respuestaProductos.ok) {
+                const productos = await respuestaProductos.json();
+                productosPorId = new Map((Array.isArray(productos) ? productos : []).map(producto => [Number(producto.id), producto]));
+            }
+        }
+
+        const completos = await Promise.all(carrito.map(item => cargarItemCompleto(item, productosPorId)));
         lista.innerHTML = completos.filter(Boolean).map(renderizarItem).join("");
         actualizarResumen();
         intentarAbrirCheckoutAutomatico();
@@ -91,16 +101,12 @@ async function cargarCarrito() {
     }
 }
 
-async function cargarItemCompleto(item) {
+async function cargarItemCompleto(item, productosPorId = new Map()) {
     if (item.personalizado && item.pedidoPersonalizadoId) {
         try {
             const respuestaSolicitud = await fetchConSesion(`${API_URL}/pedidos-personalizados/${encodeURIComponent(item.pedidoPersonalizadoId)}`);
             const solicitud = respuestaSolicitud.ok ? await respuestaSolicitud.json() : null;
-            let producto = null;
-            if (item.productoId != null) {
-                const respuestaProducto = await fetch(`${API_URL}/productos/${item.productoId}`);
-                if (respuestaProducto.ok) producto = await respuestaProducto.json();
-            }
+            let producto = item.productoId != null ? productosPorId.get(Number(item.productoId)) || null : null;
             producto ||= {
                 id: null,
                 nombre: solicitud?.productoNombre || "Diseño libre personalizado",
@@ -114,10 +120,12 @@ async function cargarItemCompleto(item) {
         }
     }
 
-    const respuestaProducto = await fetch(`${API_URL}/productos/${item.productoId}`);
-    if (!respuestaProducto.ok) return null;
-    const producto = await respuestaProducto.json();
-    producto.imagenVariante = await obtenerImagenVarianteProducto(producto, item.color);
+    const producto = productosPorId.get(Number(item.productoId));
+    if (!producto) return null;
+    const variantes = obtenerVariantesColorProducto(producto);
+    producto.imagenVariante = variantes.length
+            ? await obtenerImagenVarianteProducto(producto, item.color)
+            : obtenerUrlImagen(producto.imagen);
     return {item, producto, solicitud: null};
 }
 

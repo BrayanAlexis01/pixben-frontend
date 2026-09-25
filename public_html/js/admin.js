@@ -478,20 +478,38 @@ async function guardarProducto(evento) {
         });
         if (!respuesta.ok) throw new Error(await obtenerMensajeError(respuesta));
         const guardado = await respuesta.json();
+        let huboCargaImagenes = false;
         if (colores.length) {
             const filas = Array.from(document.querySelectorAll("#listaColoresAdmin .fila-color-admin"));
+            const cargas = [];
             for (const colorGuardado of (guardado.colores || [])) {
                 const fila = filas.find(item => normalizarTexto(item.querySelector("[data-color-nombre]").value) === normalizarTexto(colorGuardado.nombre));
                 if (!fila) continue;
                 const archivosColor = archivosColorFila(fila);
-                if (archivosColor.length) await subirGaleriaVariante(guardado.id, colorGuardado.clave, archivosColor);
+                if (archivosColor.length) {
+                    huboCargaImagenes = true;
+                    cargas.push(subirGaleriaVariante(guardado.id, colorGuardado.clave, archivosColor));
+                }
             }
-        } else {
+            if (cargas.length) await Promise.all(cargas);
+        } else if (archivos.length) {
+            huboCargaImagenes = true;
             await subirGaleria(guardado.id, archivos);
         }
+
+        const indiceGuardado = productosAdmin.findIndex(p => String(p.id) === String(guardado.id));
+        if (indiceGuardado >= 0) productosAdmin[indiceGuardado] = guardado;
+        else productosAdmin.unshift(guardado);
+
         alert(colores.length ? "Producto y galerías por color guardados correctamente" : "Producto guardado correctamente");
         limpiarFormulario();
-        await cargarProductos();
+
+        if (huboCargaImagenes) {
+            await cargarProductos();
+        } else {
+            actualizarFiltroCategoriasAdmin();
+            renderizarProductosAdmin();
+        }
     } catch (error) {
         console.error(error);
         alert(error.message || "No se pudo guardar el producto");
