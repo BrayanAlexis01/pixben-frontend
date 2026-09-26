@@ -166,6 +166,7 @@ async function agregarFavorito() {
     const usuario = obtenerUsuarioSesion();
     if (!usuario?.id) return alert("Debes iniciar sesión");
     if (variantesColorProducto.length && !colorSeleccionado) return alert("Selecciona primero el color que deseas guardar");
+    if (productoRequiereTalla && !tallaSeleccionada) return alert("Selecciona primero la talla que deseas guardar");
     const productoId = Number(new URLSearchParams(window.location.search).get("id"));
     if (favoritoActualId && varianteFavoritaCoincide()) {
         const respuesta = await fetchConSesion(`${API_URL}/favoritos/${encodeURIComponent(favoritoActualId)}`, {method: "DELETE"});
