@@ -31,7 +31,7 @@ function seleccionarTalla(talla, botonSeleccionado) {
     tallaSeleccionada = talla;
     document.querySelectorAll(".tallas-producto button").forEach(boton => boton.classList.remove("activa"));
     botonSeleccionado.classList.add("activa");
-    refrescarEstadoVarianteFavorita();
+    actualizarEstadoFavorito();
 }
 
 async function agregarCarrito(mostrarConfirmacion = true) {
@@ -80,9 +80,13 @@ async function agregarCarrito(mostrarConfirmacion = true) {
         }
 
         if (mostrarConfirmacion) {
+            const variante = [
+                colorSeleccionado && colorSeleccionado !== "SIN_COLOR" ? colorSeleccionado : "",
+                productoRequiereTalla && tallaSeleccionada ? `talla ${tallaSeleccionada}` : ""
+            ].filter(Boolean).join(" · ");
             alert(tieneSesionValida(usuario)
-                    ? "Producto agregado al carrito"
-                    : "Producto agregado. Puedes finalizar tu compra sin crear una cuenta.");
+                    ? `Producto agregado al carrito${variante ? ` (${variante})` : ""}`
+                    : `Producto agregado${variante ? ` (${variante})` : ""}. Puedes finalizar tu compra sin crear una cuenta.`);
         }
         return true;
     } finally {
@@ -102,19 +106,33 @@ async function actualizarEstadoFavorito() {
     const boton = document.getElementById("btnAgregarFavorito");
     const usuario = obtenerUsuarioSesion();
     if (!usuario?.id) {
-        boton.classList.remove("activo");
-        boton.querySelector("span").textContent = "Guardar en favoritos";
+        favoritoActualId = "";
+        favoritoActualColor = "";
+        favoritoActualTalla = "";
+        aplicarEstadoFavorito(false);
         return;
     }
+    if (variantesColorProducto.length && !colorSeleccionado) {
+        aplicarEstadoFavorito(false);
+        return;
+    }
+    if (productoRequiereTalla && !tallaSeleccionada) {
+        aplicarEstadoFavorito(false);
+        return;
+    }
+
     const productoId = Number(new URLSearchParams(window.location.search).get("id"));
-    const parametros = new URLSearchParams({usuarioId: usuario.id, usuario: usuario.nombre, productoId});
-    const respuesta = await fetchConSesion(`${API_URL}/favoritos/estado?productoId=${encodeURIComponent(productoId)}`);
+    const parametros = new URLSearchParams({productoId});
+    parametros.set("color", colorSeleccionado || "SIN_COLOR");
+    parametros.set("talla", tallaSeleccionada || "UNIDAD");
+
+    const respuesta = await fetchConSesion(`${API_URL}/favoritos/estado?${parametros}`);
     if (!respuesta.ok) return;
     const estado = await respuesta.json();
     favoritoActualId = estado.id || "";
     favoritoActualColor = estado.color || "";
     favoritoActualTalla = estado.talla || "";
-    refrescarEstadoVarianteFavorita();
+    aplicarEstadoFavorito(Boolean(estado.favorito));
 }
 
 function varianteFavoritaCoincide() {
@@ -175,8 +193,21 @@ async function agregarFavorito() {
     aplicarEstadoFavorito(true);
 }
 
-actualizarEstadoFavorito();
+function preguntarPorMayor() {
+    if (!productoActual) return alert("Espera a que termine de cargar el producto.");
+    const cantidad = Number(document.getElementById("cantidadProducto")?.value || 1);
+    preguntarPorMayorPixBen(productoActual, {
+        color: colorSeleccionado,
+        talla: tallaSeleccionada,
+        cantidad
+    });
+}
 
+actualizarEstadoFavorito();
+document.getElementById("btnPreguntarMayor")?.addEventListener("click", preguntarPorMayor);
+
+window.actualizarEstadoFavorito = actualizarEstadoFavorito;
 window.refrescarEstadoVarianteFavorita = refrescarEstadoVarianteFavorita;
 window.agregarCarrito = agregarCarrito;
 window.comprarAhora = comprarAhora;
+window.preguntarPorMayor = preguntarPorMayor;
