@@ -1,5 +1,30 @@
 const PRODUCTOS_POR_PAGINA = 16;
 
+const SERVICIOS_COTIZABLES = [
+    {
+        id: "servicio-dtf-premium",
+        nombre: "Film DTF Premium por metro",
+        categoria: "Film DTF Premium",
+        descripcion: "Tú envías el diseño y lo acomodamos dentro del metro para aprovechar mejor el área de impresión. Se cotiza según el metraje necesario.",
+        esServicioCotizable: true,
+        tipoServicio: "dtf",
+        destacado: true,
+        stock: 1,
+        precio: null
+    },
+    {
+        id: "servicio-bolsos-tocuyo",
+        nombre: "Bolsos de Tocuyo",
+        categoria: "Bolsos de Tocuyo",
+        descripcion: "Consulta modelos, medidas, personalización y precios por mayor para bolsos de tocuyo.",
+        esServicioCotizable: true,
+        tipoServicio: "tocuyo",
+        destacado: true,
+        stock: 1,
+        precio: null
+    }
+];
+
 const estadoCatalogo = {
     productos: [],
     filtrados: [],
@@ -50,7 +75,8 @@ async function cargarProductosCatalogo() {
         const response = await fetchConReintentos(`${API_URL}/productos`, {cache: "no-store"}, 3, 2200);
         if (!response.ok) throw new Error(`No se pudieron cargar los productos (${response.status})`);
         const data = await response.json();
-        estadoCatalogo.productos = Array.isArray(data) ? data : [];
+        const productosApi = Array.isArray(data) ? data : [];
+        estadoCatalogo.productos = [...productosApi, ...SERVICIOS_COTIZABLES];
         estadoCatalogo.usandoPrecarga = false;
         configurarRangoPrecio();
         crearCategorias();
@@ -58,18 +84,12 @@ async function cargarProductosCatalogo() {
         mostrarEstado("");
     } catch (error) {
         console.error(error);
-        estadoCatalogo.productos = [];
-        estadoCatalogo.filtrados = [];
-        elementosCatalogo.grid.innerHTML = `
-            <div class="sin-resultados">
-                <i class="fa-solid fa-cloud-arrow-down"></i>
-                <h3>El catálogo todavía está iniciando</h3>
-                <p>Espera unos segundos y vuelve a intentarlo. Ningún producto local se mostrará fuera del panel administrador.</p>
-                <button type="button" class="btn-reintentar-catalogo" onclick="cargarProductosCatalogo()">Reintentar</button>
-            </div>`;
-        elementosCatalogo.paginacion.innerHTML = "";
-        if (elementosCatalogo.contador) elementosCatalogo.contador.textContent = "0 productos encontrados";
-        mostrarEstado("No se pudo conectar con el catálogo todavía.", true);
+        estadoCatalogo.productos = [...SERVICIOS_COTIZABLES];
+        estadoCatalogo.usandoPrecarga = true;
+        configurarRangoPrecio();
+        crearCategorias();
+        aplicarFiltros();
+        mostrarEstado("El catálogo de productos está iniciando, pero las consultas por DTF y Tocuyo siguen disponibles por WhatsApp.", true);
     }
 }
 
@@ -149,6 +169,7 @@ function configurarEventosCatalogo() {
 
 function configurarRangoPrecio() {
     const precios = estadoCatalogo.productos
+            .filter(producto => !producto.esServicioCotizable)
             .map(producto => Number(producto.precio))
             .filter(Number.isFinite);
 
@@ -243,20 +264,25 @@ function aplicarFiltros() {
                 `${producto.nombre} ${producto.descripcion} ${producto.categoria} ${producto.sku || ""}`
         );
         const precio = Number(producto.precio);
-        const coloresProducto = detectarColoresProducto(producto);
+        const esServicio = Boolean(producto.esServicioCotizable);
+        const coloresProducto = esServicio ? [] : detectarColoresProducto(producto);
 
         const coincideBusqueda = !estadoCatalogo.busqueda || textoProducto.includes(estadoCatalogo.busqueda);
         const coincideCategoria = categoriaNormalizada === "todos"
                 || normalizarTexto(producto.categoria) === categoriaNormalizada;
-        const coincidePrecio = Number.isFinite(precio)
+        const coincidePrecio = esServicio || (Number.isFinite(precio)
                 && precio >= estadoCatalogo.precioMin
-                && precio <= estadoCatalogo.precioMax;
-        const coincideColor = estadoCatalogo.colores.size === 0
-                || [...estadoCatalogo.colores].some(color => coloresProducto.includes(color));
-        const tallasProducto = obtenerTallasProducto(producto);
-        const coincideTalla = estadoCatalogo.tallas.size === 0
-                || [...estadoCatalogo.tallas].some(talla => tallasProducto.includes(talla));
-        const coincideStock = !estadoCatalogo.soloStock || Number(producto.stock) > 0;
+                && precio <= estadoCatalogo.precioMax);
+        const coincideColor = esServicio
+                ? estadoCatalogo.colores.size === 0
+                : estadoCatalogo.colores.size === 0
+                    || [...estadoCatalogo.colores].some(color => coloresProducto.includes(color));
+        const tallasProducto = esServicio ? [] : obtenerTallasProducto(producto);
+        const coincideTalla = esServicio
+                ? estadoCatalogo.tallas.size === 0
+                : estadoCatalogo.tallas.size === 0
+                    || [...estadoCatalogo.tallas].some(talla => tallasProducto.includes(talla));
+        const coincideStock = esServicio || !estadoCatalogo.soloStock || Number(producto.stock) > 0;
 
         return coincideBusqueda
                 && coincideCategoria
@@ -275,8 +301,10 @@ function ordenarProductos() {
     estadoCatalogo.filtrados.sort((a, b) => {
         switch (estadoCatalogo.orden) {
             case "precio-asc":
+                if (a.esServicioCotizable !== b.esServicioCotizable) return a.esServicioCotizable ? 1 : -1;
                 return Number(a.precio) - Number(b.precio);
             case "precio-desc":
+                if (a.esServicioCotizable !== b.esServicioCotizable) return a.esServicioCotizable ? 1 : -1;
                 return Number(b.precio) - Number(a.precio);
             case "nombre":
                 return String(a.nombre).localeCompare(String(b.nombre), "es");
@@ -314,10 +342,31 @@ function renderizarCatalogo() {
     const pagina = estadoCatalogo.filtrados.slice(inicio, inicio + PRODUCTOS_POR_PAGINA);
 
     elementosCatalogo.grid.innerHTML = pagina.map(producto => {
-        const precio = Number(producto.precio || 0).toFixed(2);
         const categoria = producto.categoria || "Sin categoría";
-        const agotado = Number(producto.stock) <= 0;
 
+        if (producto.esServicioCotizable) {
+            const icono = producto.tipoServicio === "dtf" ? "fa-layer-group" : "fa-bag-shopping";
+            const etiqueta = producto.tipoServicio === "dtf" ? "Venta por metro" : "Cotización por mayor";
+            return `
+                <article class="producto producto-servicio" tabindex="0" role="button"
+                         data-servicio="${escaparHtmlSeguro(producto.tipoServicio)}"
+                         aria-label="Cotizar ${escaparHtmlSeguro(producto.nombre)}">
+                    <div class="producto-imagen-contenedor servicio-visual">
+                        <span class="badge-destacado">${etiqueta}</span>
+                        <i class="fa-solid ${icono}" aria-hidden="true"></i>
+                    </div>
+                    <div class="producto-info">
+                        <span class="producto-categoria">${escaparHtmlSeguro(categoria)}</span>
+                        <h3>${escaparHtmlSeguro(producto.nombre)}</h3>
+                        <p class="servicio-descripcion">${escaparHtmlSeguro(producto.descripcion)}</p>
+                        <p class="precio precio-cotizar">Precio a cotizar</p>
+                        <span class="btn-cotizar-servicio"><i class="fa-brands fa-whatsapp"></i> Consultar por WhatsApp</span>
+                    </div>
+                </article>`;
+        }
+
+        const precio = Number(producto.precio || 0).toFixed(2);
+        const agotado = Number(producto.stock) <= 0;
         const identificador = producto.id;
 
         return `
@@ -342,6 +391,10 @@ function renderizarCatalogo() {
 
     elementosCatalogo.grid.querySelectorAll(".producto").forEach(tarjeta => {
         const abrir = () => {
+            if (tarjeta.dataset.servicio) {
+                consultarServicioPixBen(tarjeta.dataset.servicio);
+                return;
+            }
             window.location.href = `detalles-producto.html?id=${tarjeta.dataset.productoId}`;
         };
         tarjeta.addEventListener("click", abrir);
