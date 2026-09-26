@@ -750,12 +750,22 @@ async function mostrarImagenesActuales(productoId, principal) {
 
 async function eliminarProducto(id) {
     if (!confirm("¿Eliminar este producto?")) return;
-    const respuesta = await fetchConSesion(`${API_URL}/productos/${id}`, {method: "DELETE"});
-    if (!respuesta.ok) return alert(await obtenerMensajeError(respuesta));
+
+    const anterior = productosAdmin;
     productosAdmin = productosAdmin.filter(p => String(p.id) !== String(id));
     productosSeleccionadosAdmin.delete(Number(id));
     actualizarFiltroCategoriasAdmin();
     renderizarProductosAdmin();
+
+    try {
+        const respuesta = await fetchConSesion(`${API_URL}/productos/${id}`, {method: "DELETE"});
+        if (!respuesta.ok) throw new Error(await obtenerMensajeError(respuesta));
+    } catch (error) {
+        productosAdmin = anterior;
+        actualizarFiltroCategoriasAdmin();
+        renderizarProductosAdmin();
+        alert(error.message || "No se pudo eliminar el producto");
+    }
 }
 
 function limpiarFormulario() {
