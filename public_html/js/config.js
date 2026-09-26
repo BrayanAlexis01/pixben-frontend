@@ -1,5 +1,42 @@
 const API_URL = "https://pixben-backend.onrender.com";
 const IMAGEN_FALLBACK = "/imagensponsor/polo-ocean.webp";
+const PIXBEN_WHATSAPP_MAYOR = "51947565664";
+
+function abrirWhatsAppPixBen(mensaje) {
+    const url = `https://wa.me/${PIXBEN_WHATSAPP_MAYOR}?text=${encodeURIComponent(mensaje)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+}
+
+function preguntarPorMayorPixBen(producto, opciones = {}) {
+    const nombre = producto?.nombre || "un producto de PixBen";
+    const sku = producto?.sku ? ` (SKU: ${producto.sku})` : "";
+    const variante = [
+        opciones.color && !["SIN_COLOR", ""].includes(String(opciones.color)) ? `Color: ${opciones.color}` : "",
+        opciones.talla && !["UNIDAD", "ÚNICA", "SIN_TALLA", ""].includes(String(opciones.talla).toUpperCase()) ? `Talla: ${opciones.talla}` : "",
+        Number(opciones.cantidad || 0) > 0 ? `Cantidad referencial: ${opciones.cantidad}` : ""
+    ].filter(Boolean).join(" · ");
+    const enlace = producto?.id ? `https://pixben.netlify.app/htmls/detalles-producto.html?id=${encodeURIComponent(producto.id)}` : location.href;
+    abrirWhatsAppPixBen(
+        `Hola, vengo de la página web de PixBen. Quisiera consultar precio por mayor de: ${nombre}${sku}.`
+        + (variante ? `\n${variante}.` : "")
+        + `\nEnlace: ${enlace}\n¿Me puedes indicar precio por mayor, disponibilidad y cantidad mínima?`
+    );
+}
+
+function consultarServicioPixBen(tipo) {
+    if (tipo === "dtf") {
+        abrirWhatsAppPixBen(
+            "Hola, vengo de la página web de PixBen. Quisiera cotizar Film DTF Premium por metro. "
+            + "Tengo mi propio diseño y quisiera saber cuántos metros necesito y el precio. "
+            + "Entiendo que ustedes acomodan el diseño dentro del metro para aprovechar mejor el área de impresión."
+        );
+        return;
+    }
+    abrirWhatsAppPixBen(
+        "Hola, vengo de la página web de PixBen. Quisiera consultar por Bolsos de Tocuyo, "
+        + "opciones de personalización y precio por mayor. ¿Me pueden indicar modelos, medidas y cantidad mínima?"
+    );
+}
 
 function obtenerUrlImagen(imagen) {
     if (!imagen) {
