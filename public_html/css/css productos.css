@@ -705,3 +705,56 @@ footer{
 
 /* Búsqueda dentro del catálogo: la cabecera queda idéntica al index. */
 .controles-productos{display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap}.busqueda-catalogo{display:flex;align-items:center;gap:9px;min-width:min(430px,100%);padding:0 12px;border:1px solid #ddd;border-radius:10px;background:#fff}.busqueda-catalogo i{color:#777}.busqueda-catalogo input{width:100%;height:42px;border:0;outline:0;background:transparent;font:inherit}.producto-esqueleto{pointer-events:none}.producto-esqueleto .producto-info{display:grid;gap:9px}.esqueleto-bloque,.esqueleto-linea{display:block;background:linear-gradient(90deg,#f0f0f0 25%,#fafafa 50%,#f0f0f0 75%);background-size:200% 100%;animation:pixbenSkeleton 1.3s infinite}.producto-esqueleto .producto-imagen-contenedor{min-height:260px}.esqueleto-linea{height:13px;border-radius:99px}.esqueleto-linea.corta{width:35%}.esqueleto-linea.precio{width:24%;height:17px}.btn-reintentar-catalogo{margin-top:10px;border:0;border-radius:10px;background:#7d2cba;color:#fff;padding:10px 15px;font-weight:800;cursor:pointer}@keyframes pixbenSkeleton{to{background-position:-200% 0}}@media(max-width:800px){.controles-productos{align-items:stretch}.busqueda-catalogo{order:1;width:100%;min-width:0}.controles-productos>span{order:2}.controles-productos>select{order:3}}
+
+
+/* Servicios cotizables: DTF por metro y Tocuyo */
+.producto-servicio{
+    border:1px solid #e1d3eb;
+    background:linear-gradient(180deg,#fff 0%,#fbf7ff 100%);
+}
+.servicio-visual{
+    height:230px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:
+        radial-gradient(circle at 25% 20%,rgba(185,72,255,.24),transparent 35%),
+        linear-gradient(135deg,#190825,#5e1a86 55%,#17101b);
+}
+.servicio-visual > i{
+    font-size:78px;
+    color:#fff;
+    filter:drop-shadow(0 12px 20px rgba(0,0,0,.28));
+}
+.producto-servicio .producto-info{
+    display:flex;
+    flex-direction:column;
+    min-height:260px;
+}
+.servicio-descripcion{
+    margin:0 0 14px;
+    color:#5e5662;
+    line-height:1.5;
+    font-size:13px;
+    flex:1;
+}
+.precio-cotizar{
+    color:#6f1fc1;
+}
+.btn-cotizar-servicio{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    margin-top:5px;
+    padding:11px 13px;
+    border-radius:10px;
+    background:#19a94b;
+    color:#fff;
+    font-weight:800;
+    font-size:13px;
+}
+.producto-servicio:hover .btn-cotizar-servicio{
+    background:#138d3e;
+}
