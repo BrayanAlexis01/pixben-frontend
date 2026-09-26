@@ -1,0 +1,23 @@
+name: UX and catalog validation
+
+on:
+  push:
+    branches: [ "ux-wholesale-dtf-20260925" ]
+  workflow_dispatch:
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check JavaScript syntax
+        run: |
+          node --check public_html/js/config.js
+          node --check public_html/js/admin.js
+          node --check public_html/js/productos.js
+          node --check public_html/js/paginas/detalles-producto.js
+          node --check public_html/js/paginas/detalles-acciones.js
+          node --check public_html/service-worker.js

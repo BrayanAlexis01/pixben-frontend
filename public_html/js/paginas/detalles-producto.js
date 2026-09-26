@@ -145,7 +145,7 @@ async function seleccionarColor(nombre, botonSeleccionado) {
     } finally {
         botonSeleccionado?.classList.remove("cargando-galeria");
     }
-    window.refrescarEstadoVarianteFavorita?.();
+    window.actualizarEstadoFavorito?.();
 }
 
 function renderizarColoresProducto(producto) {
@@ -265,6 +265,7 @@ async function cargarProducto() {
 
         await cargarGaleriaProducto(id, producto.imagen);
         renderizarColoresProducto(producto);
+        window.actualizarEstadoFavorito?.();
         registrarHistorial();
     } catch (error) {
         console.error(error);

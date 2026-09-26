@@ -198,7 +198,7 @@ function configurarMonitorRender() {
 }
 
 async function cargarCategorias() {
-    const respaldo = ["Polos", "Hoodies / Poleras", "Gorras", "Tazas", "Mousepads", "Bolsos / Totebags", "Accesorios"];
+    const respaldo = ["Polos", "Hoodies / Poleras", "Gorras", "Tazas", "Mousepads", "Bolsos / Totebags", "Bolsos de Tocuyo", "Film DTF Premium", "Accesorios"];
     try {
         const respuesta = await fetchConSesion(`${API_URL}/categorias`);
         if (!respuesta.ok) throw new Error();
@@ -638,12 +638,27 @@ async function eliminarProductosSeleccionados() {
     const ids=[...productosSeleccionadosAdmin];
     if(!ids.length) return;
     if(!confirm(`¿Eliminar ${ids.length} producto(s) seleccionados? Esta acción no se puede deshacer.`)) return;
-    const boton=document.getElementById("btnEliminarSeleccionados"); boton.disabled=true;
-    let errores=0;
-    for(const id of ids){try{const r=await fetchConSesion(`${API_URL}/productos/${id}`,{method:"DELETE"});if(!r.ok)errores++;}catch{errores++;}}
-    productosSeleccionadosAdmin.clear();
-    await cargarProductos();
-    if(errores) alert(`${errores} producto(s) no pudieron eliminarse.`);
+    const boton=document.getElementById("btnEliminarSeleccionados");
+    boton.disabled=true;
+    try {
+        const resultados = await Promise.all(ids.map(async id => {
+            try {
+                const respuesta = await fetchConSesion(`${API_URL}/productos/${id}`, {method:"DELETE"});
+                return {id, ok: respuesta.ok};
+            } catch {
+                return {id, ok:false};
+            }
+        }));
+        const eliminados = new Set(resultados.filter(r => r.ok).map(r => Number(r.id)));
+        productosAdmin = productosAdmin.filter(p => !eliminados.has(Number(p.id)));
+        productosSeleccionadosAdmin.clear();
+        actualizarFiltroCategoriasAdmin();
+        renderizarProductosAdmin();
+        const errores = resultados.length - eliminados.size;
+        if(errores) alert(`${errores} producto(s) no pudieron eliminarse.`);
+    } finally {
+        boton.disabled=false;
+    }
 }
 
 async function abrirVistaPreviaProductoAdmin(id) {
@@ -735,9 +750,22 @@ async function mostrarImagenesActuales(productoId, principal) {
 
 async function eliminarProducto(id) {
     if (!confirm("¿Eliminar este producto?")) return;
-    const respuesta = await fetchConSesion(`${API_URL}/productos/${id}`, {method: "DELETE"});
-    if (!respuesta.ok) return alert("No se pudo eliminar");
-    await cargarProductos();
+
+    const anterior = productosAdmin;
+    productosAdmin = productosAdmin.filter(p => String(p.id) !== String(id));
+    productosSeleccionadosAdmin.delete(Number(id));
+    actualizarFiltroCategoriasAdmin();
+    renderizarProductosAdmin();
+
+    try {
+        const respuesta = await fetchConSesion(`${API_URL}/productos/${id}`, {method: "DELETE"});
+        if (!respuesta.ok) throw new Error(await obtenerMensajeError(respuesta));
+    } catch (error) {
+        productosAdmin = anterior;
+        actualizarFiltroCategoriasAdmin();
+        renderizarProductosAdmin();
+        alert(error.message || "No se pudo eliminar el producto");
+    }
 }
 
 function limpiarFormulario() {

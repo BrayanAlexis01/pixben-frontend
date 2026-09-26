@@ -1,6 +1,6 @@
 "use strict";
 
-const VERSION = "pixben-pwa-v12";
+const VERSION = "pixben-pwa-v13";
 const CACHE_ESTATICO = `${VERSION}-static`;
 const CACHE_PAGINAS = `${VERSION}-pages`;
 
