@@ -5,7 +5,7 @@ const SERVICIOS_COTIZABLES = [
         id: "servicio-dtf-premium",
         nombre: "Film DTF Premium por metro",
         categoria: "Film DTF Premium",
-        descripcion: "Tú envías el diseño y lo acomodamos dentro del metro para aprovechar mejor el área de impresión. Se cotiza según el metraje necesario.",
+        descripcion: "No hay un diseño fijo: tú envías tu diseño y lo acomodamos dentro del metro para aprovechar mejor el área de impresión. Se cotiza según el metraje necesario.",
         esServicioCotizable: true,
         tipoServicio: "dtf",
         destacado: true,
