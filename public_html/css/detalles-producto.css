@@ -649,7 +649,7 @@ footer{
 /* Acciones de compra coherentes */
 .acciones-producto{
     display:grid;
-    grid-template-columns:repeat(3,minmax(0,1fr));
+    grid-template-columns:repeat(2,minmax(0,1fr));
     gap:12px;
 }
 .acciones-producto button{
@@ -670,6 +670,19 @@ footer{
 .btn-carrito:disabled{opacity:.7;cursor:wait;transform:none}
 .btn-comprar{background:#111;color:#fff;border:2px solid #111}
 .btn-comprar:hover{background:#272727}
+.btn-mayor{
+    background:#19a94b;
+    color:#fff;
+    border:2px solid #19a94b;
+    cursor:pointer;
+    box-shadow:0 10px 24px rgba(25,169,75,.18);
+}
+.btn-mayor:hover{
+    background:#138d3e;
+    border-color:#138d3e;
+    transform:translateY(-2px);
+    box-shadow:0 12px 28px rgba(25,169,75,.24);
+}
 .acciones-producto .btn-favorito{border-radius:12px;min-height:52px}
 @media(max-width:980px){.acciones-producto{grid-template-columns:1fr}.acciones-producto button{width:100%}}
 
