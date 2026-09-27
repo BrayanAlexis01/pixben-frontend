@@ -15,7 +15,7 @@
 
     <meta name="robots" content="noindex,nofollow">
     <title>Panel administrador | PixBen</title>
-    <link href="../css/admin.css?v=15" rel="stylesheet">
+    <link href="../css/admin.css?v=16" rel="stylesheet">
     <link href="../css/responsive-global.css?v=3" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
     <link rel="stylesheet" href="../css/pwa-premium.css?v=2">
@@ -55,15 +55,16 @@
         </div>
     </section>
 
-    <div class="admin-tabs" role="tablist">
-        <button class="tab-activo" data-seccion="seccionProductos"><i class="fa-solid fa-box"></i> Productos</button>
-        <button data-seccion="seccionPersonalizados"><i class="fa-solid fa-shirt"></i> Personalizados <span id="contadorPersonalizados" class="badge">0</span></button>
-        <button data-seccion="seccionPedidos"><i class="fa-solid fa-receipt"></i> Pedidos</button>
-        <button data-seccion="seccionMensajes"><i class="fa-solid fa-envelope"></i> Mensajes <span id="contadorMensajes" class="badge">0</span></button>
-        <button data-seccion="seccionAnalitica"><i class="fa-solid fa-chart-line"></i> Analítica</button>
+    <div class="admin-tabs" role="tablist" aria-label="Módulos del panel administrador">
+        <button class="tab-activo" role="tab" aria-selected="true" aria-controls="seccionProductos" data-seccion="seccionProductos"><i class="fa-solid fa-box"></i> Productos</button>
+        <button role="tab" aria-selected="false" aria-controls="seccionPersonalizados" data-seccion="seccionPersonalizados"><i class="fa-solid fa-shirt"></i> Personalizados <span id="contadorPersonalizados" class="badge">0</span></button>
+        <button role="tab" aria-selected="false" aria-controls="seccionPedidos" data-seccion="seccionPedidos"><i class="fa-solid fa-receipt"></i> Pedidos</button>
+        <button role="tab" aria-selected="false" aria-controls="seccionReportes" data-seccion="seccionReportes"><i class="fa-solid fa-chart-column"></i> Reportes</button>
+        <button role="tab" aria-selected="false" aria-controls="seccionMensajes" data-seccion="seccionMensajes"><i class="fa-solid fa-envelope"></i> Mensajes <span id="contadorMensajes" class="badge">0</span></button>
+        <button role="tab" aria-selected="false" aria-controls="seccionAnalitica" data-seccion="seccionAnalitica"><i class="fa-solid fa-chart-line"></i> Analítica</button>
     </div>
 
-    <section id="seccionProductos" class="admin-seccion seccion-activa">
+    <section id="seccionProductos" class="admin-seccion seccion-activa" role="tabpanel">
         <div class="card-formulario">
             <div class="encabezado-seccion"><div><h2>Gestión de productos</h2><p>Crea un solo producto y, si tiene colores, asigna una galería diferente a cada variante.</p></div></div>
             <form id="formProducto">
@@ -127,22 +128,78 @@
         </div>
     </section>
 
-    <section id="seccionPersonalizados" class="admin-seccion">
+    <section id="seccionPersonalizados" class="admin-seccion" role="tabpanel">
         <div class="encabezado-seccion"><div><h2>Solicitudes personalizadas</h2><p>Revisa el diseño, asigna precio y actualiza el avance.</p></div><button id="btnRecargarPersonalizados" class="btn-secundario"><i class="fa-solid fa-rotate"></i> Actualizar</button></div>
         <div id="listaPersonalizados" class="lista-personalizados"><p class="estado-carga">Cargando solicitudes...</p></div>
     </section>
 
-    <section id="seccionPedidos" class="admin-seccion">
+    <section id="seccionPedidos" class="admin-seccion" role="tabpanel">
         <div class="encabezado-seccion"><div><h2>Pedidos normales</h2><p>Seguimiento de compras realizadas desde el carrito.</p></div><button id="btnRecargarPedidos" class="btn-secundario"><i class="fa-solid fa-rotate"></i> Actualizar</button></div>
         <div class="card-tabla tabla-scroll"><table id="tablaPedidos"><thead><tr><th>Pedido</th><th>Usuario / productos</th><th>Pago</th><th>Envío</th><th>Total productos</th><th>Estados</th><th>Acciones</th></tr></thead><tbody></tbody></table></div>
     </section>
 
-    <section id="seccionMensajes" class="admin-seccion">
+    <section id="seccionReportes" class="admin-seccion" role="tabpanel" aria-label="Reportes del negocio">
+        <div class="encabezado-seccion encabezado-reportes">
+            <div>
+                <h2>Reportes del negocio</h2>
+                <p>Indicadores para apoyar decisiones sobre ventas, pedidos, productos y personalizaciones.</p>
+            </div>
+            <div class="acciones-reportes">
+                <label for="periodoReportes">Periodo
+                    <select id="periodoReportes">
+                        <option value="7">Últimos 7 días</option>
+                        <option value="30" selected>Últimos 30 días</option>
+                        <option value="90">Últimos 90 días</option>
+                        <option value="all">Todo el historial</option>
+                    </select>
+                </label>
+                <button id="btnRecargarReportes" class="btn-secundario" type="button"><i class="fa-solid fa-rotate"></i> Actualizar</button>
+                <button id="btnExportarReportes" class="btn-guardar" type="button"><i class="fa-solid fa-file-csv"></i> Exportar CSV</button>
+            </div>
+        </div>
+
+        <div id="estadoReportes" class="estado-reportes" aria-live="polite">Selecciona la pestaña para cargar los indicadores.</div>
+
+        <div class="metricas-reportes" aria-label="Indicadores principales">
+            <article><span>Ventas verificadas</span><strong id="reporteVentas">S/ 0.00</strong><small>Pagos verificados del periodo</small></article>
+            <article><span>Pedidos</span><strong id="reportePedidos">0</strong><small>Pedidos registrados</small></article>
+            <article><span>Por atender</span><strong id="reportePendientes">0</strong><small>No cancelados ni entregados</small></article>
+            <article><span>Personalizados</span><strong id="reportePersonalizados">0</strong><small>Solicitudes recibidas</small></article>
+            <article><span>Stock bajo</span><strong id="reporteStockBajo">0</strong><small>Productos con 5 unidades o menos</small></article>
+        </div>
+
+        <div class="reportes-grid">
+            <article class="card-reporte">
+                <div class="titulo-card-reporte"><div><span>REPORTE 01</span><h3>Productos más vendidos</h3></div><i class="fa-solid fa-ranking-star"></i></div>
+                <div class="tabla-scroll">
+                    <table>
+                        <thead><tr><th>Producto</th><th>Unidades</th><th>Ingresos</th></tr></thead>
+                        <tbody id="tablaProductosVendidos"><tr><td colspan="3">Sin datos cargados.</td></tr></tbody>
+                    </table>
+                </div>
+            </article>
+            <article class="card-reporte">
+                <div class="titulo-card-reporte"><div><span>REPORTE 02</span><h3>Estado de pedidos</h3></div><i class="fa-solid fa-list-check"></i></div>
+                <div id="reporteEstadosPedidos" class="lista-estados-reporte"><p>Sin datos cargados.</p></div>
+            </article>
+            <article class="card-reporte reporte-ancho">
+                <div class="titulo-card-reporte"><div><span>REPORTE 03</span><h3>Productos con stock bajo</h3></div><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <div class="tabla-scroll">
+                    <table>
+                        <thead><tr><th>Producto</th><th>Categoría</th><th>Stock disponible</th></tr></thead>
+                        <tbody id="tablaStockBajo"><tr><td colspan="3">Sin datos cargados.</td></tr></tbody>
+                    </table>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section id="seccionMensajes" class="admin-seccion" role="tabpanel">
         <div class="encabezado-seccion"><div><h2>Mensajes de contacto</h2><p>Todo se consulta dentro del panel. El formulario no permite adjuntos.</p></div><button id="btnRecargarMensajes" class="btn-secundario"><i class="fa-solid fa-rotate"></i> Actualizar</button></div>
         <div id="listaMensajes" class="lista-mensajes"><p class="estado-carga">Cargando mensajes...</p></div>
     </section>
 
-    <section id="seccionAnalitica" class="admin-seccion">
+    <section id="seccionAnalitica" class="admin-seccion" role="tabpanel">
         <div class="encabezado-seccion"><div><h2>Analítica de visitas</h2><p>Métricas respetuosas con la privacidad: no se guarda la IP ni se identifica a visitantes anónimos.</p></div><div class="acciones-analitica"><button id="btnRecargarAnalitica" class="btn-secundario"><i class="fa-solid fa-rotate"></i> Actualizar</button><button id="btnBorrarAnaliticaAntigua" class="btn-advertencia"><i class="fa-solid fa-calendar-xmark"></i> Borrar +30 días</button><button id="btnBorrarAnalitica" class="btn-peligro"><i class="fa-solid fa-trash"></i> Borrar todo</button></div></div>
         <div class="metricas-admin">
             <article><i class="fa-solid fa-calendar-day"></i><span>Vistas hoy</span><strong id="metricaVistasHoy">0</strong></article>
@@ -169,7 +226,7 @@
 
 <script src="../js/config.js?v=19"></script>
 <script src="../js/analitica.js?v=3"></script>
-<script src="../js/admin.js?v=17"></script>
+<script src="../js/admin.js?v=18"></script>
 <script src="../js/responsive-menu.js?v=4"></script>
 <script src="../js/accessibility.js?v=1"></script>
 </body>
