@@ -94,8 +94,17 @@ html.a11y-high-contrast :where(input,select,textarea){
 html.a11y-high-contrast :where(button,.btn-principal,.btn-comprar,.btn-guardar){
     border:2px solid #fff !important;
 }
+/* Las imágenes conservan su apariencia original; el contraste se aplica a sus contenedores.
+   Evita bordes artificiales en logos, avatares y fotografías. */
 html.a11y-high-contrast img{
-    outline:1px solid rgba(255,255,255,.45);
+    outline:none !important;
+}
+html.a11y-high-contrast .site-header-pixben .logo img,
+html.a11y-high-contrast .logo img{
+    border:0 !important;
+    outline:0 !important;
+    box-shadow:none !important;
+    background:transparent !important;
 }
 
 /* Modal */
@@ -265,4 +274,283 @@ html.a11y-high-contrast .a11y-flotante{
     background:#000 !important;
     color:#ffe45c !important;
     border-color:#ffe45c !important;
+}
+
+
+/* =========================================================
+   CONTRASTE ALTO - CORRECCIONES DE LEGIBILIDAD
+   ========================================================= */
+
+/* Controles generales */
+html.a11y-high-contrast :where(
+    button,
+    [role="button"],
+    .btn-secundario,
+    .btn-limpiar,
+    .paginacion button
+){
+    color:#fff !important;
+    background:#000 !important;
+    border-color:#fff !important;
+}
+html.a11y-high-contrast :where(
+    button,
+    [role="button"],
+    a,
+    input,
+    select,
+    textarea
+):focus-visible{
+    outline-color:#ffe45c !important;
+}
+html.a11y-high-contrast :where(input,select,textarea)::placeholder{
+    color:#d8d8d8 !important;
+    opacity:1 !important;
+}
+
+/* Catálogo / filtros */
+html.a11y-high-contrast .catalogo,
+html.a11y-high-contrast .productos-seccion,
+html.a11y-high-contrast .sidebar,
+html.a11y-high-contrast .filtro-bloque,
+html.a11y-high-contrast .controles-productos{
+    color:#fff !important;
+}
+html.a11y-high-contrast .filtro-bloque{
+    border-color:#8f8f8f !important;
+}
+html.a11y-high-contrast .categoria-filtro{
+    color:#fff !important;
+    background:#090909 !important;
+    border:1px solid #d9d9d9 !important;
+}
+html.a11y-high-contrast .categoria-filtro:hover{
+    color:#ffe45c !important;
+    background:#171717 !important;
+    border-color:#ffe45c !important;
+}
+html.a11y-high-contrast .categoria-filtro.seleccionado{
+    color:#000 !important;
+    background:#ffe45c !important;
+    border-color:#ffe45c !important;
+    font-weight:900 !important;
+}
+
+html.a11y-high-contrast .precio-campos label,
+html.a11y-high-contrast .valor-precio,
+html.a11y-high-contrast .ayuda-filtro,
+html.a11y-high-contrast .filtro-cargando,
+html.a11y-high-contrast .filtro-stock,
+html.a11y-high-contrast #contadorProductos{
+    color:#f4f4f4 !important;
+}
+
+html.a11y-high-contrast .precio-campos input{
+    color:#fff !important;
+    background:#000 !important;
+    border-color:#fff !important;
+}
+html.a11y-high-contrast input[type="range"]{
+    accent-color:#ffe45c !important;
+}
+
+html.a11y-high-contrast .talla,
+html.a11y-high-contrast .talla-filtro{
+    color:#fff !important;
+    background:#000 !important;
+    border:1px solid #fff !important;
+}
+html.a11y-high-contrast .talla-filtro:hover{
+    color:#ffe45c !important;
+    border-color:#ffe45c !important;
+}
+html.a11y-high-contrast .talla-filtro.seleccionado{
+    color:#000 !important;
+    background:#ffe45c !important;
+    border-color:#ffe45c !important;
+}
+
+html.a11y-high-contrast .color-filtro{
+    border:3px solid #fff !important;
+    box-shadow:0 0 0 1px #000 !important;
+}
+html.a11y-high-contrast .color-filtro.seleccionado{
+    outline:3px solid #ffe45c !important;
+    outline-offset:3px !important;
+}
+
+html.a11y-high-contrast .btn-filtrar{
+    color:#000 !important;
+    background:#ffe45c !important;
+    border:2px solid #ffe45c !important;
+    font-weight:900 !important;
+}
+html.a11y-high-contrast .btn-limpiar{
+    color:#fff !important;
+    background:#000 !important;
+    border:2px solid #fff !important;
+}
+
+/* Buscador y orden */
+html.a11y-high-contrast .busqueda-catalogo{
+    color:#fff !important;
+    background:#000 !important;
+    border:2px solid #fff !important;
+}
+html.a11y-high-contrast .busqueda-catalogo i{
+    color:#fff !important;
+}
+html.a11y-high-contrast .busqueda-catalogo input{
+    color:#fff !important;
+    background:transparent !important;
+    border:0 !important;
+}
+html.a11y-high-contrast #ordenProductos{
+    color:#fff !important;
+    background:#000 !important;
+    border:2px solid #fff !important;
+}
+html.a11y-high-contrast #ordenProductos option{
+    color:#fff !important;
+    background:#000 !important;
+}
+
+/* Tarjetas de productos */
+html.a11y-high-contrast .producto{
+    color:#fff !important;
+    background:#080808 !important;
+    border:2px solid #d8d8d8 !important;
+}
+html.a11y-high-contrast .producto-info{
+    color:#fff !important;
+    background:#080808 !important;
+}
+html.a11y-high-contrast .producto-categoria{
+    color:#e6e6e6 !important;
+}
+html.a11y-high-contrast .producto-info h3,
+html.a11y-high-contrast .producto-info .precio{
+    color:#fff !important;
+}
+html.a11y-high-contrast .producto-imagen-contenedor{
+    background:#f2f2f2 !important;
+}
+html.a11y-high-contrast .badge-destacado{
+    color:#000 !important;
+    background:#ffe45c !important;
+    border:1px solid #000 !important;
+}
+html.a11y-high-contrast .badge-agotado{
+    color:#fff !important;
+    background:#000 !important;
+    border:2px solid #fff !important;
+}
+html.a11y-high-contrast .sin-resultados,
+html.a11y-high-contrast .estado-catalogo{
+    color:#fff !important;
+    background:#0b0b0b !important;
+    border:1px solid #fff !important;
+}
+html.a11y-high-contrast .estado-catalogo.error{
+    color:#fff !important;
+    background:#3b0000 !important;
+    border-color:#ff8080 !important;
+}
+
+/* Paginación */
+html.a11y-high-contrast .paginacion button{
+    color:#fff !important;
+    background:#000 !important;
+    border:1px solid #fff !important;
+}
+html.a11y-high-contrast .paginacion button:hover:not(:disabled){
+    color:#000 !important;
+    background:#ffe45c !important;
+    border-color:#ffe45c !important;
+}
+html.a11y-high-contrast .paginacion button.activo{
+    color:#000 !important;
+    background:#ffe45c !important;
+    border-color:#ffe45c !important;
+}
+html.a11y-high-contrast .paginacion button:disabled{
+    color:#b5b5b5 !important;
+    background:#202020 !important;
+    border-color:#666 !important;
+}
+
+/* Menús, cards y textos secundarios frecuentes en otras vistas */
+html.a11y-high-contrast :where(
+    .texto-ayuda,
+    .muted,
+    .nota-privacidad,
+    .estado-formulario,
+    .producto-categoria,
+    .meta,
+    .descripcion
+){
+    color:#e5e5e5 !important;
+}
+html.a11y-high-contrast .menu-usuario{
+    color:#fff !important;
+    background:#090909 !important;
+    border:1px solid #fff !important;
+}
+html.a11y-high-contrast .menu-usuario a{
+    color:#fff !important;
+    background:#090909 !important;
+}
+html.a11y-high-contrast .menu-usuario a:hover,
+html.a11y-high-contrast .menu-usuario a:focus-visible{
+    color:#000 !important;
+    background:#ffe45c !important;
+}
+
+/* Modal de accesibilidad en contraste alto */
+html.a11y-high-contrast .a11y-modal-contenido,
+html.a11y-high-contrast .a11y-modal-cabecera,
+html.a11y-high-contrast .a11y-modal-cuerpo,
+html.a11y-high-contrast .a11y-modal-pie,
+html.a11y-high-contrast .a11y-bloque{
+    color:#fff !important;
+    background:#050505 !important;
+    border-color:#fff !important;
+}
+html.a11y-high-contrast .a11y-modal-cabecera p,
+html.a11y-high-contrast .a11y-bloque p{
+    color:#f0f0f0 !important;
+}
+html.a11y-high-contrast .a11y-eyebrow{
+    color:#ffe45c !important;
+}
+html.a11y-high-contrast .a11y-opcion,
+html.a11y-high-contrast .a11y-toggle,
+html.a11y-high-contrast .a11y-restablecer,
+html.a11y-high-contrast .a11y-cerrar{
+    color:#fff !important;
+    background:#000 !important;
+    border:2px solid #fff !important;
+}
+html.a11y-high-contrast .a11y-opcion[aria-pressed="true"],
+html.a11y-high-contrast .a11y-toggle[aria-pressed="true"],
+html.a11y-high-contrast .a11y-listo{
+    color:#000 !important;
+    background:#ffe45c !important;
+    border-color:#ffe45c !important;
+}
+
+/* El encabezado y el logo no reciben bordes artificiales */
+html.a11y-high-contrast .site-header-pixben,
+html.a11y-high-contrast .site-header-pixben .logo,
+html.a11y-high-contrast .site-header-pixben .logo a{
+    background:#000 !important;
+    border:0 !important;
+    outline:0 !important;
+    box-shadow:none !important;
+}
+html.a11y-high-contrast .site-header-pixben .logo img{
+    border:0 !important;
+    outline:0 !important;
+    box-shadow:none !important;
+    filter:none !important;
 }
