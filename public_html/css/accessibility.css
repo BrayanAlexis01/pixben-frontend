@@ -239,3 +239,30 @@ body.a11y-modal-abierto{overflow:hidden}
     .a11y-modal-pie{flex-direction:column-reverse}
     .a11y-modal-pie button{width:100%}
 }
+
+.a11y-flotante{
+    position:fixed;
+    left:18px;
+    bottom:18px;
+    z-index:99990;
+    width:50px;
+    height:50px;
+    display:grid;
+    place-items:center;
+    border:2px solid #fff;
+    border-radius:50%;
+    background:#7423b2;
+    color:#fff;
+    box-shadow:0 10px 28px rgba(50,17,73,.28);
+    cursor:pointer;
+    font-size:23px;
+}
+.a11y-flotante:hover{
+    background:#5f198f;
+    transform:translateY(-2px);
+}
+html.a11y-high-contrast .a11y-flotante{
+    background:#000 !important;
+    color:#ffe45c !important;
+    border-color:#ffe45c !important;
+}
