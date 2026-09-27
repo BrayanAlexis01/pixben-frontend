@@ -1006,6 +1006,7 @@ async function cargarReportes() {
     if (!estado) return;
     estado.textContent = "Calculando reportes...";
     try {
+        if (!productosAdmin.length) await cargarProductos();
         const [respuestaPedidos, respuestaPersonalizados] = await Promise.all([
             fetchConSesion(`${API_URL}/pedidos/admin/todos`),
             fetchConSesion(`${API_URL}/pedidos-personalizados/admin/todos`)
