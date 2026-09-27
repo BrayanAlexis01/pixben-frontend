@@ -23,6 +23,7 @@ const CLAVE_MANTENER_RENDER = "pixben_admin_mantener_render_activo";
 const INTERVALO_MANTENER_RENDER_MS = 9 * 60 * 1000;
 let temporizadorMantenerRender = null;
 let comprobandoRender = false;
+let ultimoReporteDatos = null;
 
 configurarTabs();
 configurarEventos();
@@ -35,8 +36,12 @@ function configurarTabs() {
             document.querySelectorAll(".admin-tabs button").forEach(b => b.classList.remove("tab-activo"));
             document.querySelectorAll(".admin-seccion").forEach(s => s.classList.remove("seccion-activa"));
             boton.classList.add("tab-activo");
+            document.querySelectorAll(".admin-tabs button[data-seccion]").forEach(tab => {
+                tab.setAttribute("aria-selected", String(tab === boton));
+            });
             document.getElementById(boton.dataset.seccion).classList.add("seccion-activa");
             if (boton.dataset.seccion === "seccionAnalitica") cargarAnalitica();
+            if (boton.dataset.seccion === "seccionReportes") cargarReportes();
         });
     });
 }
@@ -63,6 +68,9 @@ function configurarEventos() {
     document.getElementById("btnRecargarPedidos").addEventListener("click", cargarPedidosAdmin);
     document.getElementById("btnRecargarMensajes").addEventListener("click", cargarMensajes);
     document.getElementById("btnRecargarAnalitica")?.addEventListener("click", cargarAnalitica);
+    document.getElementById("btnRecargarReportes")?.addEventListener("click", cargarReportes);
+    document.getElementById("periodoReportes")?.addEventListener("change", cargarReportes);
+    document.getElementById("btnExportarReportes")?.addEventListener("click", exportarReporteCsv);
     document.getElementById("btnBorrarAnaliticaAntigua")?.addEventListener("click", () => borrarAnalitica(false));
     document.getElementById("btnBorrarAnalitica")?.addEventListener("click", () => borrarAnalitica(true));
     document.getElementById("btnDescargarRespaldo")?.addEventListener("click", descargarRespaldo);
@@ -992,6 +1000,156 @@ function formatearFecha(valor) {
 function formatearEstado(valor) { return String(valor || "PENDIENTE").replaceAll("_", " ").toLowerCase().replace(/\b\w/g, l => l.toUpperCase()); }
 function escaparHtml(valor) { return String(valor ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;"); }
 function escaparAtributo(valor) { return escaparHtml(valor); }
+
+async function cargarReportes() {
+    const estado = document.getElementById("estadoReportes");
+    if (!estado) return;
+    estado.textContent = "Calculando reportes...";
+    try {
+        const [respuestaPedidos, respuestaPersonalizados] = await Promise.all([
+            fetchConSesion(`${API_URL}/pedidos/admin/todos`),
+            fetchConSesion(`${API_URL}/pedidos-personalizados/admin/todos`)
+        ]);
+        if (!respuestaPedidos.ok) throw new Error("No se pudieron cargar los pedidos para los reportes");
+        if (!respuestaPersonalizados.ok) throw new Error("No se pudieron cargar las personalizaciones para los reportes");
+
+        const pedidos = await respuestaPedidos.json();
+        const personalizados = await respuestaPersonalizados.json();
+        const periodo = document.getElementById("periodoReportes")?.value || "30";
+        const pedidosPeriodo = filtrarPorPeriodo(pedidos, periodo, "fecha");
+        const personalizadosPeriodo = filtrarPorPeriodo(personalizados, periodo, "fechaCreacion");
+        const ventasVerificadas = pedidosPeriodo.filter(p =>
+            String(p.estadoPago || "").toUpperCase() === "VERIFICADO"
+            && String(p.estado || "").toUpperCase() !== "CANCELADO"
+        );
+        const ventas = ventasVerificadas.reduce((total, p) => total + Number(p.total ?? p.subtotal ?? 0), 0);
+        const pendientes = pedidosPeriodo.filter(p => !["CANCELADO", "ENTREGADO"].includes(String(p.estado || "").toUpperCase())).length;
+        const stockBajo = productosAdmin
+            .map(producto => ({producto, stock: stockDisponibleReporte(producto)}))
+            .filter(item => item.stock <= 5)
+            .sort((a, b) => a.stock - b.stock);
+
+        document.getElementById("reporteVentas").textContent = `S/ ${ventas.toFixed(2)}`;
+        document.getElementById("reportePedidos").textContent = String(pedidosPeriodo.length);
+        document.getElementById("reportePendientes").textContent = String(pendientes);
+        document.getElementById("reportePersonalizados").textContent = String(personalizadosPeriodo.length);
+        document.getElementById("reporteStockBajo").textContent = String(stockBajo.length);
+
+        renderizarProductosVendidos(ventasVerificadas);
+        renderizarEstadosPedidos(pedidosPeriodo);
+        renderizarStockBajo(stockBajo);
+
+        ultimoReporteDatos = {periodo, pedidos: pedidosPeriodo, personalizados: personalizadosPeriodo};
+        const etiqueta = periodo === "all" ? "todo el historial" : `los últimos ${periodo} días`;
+        estado.textContent = `Reporte actualizado con ${pedidosPeriodo.length} pedido(s) de ${etiqueta}.`;
+    } catch (error) {
+        estado.textContent = error.message || "No se pudieron generar los reportes.";
+    }
+}
+
+function filtrarPorPeriodo(lista, periodo, campoFecha) {
+    const datos = Array.isArray(lista) ? lista : [];
+    if (periodo === "all") return datos;
+    const dias = Number(periodo || 30);
+    const limite = Date.now() - dias * 24 * 60 * 60 * 1000;
+    return datos.filter(item => {
+        const fecha = Date.parse(item?.[campoFecha] || "");
+        return Number.isFinite(fecha) && fecha >= limite;
+    });
+}
+
+function stockDisponibleReporte(producto) {
+    const colores = Array.isArray(producto?.colores) ? producto.colores : [];
+    if (colores.length) {
+        return colores.reduce((total, color) => total + Math.max(0, Number(color?.stock || 0)), 0);
+    }
+    return Math.max(0, Number(producto?.stock || 0));
+}
+
+function renderizarProductosVendidos(pedidos) {
+    const tbody = document.getElementById("tablaProductosVendidos");
+    if (!tbody) return;
+    const acumulado = new Map();
+    pedidos.forEach(pedido => (pedido.items || []).forEach(item => {
+        const clave = String(item.productoId ?? item.nombre ?? "producto");
+        const actual = acumulado.get(clave) || {nombre: item.nombre || "Producto", unidades: 0, ingresos: 0};
+        actual.unidades += Number(item.cantidad || 0);
+        actual.ingresos += Number(item.subtotal || 0);
+        acumulado.set(clave, actual);
+    }));
+    const filas = [...acumulado.values()].sort((a, b) => b.unidades - a.unidades).slice(0, 8);
+    tbody.innerHTML = filas.length
+        ? filas.map(item => `<tr><td>${escaparHtml(item.nombre)}</td><td>${item.unidades}</td><td>S/ ${item.ingresos.toFixed(2)}</td></tr>`).join("")
+        : '<tr><td colspan="3">Aún no hay ventas verificadas en este periodo.</td></tr>';
+}
+
+function renderizarEstadosPedidos(pedidos) {
+    const contenedor = document.getElementById("reporteEstadosPedidos");
+    if (!contenedor) return;
+    const estados = new Map();
+    pedidos.forEach(pedido => {
+        const estado = String(pedido.estado || "PENDIENTE").toUpperCase();
+        estados.set(estado, (estados.get(estado) || 0) + 1);
+    });
+    const total = Math.max(1, pedidos.length);
+    const filas = [...estados.entries()].sort((a, b) => b[1] - a[1]);
+    contenedor.innerHTML = filas.length
+        ? filas.map(([estado, cantidad]) => {
+            const porcentaje = Math.round(cantidad / total * 100);
+            return `<div class="estado-reporte">
+                <div><strong>${escaparHtml(formatearEstado(estado))}</strong><span>${cantidad} · ${porcentaje}%</span></div>
+                <div class="barra-reporte" aria-label="${escaparAtributo(formatearEstado(estado))}: ${porcentaje}%"><span style="width:${porcentaje}%"></span></div>
+            </div>`;
+        }).join("")
+        : "<p>No hay pedidos en este periodo.</p>";
+}
+
+function renderizarStockBajo(items) {
+    const tbody = document.getElementById("tablaStockBajo");
+    if (!tbody) return;
+    tbody.innerHTML = items.length
+        ? items.slice(0, 12).map(({producto, stock}) => `<tr>
+            <td>${escaparHtml(producto.nombre || "Producto")}</td>
+            <td>${escaparHtml(producto.categoria || "Sin categoría")}</td>
+            <td><strong>${stock}</strong></td>
+        </tr>`).join("")
+        : '<tr><td colspan="3">No hay productos con stock bajo.</td></tr>';
+}
+
+function exportarReporteCsv() {
+    if (!ultimoReporteDatos) {
+        alert("Primero actualiza el reporte.");
+        return;
+    }
+    const filas = [[
+        "Pedido", "Fecha", "Cliente", "Estado", "Estado de pago",
+        "Método de pago", "Método de envío", "Total"
+    ]];
+    ultimoReporteDatos.pedidos.forEach(p => filas.push([
+        p.codigoSeguimiento || p.id || "",
+        p.fecha || "",
+        p.nombreCliente || p.usuario || p.correo || "",
+        p.estado || "",
+        p.estadoPago || "",
+        p.metodoPago || "",
+        p.metodoEnvio || "",
+        Number(p.total ?? p.subtotal ?? 0).toFixed(2)
+    ]));
+    const csv = "\uFEFF" + filas.map(fila => fila.map(valor => {
+        const limpio = String(valor ?? "").replace(/"/g, '""');
+        return `"${limpio}"`;
+    }).join(",")).join("\r\n");
+    const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const enlace = document.createElement("a");
+    enlace.href = url;
+    enlace.download = `pixben-reporte-${new Date().toISOString().slice(0,10)}.csv`;
+    document.body.appendChild(enlace);
+    enlace.click();
+    enlace.remove();
+    URL.revokeObjectURL(url);
+}
+
 async function obtenerMensajeError(respuesta) { try { const json = await respuesta.json(); return json.message || json.error || "Error"; } catch { return await respuesta.text() || "Error"; } }
 
 
