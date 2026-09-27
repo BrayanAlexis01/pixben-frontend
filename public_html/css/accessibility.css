@@ -1,0 +1,268 @@
+/* =========================================================
+   PIXBEN - ACCESIBILIDAD E INCLUSIVIDAD
+   Preferencias persistentes para lectura, contraste y movimiento.
+   ========================================================= */
+
+:root{
+    --a11y-focus:#ffcc33;
+}
+
+.saltar-contenido{
+    position:fixed;
+    top:10px;
+    left:10px;
+    z-index:100000;
+    padding:12px 16px;
+    border-radius:10px;
+    background:#111;
+    color:#fff !important;
+    font-weight:800;
+    text-decoration:none;
+    transform:translateY(-160%);
+    transition:transform .18s ease;
+    box-shadow:0 8px 24px rgba(0,0,0,.28);
+}
+.saltar-contenido:focus{
+    transform:translateY(0);
+}
+
+:where(a,button,input,select,textarea,[tabindex]):focus-visible{
+    outline:3px solid var(--a11y-focus) !important;
+    outline-offset:3px !important;
+}
+
+html.a11y-underline-links a:not(.btn-principal):not(.btn-comprar):not(.btn-guardar):not(.btn-secundario){
+    text-decoration:underline !important;
+    text-decoration-thickness:2px !important;
+    text-underline-offset:3px !important;
+}
+
+html.a11y-reading-spacing :where(p,li,label,dd,dt,small){
+    line-height:1.75 !important;
+    letter-spacing:.025em !important;
+    word-spacing:.06em !important;
+}
+
+html.a11y-text-medium{
+    font-size:112.5%;
+}
+
+html.a11y-text-large{
+    font-size:125%;
+}
+
+html.a11y-reduce-motion{
+    scroll-behavior:auto !important;
+}
+html.a11y-reduce-motion *,
+html.a11y-reduce-motion *::before,
+html.a11y-reduce-motion *::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+}
+
+html.a11y-high-contrast body,
+html.a11y-high-contrast main{
+    background:#000 !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast :where(
+    section,article,aside,form,
+    .producto,.card-resumen,.tarjeta-info,.tarjeta-configuracion,
+    .card-formulario,.card-tabla,.card-analitica,.tarjeta-mensaje,
+    .tarjeta-personalizado,.info-producto,.reseñas-container,
+    .formulario-resena,.resumen-carrito,.modal-contenido,
+    .contenido-perfil,.catalogo,.sidebar
+){
+    background:#0b0b0b !important;
+    color:#fff !important;
+    border-color:#f5f5f5 !important;
+}
+html.a11y-high-contrast :where(h1,h2,h3,h4,p,span,small,label,dt,dd,strong){
+    color:inherit !important;
+}
+html.a11y-high-contrast a{
+    color:#ffe45c !important;
+}
+html.a11y-high-contrast :where(input,select,textarea){
+    background:#000 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+}
+html.a11y-high-contrast :where(button,.btn-principal,.btn-comprar,.btn-guardar){
+    border:2px solid #fff !important;
+}
+html.a11y-high-contrast img{
+    outline:1px solid rgba(255,255,255,.45);
+}
+
+/* Modal */
+.a11y-modal[hidden]{display:none !important}
+.a11y-modal{
+    position:fixed;
+    inset:0;
+    z-index:100001;
+    display:grid;
+    place-items:center;
+    padding:20px;
+}
+.a11y-modal-fondo{
+    position:absolute;
+    inset:0;
+    background:rgba(7,5,10,.72);
+    backdrop-filter:blur(4px);
+}
+.a11y-modal-contenido{
+    position:relative;
+    width:min(720px,100%);
+    max-height:min(760px,calc(100dvh - 40px));
+    overflow:auto;
+    border-radius:22px;
+    background:#fff;
+    color:#171717;
+    border:1px solid #e5e0e9;
+    box-shadow:0 26px 80px rgba(0,0,0,.38);
+}
+.a11y-modal-cabecera{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:20px;
+    padding:25px 26px 18px;
+    border-bottom:1px solid #eee;
+}
+.a11y-modal-cabecera h2{margin:4px 0 5px;font-size:1.55rem}
+.a11y-modal-cabecera p{margin:0;color:#666;line-height:1.5}
+.a11y-eyebrow{
+    color:#7624b2;
+    font-size:.72rem;
+    font-weight:900;
+    letter-spacing:.16em;
+}
+.a11y-cerrar{
+    width:42px;
+    height:42px;
+    flex:0 0 42px;
+    border:0;
+    border-radius:50%;
+    background:#f2edf6;
+    color:#5e1b8d;
+    cursor:pointer;
+    font-size:1.15rem;
+}
+.a11y-modal-cuerpo{padding:22px 26px}
+.a11y-bloque{
+    padding:18px 0;
+    border-bottom:1px solid #eee;
+}
+.a11y-bloque:first-child{padding-top:0}
+.a11y-bloque:last-child{border-bottom:0}
+.a11y-bloque h3{margin:0 0 5px;font-size:1.05rem}
+.a11y-bloque p{margin:0 0 13px;color:#666;line-height:1.5}
+.a11y-opciones{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+}
+.a11y-opcion,
+.a11y-toggle{
+    min-height:44px;
+    border:1px solid #d8cfdf;
+    border-radius:11px;
+    padding:10px 13px;
+    background:#fff;
+    color:#261d2b;
+    font-weight:750;
+    cursor:pointer;
+}
+.a11y-opcion[aria-pressed="true"],
+.a11y-toggle[aria-pressed="true"]{
+    background:#7423b2;
+    border-color:#7423b2;
+    color:#fff;
+}
+.a11y-switch-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+.a11y-toggle{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    text-align:left;
+}
+.a11y-toggle i{width:22px;text-align:center}
+.a11y-modal-pie{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    padding:18px 26px 24px;
+    border-top:1px solid #eee;
+}
+.a11y-restablecer,
+.a11y-listo{
+    min-height:46px;
+    border-radius:11px;
+    padding:11px 17px;
+    font-weight:850;
+    cursor:pointer;
+}
+.a11y-restablecer{
+    border:1px solid #d6cddd;
+    background:#fff;
+    color:#442c50;
+}
+.a11y-listo{
+    border:0;
+    background:#7423b2;
+    color:#fff;
+}
+.a11y-estado{
+    position:absolute;
+    width:1px;
+    height:1px;
+    overflow:hidden;
+    clip:rect(0 0 0 0);
+    white-space:nowrap;
+}
+
+body.a11y-modal-abierto{overflow:hidden}
+
+@media(max-width:620px){
+    .a11y-modal{padding:10px}
+    .a11y-modal-contenido{max-height:calc(100dvh - 20px);border-radius:16px}
+    .a11y-modal-cabecera,.a11y-modal-cuerpo,.a11y-modal-pie{padding-left:18px;padding-right:18px}
+    .a11y-switch-grid{grid-template-columns:1fr}
+    .a11y-modal-pie{flex-direction:column-reverse}
+    .a11y-modal-pie button{width:100%}
+}
+
+.a11y-flotante{
+    position:fixed;
+    left:18px;
+    bottom:18px;
+    z-index:99990;
+    width:50px;
+    height:50px;
+    display:grid;
+    place-items:center;
+    border:2px solid #fff;
+    border-radius:50%;
+    background:#7423b2;
+    color:#fff;
+    box-shadow:0 10px 28px rgba(50,17,73,.28);
+    cursor:pointer;
+    font-size:23px;
+}
+.a11y-flotante:hover{
+    background:#5f198f;
+    transform:translateY(-2px);
+}
+html.a11y-high-contrast .a11y-flotante{
+    background:#000 !important;
+    color:#ffe45c !important;
+    border-color:#ffe45c !important;
+}

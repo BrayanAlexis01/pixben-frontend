@@ -1,6 +1,6 @@
 "use strict";
 
-const VERSION = "pixben-pwa-v13";
+const VERSION = "pixben-pwa-v14";
 const CACHE_ESTATICO = `${VERSION}-static`;
 const CACHE_PAGINAS = `${VERSION}-pages`;
 
@@ -10,7 +10,9 @@ const RECURSOS_BASE = [
     "/offline.html",
     "/site.webmanifest",
     "/css/pwa-premium.css",
+    "/css/accessibility.css",
     "/js/pwa-premium.js",
+    "/js/accessibility.js",
     "/js/config.js",
     "/imagensponsor/logopixben.webp",
     "/imagensponsor/app-icon-192.png",

@@ -16,12 +16,13 @@
     <meta name="robots" content="noindex,nofollow">
     <title>Mi perfil | PixBen</title>
     <link href="../css/css index.css" rel="stylesheet">
-    <link href="../css/perfil.css?v=4" rel="stylesheet">
+    <link href="../css/perfil.css?v=5" rel="stylesheet">
     <link href="../css/responsive-global.css?v=3" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
     <link rel="stylesheet" href="../css/pwa-premium.css?v=2">
     <script src="../js/pwa-premium.js?v=2" defer></script>
     <link href="../css/header-global.css?v=2" rel="stylesheet">
+    <link rel="stylesheet" href="../css/accessibility.css?v=1">
 </head>
 <body>
 <header class="site-header-pixben">
@@ -72,7 +73,7 @@
             <a href="mis-pedidos.html"><i class="fa-solid fa-box"></i> Mis pedidos</a>
             <a href="favoritos.html"><i class="fa-solid fa-heart"></i> Favoritos</a>
             <a href="historial.html"><i class="fa-solid fa-clock-rotate-left"></i> Historial</a>
-            <a href="#configuracion"><i class="fa-solid fa-gear"></i> Configuración</a>
+            <button type="button" data-open-accessibility aria-haspopup="dialog"><i class="fa-solid fa-universal-access"></i> Accesibilidad y preferencias</button>
             <button type="button" id="btnCerrarSesionPerfil"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
         </nav>
     </aside>
@@ -134,8 +135,9 @@
 <script src="../js/config.js?v=19"></script>
 <script src="../js/header-global.js?v=2"></script>
 <script src="../js/analitica.js?v=3"></script>
-<script src="../js/paginas/perfil.js?v=4"></script>
+<script src="../js/paginas/perfil.js?v=5"></script>
 <script src="../js/eventos-html.js?v=3"></script>
 <script src="../js/responsive-menu.js?v=4"></script>
+<script src="../js/accessibility.js?v=1"></script>
 </body>
 </html>
