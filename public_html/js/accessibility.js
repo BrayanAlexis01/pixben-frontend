@@ -56,6 +56,17 @@
                 abrirModal(btn);
             });
         });
+
+        if (!document.querySelector(".a11y-flotante")) {
+            const boton = document.createElement("button");
+            boton.type = "button";
+            boton.className = "a11y-flotante";
+            boton.setAttribute("aria-label", "Abrir accesibilidad y preferencias");
+            boton.setAttribute("title", "Accesibilidad y preferencias");
+            boton.innerHTML = '<span aria-hidden="true">♿</span>';
+            boton.addEventListener("click", () => abrirModal(boton));
+            document.body.appendChild(boton);
+        }
     }
 
     function crearModal(){
