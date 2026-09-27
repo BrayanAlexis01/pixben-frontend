@@ -1,0 +1,33 @@
+name: Avance 2 UX accessibility validation
+
+on:
+  push:
+    branches: [ "avance2-accessibility-reports-20260927" ]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check JavaScript syntax
+        run: |
+          node --check public_html/js/accessibility.js
+          node --check public_html/js/admin.js
+          node --check public_html/js/paginas/perfil.js
+      - name: Verify accessibility assets are loaded on every HTML page
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          missing = []
+          for p in Path("public_html").rglob("*.html"):
+              text = p.read_text(encoding="utf-8")
+              if "accessibility.css" not in text or "accessibility.js" not in text:
+                  missing.append(str(p))
+          if missing:
+              raise SystemExit("Missing accessibility assets: " + ", ".join(missing))
+          print("Accessibility assets present in all HTML pages.")
+          PY
