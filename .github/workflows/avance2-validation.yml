@@ -2,7 +2,7 @@ name: Avance 2 UX accessibility validation
 
 on:
   push:
-    branches: [ "avance2-accessibility-reports-20260927" ]
+    branches: [ "avance2-accessibility-reports-20260927", "fix-accessibility-contrast-logo-20260927" ]
   workflow_dispatch:
 
 jobs:
