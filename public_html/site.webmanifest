@@ -23,6 +23,12 @@
   "prefer_related_applications": false,
   "icons": [
     {
+      "src": "/imagensponsor/app-icon-v2.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
       "src": "/imagensponsor/app-icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
@@ -33,6 +39,12 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/imagensponsor/app-icon-maskable-v2.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
     },
     {
       "src": "/imagensponsor/app-icon-maskable-192.png",
