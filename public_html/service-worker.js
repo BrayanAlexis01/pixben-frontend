@@ -1,6 +1,6 @@
 "use strict";
 
-const VERSION = "pixben-pwa-v17";
+const VERSION = "pixben-pwa-v18";
 const CACHE_ESTATICO = `${VERSION}-static`;
 const CACHE_PAGINAS = `${VERSION}-pages`;
 
@@ -15,12 +15,10 @@ const RECURSOS_BASE = [
     "/js/accessibility.js",
     "/js/config.js",
     "/imagensponsor/logopixben.webp",
-    "/imagensponsor/app-icon-v2.svg",
-    "/imagensponsor/app-icon-maskable-v2.svg",
-    "/imagensponsor/app-icon-192.png",
-    "/imagensponsor/app-icon-512.png",
-    "/imagensponsor/app-icon-maskable-192.png",
-    "/imagensponsor/app-icon-maskable-512.png",
+    "/imagensponsor/app-icon-v3-192.png",
+    "/imagensponsor/app-icon-v3-512.png",
+    "/imagensponsor/app-icon-maskable-v3-192.png",
+    "/imagensponsor/app-icon-maskable-v3-512.png",
     "/imagensponsor/polo-ocean.webp",
     "/htmls/productos.html",
     "/htmls/personaliza.html",
