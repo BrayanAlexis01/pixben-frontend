@@ -554,3 +554,371 @@ html.a11y-high-contrast .site-header-pixben .logo img{
     box-shadow:none !important;
     filter:none !important;
 }
+
+
+/* =========================================================
+   CONTRASTE ALTO V2 - VISTAS COMPLETAS
+   Contacto / Nosotros / Personaliza
+   ========================================================= */
+
+/* ---------- CONTACTO ---------- */
+html.a11y-high-contrast .contacto-container{
+    background:#000 !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast .contacto-titulo,
+html.a11y-high-contrast .contacto-titulo h1,
+html.a11y-high-contrast .contacto-titulo p{
+    color:#fff !important;
+}
+html.a11y-high-contrast .contacto-beneficios,
+html.a11y-high-contrast .contacto-contenido{
+    background:transparent !important;
+}
+html.a11y-high-contrast .beneficio-box,
+html.a11y-high-contrast .formulario-contacto,
+html.a11y-high-contrast .info-contacto,
+html.a11y-high-contrast .faq-box{
+    background:#090909 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+    box-shadow:none !important;
+}
+html.a11y-high-contrast .beneficio-box :where(h3,p,i),
+html.a11y-high-contrast .formulario-contacto :where(h2,p,label),
+html.a11y-high-contrast .info-contacto :where(h2,h3,p,a),
+html.a11y-high-contrast .faq-box :where(h2,h3,p){
+    color:#fff !important;
+}
+html.a11y-high-contrast .info-item{
+    border-bottom-color:#777 !important;
+}
+html.a11y-high-contrast .formulario-contacto :where(input,textarea){
+    background:#000 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+}
+html.a11y-high-contrast .formulario-contacto :where(input,textarea)::placeholder{
+    color:#d7d7d7 !important;
+    opacity:1 !important;
+}
+html.a11y-high-contrast .formulario-contacto button,
+html.a11y-high-contrast .faq-box button{
+    background:#ffe45c !important;
+    color:#000 !important;
+    border:2px solid #ffe45c !important;
+    font-weight:900 !important;
+}
+html.a11y-high-contrast .estado-contacto.ok{color:#9dffbd !important}
+html.a11y-high-contrast .estado-contacto.error{color:#ff9b9b !important}
+
+/* ---------- NOSOTROS ---------- */
+html.a11y-high-contrast .nosotros-container{
+    background:#000 !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast .nosotros-hero,
+html.a11y-high-contrast .nosotros-texto,
+html.a11y-high-contrast .info-nosotros,
+html.a11y-high-contrast .caracteristicas,
+html.a11y-high-contrast .valores,
+html.a11y-high-contrast .mision-vision{
+    background:transparent !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast .nosotros-texto h1,
+html.a11y-high-contrast .nosotros-texto p,
+html.a11y-high-contrast .valor-item :where(h3,p),
+html.a11y-high-contrast .caracteristica :where(h3,p){
+    color:#fff !important;
+}
+html.a11y-high-contrast .nosotros-texto h2,
+html.a11y-high-contrast .bloque-info h2,
+html.a11y-high-contrast .valores h2{
+    color:#ffe45c !important;
+}
+html.a11y-high-contrast .bloque-info,
+html.a11y-high-contrast .valor-item,
+html.a11y-high-contrast .caracteristica,
+html.a11y-high-contrast .cta-nosotros{
+    background:#090909 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+    box-shadow:none !important;
+}
+html.a11y-high-contrast .bloque-info :where(p,h3),
+html.a11y-high-contrast .cta-nosotros :where(h2,h3,p){
+    color:#fff !important;
+}
+html.a11y-high-contrast .cta-nosotros button{
+    background:#ffe45c !important;
+    color:#000 !important;
+    border:2px solid #ffe45c !important;
+    font-weight:900 !important;
+}
+html.a11y-high-contrast .nosotros-imagen{
+    background:transparent !important;
+    border:0 !important;
+}
+html.a11y-high-contrast .nosotros-imagen img{
+    border:2px solid #fff !important;
+    outline:0 !important;
+}
+
+/* ---------- PERSONALIZADOR ---------- */
+html.a11y-high-contrast .personalizador-page{
+    background:#000 !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast .personalizador-hero,
+html.a11y-high-contrast .personalizador-hero :where(h1,p),
+html.a11y-high-contrast .editor-layout{
+    color:#fff !important;
+}
+html.a11y-high-contrast .hero-beneficios span{
+    background:#090909 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+    box-shadow:none !important;
+}
+html.a11y-high-contrast .hero-beneficios i,
+html.a11y-high-contrast .panel-kicker{
+    color:#ffe45c !important;
+}
+html.a11y-high-contrast .panel-editor,
+html.a11y-high-contrast .lienzo-seccion,
+html.a11y-high-contrast .resumen-pedido{
+    background:#080808 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+    box-shadow:none !important;
+}
+html.a11y-high-contrast .panel-editor :where(h2,h3,p,label,strong,small,span,output),
+html.a11y-high-contrast .lienzo-seccion :where(h2,h3,p,label,strong,small,span,output),
+html.a11y-high-contrast .resumen-pedido :where(h2,h3,p,label,strong,small,span,output){
+    color:#fff !important;
+}
+html.a11y-high-contrast .grupo-editor{
+    background:#050505 !important;
+    color:#fff !important;
+    border:1px solid #fff !important;
+}
+html.a11y-high-contrast .grupo-editor > summary{
+    background:#101010 !important;
+    color:#fff !important;
+    border-bottom-color:#777 !important;
+}
+html.a11y-high-contrast .grupo-editor > summary i{
+    color:#ffe45c !important;
+}
+html.a11y-high-contrast .grupo-editor-contenido,
+html.a11y-high-contrast .subgrupo-editor,
+html.a11y-high-contrast .subgrupo-titulo{
+    background:#050505 !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast .panel-editor :where(input[type=text],input[type=number],input[type=search],select,textarea){
+    background:#000 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+}
+html.a11y-high-contrast .panel-editor :where(input[type=text],input[type=number],input[type=search],textarea)::placeholder{
+    color:#d8d8d8 !important;
+    opacity:1 !important;
+}
+
+/* Selector de producto, colores y variantes */
+html.a11y-high-contrast .vista-producto,
+html.a11y-high-contrast .vistas-producto-base,
+html.a11y-high-contrast .colores-visuales,
+html.a11y-high-contrast .color-libre-wrap,
+html.a11y-high-contrast .stock-personalizable,
+html.a11y-high-contrast .producto-resumen,
+html.a11y-high-contrast .estado-diseno-resumen > div{
+    background:#0b0b0b !important;
+    color:#fff !important;
+    border-color:#fff !important;
+}
+html.a11y-high-contrast .swatch,
+html.a11y-high-contrast .color-visual{
+    border:2px solid #fff !important;
+}
+html.a11y-high-contrast .color-visual.activo,
+html.a11y-high-contrast .vista-producto.activa{
+    outline:3px solid #ffe45c !important;
+    outline-offset:2px !important;
+}
+
+/* Agregar elementos y herramientas */
+html.a11y-high-contrast .botones-agregar button,
+html.a11y-high-contrast .boton-agregar-principal,
+html.a11y-high-contrast .botones-herramienta button,
+html.a11y-high-contrast .btn-herramienta-ancho,
+html.a11y-high-contrast .historial-editor button,
+html.a11y-high-contrast .selector-lado button,
+html.a11y-high-contrast .barra-formato-texto button,
+html.a11y-high-contrast .formas-rapidas button,
+html.a11y-high-contrast .presets-imagen button{
+    background:#000 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+}
+html.a11y-high-contrast .botones-agregar button:hover,
+html.a11y-high-contrast .botones-herramienta button:hover,
+html.a11y-high-contrast .btn-herramienta-ancho:hover,
+html.a11y-high-contrast .historial-editor button:hover,
+html.a11y-high-contrast .selector-lado button:hover{
+    background:#171717 !important;
+    color:#ffe45c !important;
+    border-color:#ffe45c !important;
+}
+html.a11y-high-contrast .selector-lado .lado-activo,
+html.a11y-high-contrast .historial-editor .activo,
+html.a11y-high-contrast .presets-imagen .activo{
+    background:#ffe45c !important;
+    color:#000 !important;
+    border-color:#ffe45c !important;
+}
+
+/* Fuentes, capas y elementos internos */
+html.a11y-high-contrast .selector-fuente-actual,
+html.a11y-high-contrast .selector-fuentes,
+html.a11y-high-contrast .opcion-fuente,
+html.a11y-high-contrast .lista-fuentes,
+html.a11y-high-contrast .lista-capas,
+html.a11y-high-contrast .capa-item,
+html.a11y-high-contrast .capa-seleccionar,
+html.a11y-high-contrast .busqueda-fuentes,
+html.a11y-high-contrast .categorias-fuentes{
+    background:#090909 !important;
+    color:#fff !important;
+    border-color:#fff !important;
+}
+html.a11y-high-contrast .opcion-fuente :where(span,small),
+html.a11y-high-contrast .capa-item :where(span,small),
+html.a11y-high-contrast .capas-vacias,
+html.a11y-high-contrast .meta-fuente{
+    color:#fff !important;
+}
+
+/* Mensajes y avisos */
+html.a11y-high-contrast .nota-cuenta-personalizado,
+html.a11y-high-contrast .aviso-cotizacion,
+html.a11y-high-contrast .ayuda-editor,
+html.a11y-high-contrast .ayuda-seguridad,
+html.a11y-high-contrast .ayuda-whatsapp,
+html.a11y-high-contrast .contador-notas,
+html.a11y-high-contrast .instruccion-lienzo{
+    background:#101010 !important;
+    color:#fff !important;
+    border:1px solid #fff !important;
+}
+html.a11y-high-contrast .ayuda-whatsapp :where(strong,p){
+    color:#fff !important;
+}
+html.a11y-high-contrast .ayuda-whatsapp a{
+    background:#ffe45c !important;
+    color:#000 !important;
+    border:2px solid #ffe45c !important;
+}
+
+/* Lienzo: se mantiene claro para no falsear el color del diseño */
+html.a11y-high-contrast .canvas-shell,
+html.a11y-high-contrast .canvas-container,
+html.a11y-high-contrast #editorCanvas{
+    background:#fff !important;
+}
+html.a11y-high-contrast .canvas-empty-hint{
+    color:#111 !important;
+}
+html.a11y-high-contrast .zona-impresion span{
+    color:#000 !important;
+    background:#ffe45c !important;
+}
+
+/* Resumen / estado */
+html.a11y-high-contrast .badge-cotizacion{
+    background:#ffe45c !important;
+    color:#000 !important;
+    border:1px solid #ffe45c !important;
+}
+html.a11y-high-contrast .precio-pendiente{
+    color:#ffe45c !important;
+}
+html.a11y-high-contrast .estado-borrador{
+    background:#171717 !important;
+    color:#fff !important;
+    border:1px solid #fff !important;
+}
+html.a11y-high-contrast .estado-borrador.guardado,
+html.a11y-high-contrast .estado-solicitud.ok{
+    color:#9dffbd !important;
+}
+html.a11y-high-contrast .estado-borrador.error,
+html.a11y-high-contrast .estado-solicitud.error{
+    color:#ff9b9b !important;
+}
+
+/* Cómo funciona */
+html.a11y-high-contrast .como-funciona article{
+    background:#090909 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+}
+html.a11y-high-contrast .como-funciona article :where(h3,p){
+    color:#fff !important;
+}
+html.a11y-high-contrast .como-funciona article > span{
+    background:#ffe45c !important;
+    color:#000 !important;
+}
+
+/* Vista previa */
+html.a11y-high-contrast .modal-preview-contenido,
+html.a11y-high-contrast .preview-grid article{
+    background:#070707 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+}
+html.a11y-high-contrast .preview-explicacion{
+    color:#fff !important;
+}
+html.a11y-high-contrast .preview-imagen-wrap{
+    background:#fff !important;
+}
+html.a11y-high-contrast .preview-etiqueta{
+    background:#ffe45c !important;
+    color:#000 !important;
+}
+html.a11y-high-contrast .preview-grid article > button,
+html.a11y-high-contrast .cerrar-preview{
+    background:#000 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+}
+
+/* ---------- MÓVIL: evitar textos cortados al aumentar tamaño ---------- */
+@media(max-width:768px){
+    html.a11y-high-contrast .contacto-container,
+    html.a11y-high-contrast .nosotros-container{
+        padding-left:18px !important;
+        padding-right:18px !important;
+    }
+    html.a11y-high-contrast .contacto-titulo h1,
+    html.a11y-high-contrast .nosotros-texto h1{
+        font-size:clamp(2.2rem,12vw,3.6rem) !important;
+        line-height:1.02 !important;
+        overflow-wrap:anywhere;
+    }
+    html.a11y-high-contrast .nosotros-texto h2{
+        font-size:clamp(1.7rem,8vw,2.35rem) !important;
+        line-height:1.15 !important;
+        overflow-wrap:anywhere;
+    }
+    html.a11y-high-contrast .nosotros-hero,
+    html.a11y-high-contrast .contacto-container,
+    html.a11y-high-contrast .nosotros-container{
+        max-width:100% !important;
+        overflow-x:hidden !important;
+    }
+}
