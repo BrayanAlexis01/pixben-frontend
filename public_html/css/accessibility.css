@@ -922,3 +922,276 @@ html.a11y-high-contrast .cerrar-preview{
         overflow-x:hidden !important;
     }
 }
+
+
+/* =========================================================
+   CONTRASTE ALTO V3 - PERFIL Y ADMIN
+   ========================================================= */
+
+/* ---------- PERFIL ---------- */
+html.a11y-high-contrast .perfil-shell,
+html.a11y-high-contrast .contenido-perfil{
+    background:#000 !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast .bienvenida{
+    background:#0b0b0b !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+    box-shadow:none !important;
+}
+html.a11y-high-contrast .bienvenida .eyebrow{
+    color:#ffe45c !important;
+}
+html.a11y-high-contrast .bienvenida p{
+    color:#fff !important;
+}
+html.a11y-high-contrast .card-resumen{
+    background:#090909 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+    box-shadow:none !important;
+}
+html.a11y-high-contrast .card-resumen i{
+    background:#151515 !important;
+    color:#ffe45c !important;
+    border:1px solid #fff !important;
+}
+html.a11y-high-contrast .card-resumen span,
+html.a11y-high-contrast .card-resumen strong{
+    color:#ffe45c !important;
+}
+html.a11y-high-contrast .tarjeta-info,
+html.a11y-high-contrast .tarjeta-configuracion{
+    background:#080808 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+    box-shadow:none !important;
+}
+html.a11y-high-contrast .tarjeta-info .eyebrow,
+html.a11y-high-contrast .tarjeta-configuracion .eyebrow,
+html.a11y-high-contrast .icono-tarjeta{
+    color:#ffe45c !important;
+}
+html.a11y-high-contrast .datos-perfil{
+    background:transparent !important;
+}
+html.a11y-high-contrast .datos-perfil > div{
+    background:#000 !important;
+    color:#fff !important;
+    border:1px solid #fff !important;
+}
+html.a11y-high-contrast .datos-perfil dt{
+    color:#d8d8d8 !important;
+}
+html.a11y-high-contrast .datos-perfil dd{
+    color:#fff !important;
+}
+html.a11y-high-contrast .chip-rol{
+    background:#ffe45c !important;
+    color:#000 !important;
+    border:1px solid #ffe45c !important;
+}
+html.a11y-high-contrast .tarjeta-configuracion label,
+html.a11y-high-contrast .texto-ayuda{
+    color:#fff !important;
+}
+html.a11y-high-contrast .tarjeta-configuracion input{
+    background:#000 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+}
+html.a11y-high-contrast .btn-secundario-perfil,
+html.a11y-high-contrast .btn-principal{
+    background:#ffe45c !important;
+    color:#000 !important;
+    border:2px solid #ffe45c !important;
+}
+html.a11y-high-contrast .estado-formulario.exito{
+    color:#9dffbd !important;
+}
+html.a11y-high-contrast .estado-formulario.error{
+    color:#ff9b9b !important;
+}
+
+/* ---------- ADMIN ---------- */
+html.a11y-high-contrast .panel-admin{
+    background:#000 !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast .titulo-panel span{
+    color:#ffe45c !important;
+}
+html.a11y-high-contrast .titulo-panel p,
+html.a11y-high-contrast .encabezado-seccion p,
+html.a11y-high-contrast .encabezado-listado-productos p,
+html.a11y-high-contrast .bloque-respaldo small,
+html.a11y-high-contrast .estado-render-admin small,
+html.a11y-high-contrast .grupo small,
+html.a11y-high-contrast .contador-imagenes,
+html.a11y-high-contrast .meta-listado-productos{
+    color:#e8e8e8 !important;
+}
+html.a11y-high-contrast .acciones-panel-admin{
+    background:transparent !important;
+}
+html.a11y-high-contrast .estado-render-admin,
+html.a11y-high-contrast .bloque-respaldo{
+    background:#090909 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+    box-shadow:none !important;
+    border-radius:14px !important;
+    padding:14px !important;
+}
+html.a11y-high-contrast .estado-render-linea strong{
+    color:#fff !important;
+}
+html.a11y-high-contrast .btn-render-admin,
+html.a11y-high-contrast .btn-respaldo-admin{
+    background:#000 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+    box-shadow:none !important;
+}
+html.a11y-high-contrast .btn-render-admin:hover,
+html.a11y-high-contrast .btn-respaldo-admin:hover{
+    background:#ffe45c !important;
+    color:#000 !important;
+    border-color:#ffe45c !important;
+}
+html.a11y-high-contrast .admin-tabs{
+    background:transparent !important;
+}
+html.a11y-high-contrast .admin-tabs button{
+    background:#000 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+}
+html.a11y-high-contrast .admin-tabs button.tab-activo{
+    background:#ffe45c !important;
+    color:#000 !important;
+    border-color:#ffe45c !important;
+}
+html.a11y-high-contrast .admin-tabs .badge{
+    background:#fff !important;
+    color:#000 !important;
+    border:1px solid #000 !important;
+}
+html.a11y-high-contrast .card-formulario,
+html.a11y-high-contrast .card-tabla,
+html.a11y-high-contrast .admin-seccion.seccion-activa,
+html.a11y-high-contrast .tarjeta-personalizado,
+html.a11y-high-contrast .tarjeta-mensaje,
+html.a11y-high-contrast .card-analitica,
+html.a11y-high-contrast .card-reporte{
+    background:#080808 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+    box-shadow:none !important;
+}
+html.a11y-high-contrast .filtros-productos-admin,
+html.a11y-high-contrast .fila-color-admin,
+html.a11y-high-contrast .mensaje-cuerpo,
+html.a11y-high-contrast .detalle-items-admin,
+html.a11y-high-contrast .datos-preview-admin dl div{
+    background:#0d0d0d !important;
+    color:#fff !important;
+    border-color:#fff !important;
+}
+html.a11y-high-contrast .filtros-productos-admin label,
+html.a11y-high-contrast .fila-color-admin label,
+html.a11y-high-contrast .galeria-variante-cabecera strong,
+html.a11y-high-contrast .galeria-variante-cabecera small,
+html.a11y-high-contrast .datos-solicitud p,
+html.a11y-high-contrast .mensaje-meta{
+    color:#fff !important;
+}
+html.a11y-high-contrast .selector-tallas-admin span{
+    background:#000 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+}
+html.a11y-high-contrast .selector-tallas-admin input:checked + span{
+    background:#ffe45c !important;
+    color:#000 !important;
+    border-color:#ffe45c !important;
+    box-shadow:none !important;
+}
+html.a11y-high-contrast .fila-color-admin input[type="color"],
+html.a11y-high-contrast .galeria-variante-admin input[type="file"]{
+    background:#000 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+}
+html.a11y-high-contrast #stock[readonly]{
+    background:#171717 !important;
+    color:#ddd !important;
+}
+html.a11y-high-contrast table,
+html.a11y-high-contrast thead,
+html.a11y-high-contrast tbody,
+html.a11y-high-contrast tr,
+html.a11y-high-contrast th,
+html.a11y-high-contrast td{
+    color:#fff !important;
+    border-color:#777 !important;
+}
+html.a11y-high-contrast th{
+    background:#151515 !important;
+}
+html.a11y-high-contrast td{
+    background:#080808 !important;
+}
+html.a11y-high-contrast .metricas-admin article,
+html.a11y-high-contrast .metricas-reportes article{
+    background:#090909 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+    box-shadow:none !important;
+}
+html.a11y-high-contrast .metricas-admin i{
+    background:#151515 !important;
+    color:#ffe45c !important;
+    border:1px solid #fff !important;
+}
+html.a11y-high-contrast .metricas-admin span,
+html.a11y-high-contrast .metricas-admin strong,
+html.a11y-high-contrast .metricas-reportes span,
+html.a11y-high-contrast .metricas-reportes strong,
+html.a11y-high-contrast .metricas-reportes small{
+    color:#fff !important;
+}
+html.a11y-high-contrast .estado-reportes,
+html.a11y-high-contrast .nota-privacidad{
+    background:#101010 !important;
+    color:#fff !important;
+    border:1px solid #fff !important;
+}
+html.a11y-high-contrast .barra-reporte,
+html.a11y-high-contrast .barra-dia > div{
+    background:#262626 !important;
+}
+html.a11y-high-contrast .barra-reporte span,
+html.a11y-high-contrast .barra-dia i{
+    background:#ffe45c !important;
+}
+html.a11y-high-contrast .modal-admin-contenido{
+    background:#080808 !important;
+    color:#fff !important;
+    border:2px solid #fff !important;
+}
+html.a11y-high-contrast .preview-categoria{
+    background:#ffe45c !important;
+    color:#000 !important;
+}
+html.a11y-high-contrast .datos-preview-admin > p:not(.preview-precio),
+html.a11y-high-contrast .datos-preview-admin dt,
+html.a11y-high-contrast .datos-preview-admin dd{
+    color:#fff !important;
+}
+
+/* Evita bloques blancos residuales en alto contraste */
+html.a11y-high-contrast :where(.perfil-shell,.panel-admin) :where(div,section,article,form):not(.canvas-shell):not(.preview-imagen-wrap){
+    border-color:inherit;
+}
