@@ -308,6 +308,11 @@
 
             <div class="canvas-shell" id="canvasShell">
                 <canvas id="editorCanvas" width="560" height="640"></canvas>
+                <div class="marca-agua-editor" aria-hidden="true">
+                    <span>PIXBEN · VISTA PREVIA</span>
+                    <span>PIXBEN · VISTA PREVIA</span>
+                    <span>PIXBEN · VISTA PREVIA</span>
+                </div>
                 <div class="zona-impresion" id="zonaImpresion" aria-hidden="true"><span>Área recomendada de impresión</span></div>
                 <div class="canvas-empty-hint" id="canvasEmptyHint"><i class="fa-solid fa-wand-magic-sparkles"></i><b>Empieza a crear</b><span>Agrega una imagen, texto o forma</span></div>
                 <div class="drop-overlay" id="dropOverlay" hidden><i class="fa-solid fa-cloud-arrow-up"></i><b>Suelta tu imagen aquí</b><span>PNG, JPG o WEBP</span></div>
@@ -347,7 +352,18 @@
             <textarea id="notasPedido" maxlength="800" placeholder="Ejemplo: DTF, estampado grande al centro, respetar el tamaño del logo, ubicación especial..."></textarea>
             <div class="contador-notas"><span>Agrega detalles que no se vean en el mockup.</span><span id="contadorNotas">0/800</span></div>
             <button type="button" id="btnSolicitar" class="btn-principal"><i class="fa-solid fa-paper-plane"></i> Enviar diseño para cotizar</button>
-            <p class="nota-cuenta-personalizado"><i class="fa-solid fa-circle-info"></i> Puedes diseñar sin iniciar sesión. Para enviar y consultar la cotización se requiere una cuenta.</p>
+            <p class="nota-cuenta-personalizado"><i class="fa-solid fa-shield-halved"></i> El editor puede probarse gratis, pero la vista previa lleva marca de agua y no permite descargar el archivo final. Para enviar, guardar como solicitud o continuar con el pedido se requiere una cuenta.</p>
+
+            <section class="diseno-asistido-card" aria-labelledby="tituloDisenoAsistidoCard">
+                <div class="diseno-asistido-icono"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                <div>
+                    <span class="panel-kicker">DISEÑO ASISTIDO</span>
+                    <h3 id="tituloDisenoAsistidoCard">¿Prefieres que PixBen lo diseñe por ti?</h3>
+                    <p>Deja tu idea al diseñador con un adelanto de <b>S/ 15.00</b>. El trabajo empieza después de verificar el pago, incluye hasta 2 revisiones y el adelanto se descuenta del saldo del pedido si continúas.</p>
+                </div>
+                <button type="button" id="btnAbrirDisenoAsistido" class="btn-diseno-asistido">Solicitar diseñador</button>
+            </section>
+
             <div class="ayuda-whatsapp">
                 <i class="fa-brands fa-whatsapp"></i>
                 <div><strong>¿Necesitas ayuda?</strong><p>Conversa con PixBen antes de enviar tu diseño.</p></div>
@@ -372,15 +388,67 @@
             <div><span class="panel-kicker">VISTA PREVIA</span><h2 id="tituloPreview">Revisa tu diseño antes de enviarlo</h2></div>
             <button type="button" class="cerrar-preview" data-cerrar-preview aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <p class="preview-explicacion">Esta vista es una referencia para la cotización. El tamaño final de impresión se confirma antes de producir.</p>
+        <p class="preview-explicacion">Esta vista es una referencia para la cotización. Por seguridad, las previsualizaciones incluyen marca de agua y no se habilita la descarga del archivo final.</p>
         <div class="preview-grid">
-            <article><div class="preview-etiqueta">Frente</div><div class="preview-imagen-wrap"><img id="previewFrente" alt="Vista previa del frente"></div><button type="button" data-descargar-lado="frente"><i class="fa-solid fa-download"></i> Descargar frente</button></article>
-            <article><div class="preview-etiqueta">Espalda</div><div class="preview-imagen-wrap"><img id="previewEspalda" alt="Vista previa de la espalda"></div><button type="button" data-descargar-lado="espalda"><i class="fa-solid fa-download"></i> Descargar espalda</button></article>
+            <article>
+                <div class="preview-etiqueta">Frente</div>
+                <div class="preview-imagen-wrap preview-protegida"><img id="previewFrente" alt="Vista previa del frente"><span aria-hidden="true">PIXBEN · VISTA PREVIA</span></div>
+            </article>
+            <article>
+                <div class="preview-etiqueta">Espalda</div>
+                <div class="preview-imagen-wrap preview-protegida"><img id="previewEspalda" alt="Vista previa de la espalda"><span aria-hidden="true">PIXBEN · VISTA PREVIA</span></div>
+            </article>
         </div>
         <div class="preview-acciones"><button type="button" class="btn-secundario" data-cerrar-preview>Seguir editando</button><button type="button" class="btn-principal" id="btnEnviarDesdePreview"><i class="fa-solid fa-paper-plane"></i> Enviar para cotizar</button></div>
     </section>
 </div>
 
+
+<div id="modalDisenoAsistido" class="modal-preview modal-diseno-asistido" hidden role="dialog" aria-modal="true" aria-labelledby="tituloDisenoAsistido">
+    <div class="modal-preview-backdrop" data-cerrar-diseno-asistido></div>
+    <section class="modal-preview-contenido">
+        <div class="modal-preview-cabecera">
+            <div>
+                <span class="panel-kicker">SERVICIO DE DISEÑO</span>
+                <h2 id="tituloDisenoAsistido">Cuéntale tu idea al diseñador</h2>
+            </div>
+            <button type="button" class="cerrar-preview" data-cerrar-diseno-asistido aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <div class="adelanto-diseno-resumen">
+            <div><span>Adelanto</span><strong>S/ 15.00</strong></div>
+            <div><span>Revisiones incluidas</span><strong>2</strong></div>
+            <p><i class="fa-solid fa-lock"></i> El diseñador no empieza hasta que el administrador verifique el adelanto. Si continúas con el pedido, este monto se descuenta del saldo que se cotice después.</p>
+        </div>
+
+        <label for="ideaDisenador">¿Qué quieres que preparemos?</label>
+        <textarea id="ideaDisenador" maxlength="800" placeholder="Ejemplo: quiero un diseño urbano con mi logo al centro, letras blancas y un detalle pequeño en la espalda..."></textarea>
+        <div class="contador-notas"><span>Describe colores, estilo, texto y cualquier referencia importante.</span><span id="contadorIdeaDisenador">0/800</span></div>
+
+        <div class="pago-diseno-grid">
+            <label for="metodoPagoDiseno">Método del adelanto
+                <select id="metodoPagoDiseno">
+                    <option value="YAPE">Yape</option>
+                    <option value="PLIN">Plin</option>
+                    <option value="BCP">BCP</option>
+                </select>
+            </label>
+            <label for="referenciaPagoDiseno">Código / número de operación
+                <input id="referenciaPagoDiseno" type="text" maxlength="80" autocomplete="off" placeholder="Ej. 12345678">
+            </label>
+        </div>
+
+        <div class="terminos-diseno-asistido">
+            <i class="fa-solid fa-circle-info"></i>
+            <p>El envío de esta solicitud no inicia el trabajo automáticamente. Primero PixBen revisará la referencia de pago y cambiará el estado a <b>En revisión</b>.</p>
+        </div>
+
+        <div class="preview-acciones">
+            <button type="button" class="btn-secundario" data-cerrar-diseno-asistido>Cancelar</button>
+            <button type="button" class="btn-principal" id="btnSolicitarDisenoAsistido"><i class="fa-solid fa-paper-plane"></i> Enviar solicitud con adelanto</button>
+        </div>
+    </section>
+</div>
 
 <footer><section class="footer-copy"><p>© 2026 PIXBEN. Todos los derechos reservados.</p></section></footer>
 
@@ -388,7 +456,7 @@
 <script src="../js/header-global.js?v=2"></script>
 <script src="../js/analitica.js?v=3"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
-<script src="../js/personaliza.js?v=15"></script>
+<script src="../js/personaliza.js?v=16"></script>
 <script src="../js/eventos-html.js?v=3"></script>
 <script src="../js/responsive-menu.js?v=4"></script>
 <script src="../js/accessibility.js?v=1"></script>
