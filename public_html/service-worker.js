@@ -1,8 +1,9 @@
 "use strict";
 
-const VERSION = "pixben-pwa-v19";
+const VERSION = "pixben-pwa-v20";
 const CACHE_ESTATICO = `${VERSION}-static`;
 const CACHE_PAGINAS = `${VERSION}-pages`;
+const CACHE_META = "pixben-meta";
 
 const RECURSOS_BASE = [
     "/",
@@ -136,28 +137,70 @@ self.addEventListener("fetch", (event) => {
     }
 });
 
+async function guardarContextoPush(contexto) {
+    const cache = await caches.open(CACHE_META);
+    const seguro = {
+        modo: contexto?.modo === "admin" ? "admin" : "cliente",
+        url: contexto?.modo === "admin"
+                ? "/htmls/admin.html#seccionPedidos"
+                : "/htmls/mis-pedidos.html"
+    };
+    await cache.put("/__pixben_push_context__", new Response(JSON.stringify(seguro), {
+        headers: {"Content-Type": "application/json"}
+    }));
+}
+
+async function obtenerContextoPush() {
+    try {
+        const cache = await caches.open(CACHE_META);
+        const respuesta = await cache.match("/__pixben_push_context__");
+        if (!respuesta) return {modo: "cliente", url: "/htmls/mis-pedidos.html"};
+        return await respuesta.json();
+    } catch {
+        return {modo: "cliente", url: "/htmls/mis-pedidos.html"};
+    }
+}
+
 self.addEventListener("message", (event) => {
-    if (event.data?.tipo === "SKIP_WAITING") self.skipWaiting();
+    if (event.data?.tipo === "SKIP_WAITING") {
+        self.skipWaiting();
+        return;
+    }
+    if (event.data?.tipo === "CONFIG_PUSH_CONTEXT") {
+        event.waitUntil(guardarContextoPush(event.data.contexto || {}));
+    }
 });
 
-/* Preparado para Web Push. El envío desde el servidor requiere claves VAPID. */
+/* Push sin payload: el contexto guardado permite mostrar un aviso distinto al administrador. */
 self.addEventListener("push", (event) => {
-    let datos = {};
-    try {
-        datos = event.data ? event.data.json() : {};
-    } catch {
-        datos = {body: event.data?.text() || "Tienes una novedad en PixBen."};
-    }
+    event.waitUntil((async () => {
+        let datos = {};
+        try {
+            datos = event.data ? event.data.json() : {};
+        } catch {
+            datos = {body: event.data?.text() || ""};
+        }
 
-    event.waitUntil(self.registration.showNotification(datos.title || "PixBen", {
-        body: datos.body || "Tienes una novedad en tu pedido.",
-        icon: datos.icon || "/imagensponsor/favicon-192.png",
-        badge: datos.badge || "/imagensponsor/favicon-192.png",
-        tag: datos.tag || "pixben-pedido",
-        renotify: true,
-        data: {url: datos.url || "/htmls/mis-pedidos.html"},
-        vibrate: [120, 70, 120]
-    }));
+        const contexto = await obtenerContextoPush();
+        const esAdmin = contexto?.modo === "admin";
+        const titulo = datos.title || (esAdmin ? "Nuevo pedido en PixBen" : "PixBen");
+        const cuerpo = datos.body || (esAdmin
+                ? "Tienes un pedido nuevo. Toca la notificación para revisarlo."
+                : "Tienes una novedad en tu pedido.");
+        const destino = datos.url || contexto?.url || (esAdmin
+                ? "/htmls/admin.html#seccionPedidos"
+                : "/htmls/mis-pedidos.html");
+
+        await self.registration.showNotification(titulo, {
+            body: cuerpo,
+            icon: datos.icon || "/imagensponsor/app-icon-v4-192.png",
+            badge: datos.badge || "/imagensponsor/favicon-192.png",
+            tag: datos.tag || (esAdmin ? "pixben-admin-pedido" : "pixben-pedido"),
+            renotify: true,
+            data: {url: destino},
+            vibrate: [160, 80, 160, 80, 220]
+        });
+    })());
 });
 
 self.addEventListener("notificationclick", (event) => {

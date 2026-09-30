@@ -76,23 +76,40 @@ function renderizarPedidoNormal(pedido) {
 }
 
 function renderizarPedidoPersonalizado(pedido) {
+    const asistido = String(pedido.tipoServicio || "").toUpperCase() === "DISENO_ASISTIDO";
     const precio = pedido.precio == null ? "Por procesar" : `S/ ${Number(pedido.precio).toFixed(2)}`;
     const imagen = pedido.imagenFrente || pedido.imagenEspalda;
-    return `<article class="tarjeta-pedido pedido-personalizado-usuario">
+    const estadoPagoDiseno = String(pedido.estadoPagoDiseno || (asistido ? "POR_VERIFICAR" : "NO_APLICA"));
+    const tarifaDiseno = Number(pedido.tarifaDiseno ?? (asistido ? 15 : 0));
+
+    return `<article class="tarjeta-pedido pedido-personalizado-usuario ${asistido ? "pedido-diseno-asistido" : ""}">
         <div class="pedido-superior">
-            <div><span class="tipo-pedido">Personalizado</span><h2>${escaparPedidos(pedido.productoNombre || "Diseño personalizado")}</h2><p class="pedido-fecha">${escaparPedidos(fechaBonita(pedido.fechaCreacion))}</p></div>
+            <div>
+                <span class="tipo-pedido">${asistido ? "Diseño asistido" : "Personalizado"}</span>
+                <h2>${escaparPedidos(pedido.productoNombre || (asistido ? "Solicitud al diseñador" : "Diseño personalizado"))}</h2>
+                <p class="pedido-fecha">${escaparPedidos(fechaBonita(pedido.fechaCreacion))}</p>
+            </div>
             <span class="estado-pedido">${escaparPedidos(estadoBonito(pedido.estado))}</span>
         </div>
         <div class="pedido-personalizado-contenido">
-            ${imagen ? `<img src="${escaparPedidos(imagen)}" alt="Vista previa">` : ""}
-            <div><p>${escaparPedidos(pedido.color || "Color por confirmar")} · ${escaparPedidos(pedido.talla || "Unidad")} · ${Number(pedido.cantidad || 1)} unidad(es)</p><p>${escaparPedidos(pedido.mensajeAdmin || "Estamos procesando tu solicitud.")}</p></div>
+            ${imagen ? `<div class="preview-protegido-pedido"><img src="${escaparPedidos(imagen)}" alt="Vista previa"><span>PIXBEN · VISTA PREVIA</span></div>` : `<div class="sin-preview-pedido"><i class="fa-solid fa-pen-ruler"></i><span>El diseñador preparará la propuesta.</span></div>`}
+            <div>
+                <p>${escaparPedidos(pedido.color || "Color por confirmar")} · ${escaparPedidos(pedido.talla || "Unidad")} · ${Number(pedido.cantidad || 1)} unidad(es)</p>
+                ${asistido ? `<p class="detalle-adelanto-pedido"><b>Adelanto de diseño:</b> S/ ${tarifaDiseno.toFixed(2)} · ${escaparPedidos(estadoBonito(estadoPagoDiseno))}</p><p><b>Revisiones incluidas:</b> ${Number(pedido.revisionesIncluidas || 2)}</p>` : ""}
+                <p>${escaparPedidos(pedido.mensajeAdmin || "Estamos procesando tu solicitud.")}</p>
+            </div>
         </div>
-        <div class="pedido-total"><span>Precio</span><strong>${escaparPedidos(precio)}</strong></div>
+        <div class="pedido-total"><span>${asistido ? "Saldo restante" : "Precio"}</span><strong>${escaparPedidos(precio)}</strong></div>
     </article>`;
 }
 
 function resumenEstadoPedido(pedido, personalizado = false) {
-    if (personalizado) return [pedido.estado, pedido.precio, pedido.mensajeAdmin].join("|");
+    if (personalizado) return [
+        pedido.estado,
+        pedido.precio,
+        pedido.estadoPagoDiseno,
+        pedido.mensajeAdmin
+    ].join("|");
     return [pedido.estado, pedido.estadoPago, pedido.estadoEnvio].join("|");
 }
 
@@ -111,6 +128,23 @@ function detectarCambiosPedidos(normales, personalizados) {
         window.PixBenPWA?.mostrarNotificacion(
                 "Actualización de tu pedido",
                 `${codigoVisible(cambio)}: ${estadoBonito(cambio.estado)} · Envío ${estadoBonito(cambio.estadoEnvio)}`,
+                "/htmls/mis-pedidos.html"
+        );
+        return;
+    }
+
+    const personalizado = personalizados.find(pedido =>
+        anteriores[`personalizado:${pedido.id}`]
+        && anteriores[`personalizado:${pedido.id}`] !== actuales[`personalizado:${pedido.id}`]
+    );
+    if (personalizado) {
+        const asistido = String(personalizado.tipoServicio || "").toUpperCase() === "DISENO_ASISTIDO";
+        const detallePago = asistido && personalizado.estadoPagoDiseno
+                ? ` · Adelanto ${estadoBonito(personalizado.estadoPagoDiseno)}`
+                : "";
+        window.PixBenPWA?.mostrarNotificacion(
+                asistido ? "Actualización de tu diseño asistido" : "Actualización de tu personalizado",
+                `${estadoBonito(personalizado.estado)}${detallePago}`,
                 "/htmls/mis-pedidos.html"
         );
     }

@@ -243,7 +243,15 @@
         botonSolicitar.addEventListener("click", enviarSolicitud);
         document.getElementById("btnEnviarDesdePreview").addEventListener("click", enviarSolicitud);
         document.querySelectorAll("[data-cerrar-preview]").forEach(el => el.addEventListener("click", cerrarVistaPrevia));
-        document.querySelectorAll("[data-descargar-lado]").forEach(el => el.addEventListener("click", () => descargarPreview(el.dataset.descargarLado)));
+
+        document.getElementById("btnAbrirDisenoAsistido").addEventListener("click", abrirDisenoAsistido);
+        document.getElementById("btnSolicitarDisenoAsistido").addEventListener("click", enviarSolicitudDisenoAsistido);
+        document.querySelectorAll("[data-cerrar-diseno-asistido]").forEach(el => el.addEventListener("click", cerrarDisenoAsistido));
+        document.getElementById("ideaDisenador").addEventListener("input", () => {
+            document.getElementById("contadorIdeaDisenador").textContent = `${document.getElementById("ideaDisenador").value.length}/800`;
+        });
+        document.getElementById("metodoPagoDiseno").addEventListener("change", renderizarDatosPagoDiseno);
+        renderizarDatosPagoDiseno();
 
         document.getElementById("notasPedido").addEventListener("input", () => {
             document.getElementById("contadorNotas").textContent = `${document.getElementById("notasPedido").value.length}/800`;
@@ -1340,8 +1348,8 @@
         boton.disabled = true;
         boton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generando...';
         try {
-            previewActual.frente = await exportarLadoDataUrl("frente");
-            previewActual.espalda = await exportarLadoDataUrl("espalda");
+            previewActual.frente = await protegerPreviewDataUrl(await exportarLadoDataUrl("frente"));
+            previewActual.espalda = await protegerPreviewDataUrl(await exportarLadoDataUrl("espalda"));
             document.getElementById("previewFrente").src = previewActual.frente;
             document.getElementById("previewEspalda").src = previewActual.espalda;
             document.getElementById("modalPreview").hidden = false;
@@ -1360,13 +1368,190 @@
         document.body.classList.remove("modal-abierto");
     }
 
-    function descargarPreview(lado) {
-        const dataUrl = previewActual[lado];
-        if (!dataUrl) return;
-        const a = document.createElement("a");
-        a.href = dataUrl;
-        a.download = `pixben-${lado}-${Date.now()}.png`;
-        a.click();
+    async function protegerPreviewDataUrl(dataUrl) {
+        if (!dataUrl) return dataUrl;
+        const imagen = await new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.onerror = reject;
+            img.src = dataUrl;
+        });
+
+        const salida = document.createElement("canvas");
+        salida.width = imagen.naturalWidth || imagen.width;
+        salida.height = imagen.naturalHeight || imagen.height;
+        const ctx = salida.getContext("2d");
+        ctx.drawImage(imagen, 0, 0, salida.width, salida.height);
+
+        ctx.save();
+        ctx.translate(salida.width / 2, salida.height / 2);
+        ctx.rotate(-Math.PI / 6);
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.font = `900 ${Math.max(22, Math.round(salida.width * 0.055))}px Arial, sans-serif`;
+        ctx.fillStyle = "rgba(91,24,142,.28)";
+        ctx.strokeStyle = "rgba(255,255,255,.72)";
+        ctx.lineWidth = Math.max(2, salida.width * .004);
+
+        const saltoX = salida.width * .72;
+        const saltoY = salida.height * .28;
+        for (let y = -salida.height; y <= salida.height; y += saltoY) {
+            for (let x = -salida.width; x <= salida.width; x += saltoX) {
+                ctx.strokeText("PIXBEN · VISTA PREVIA", x, y);
+                ctx.fillText("PIXBEN · VISTA PREVIA", x, y);
+            }
+        }
+        ctx.restore();
+        return salida.toDataURL("image/jpeg", .86);
+    }
+
+    function renderizarDatosPagoDiseno() {
+        const contenedor = document.getElementById("datosPagoDiseno");
+        if (!contenedor) return;
+        const metodo = document.getElementById("metodoPagoDiseno")?.value || "YAPE";
+        const opciones = {
+            YAPE: {
+                titulo: "Paga S/ 15.00 con Yape",
+                imagen: "../imagen/pagos/yape.webp",
+                texto: "Escanea el QR, realiza el adelanto y copia el código de operación."
+            },
+            PLIN: {
+                titulo: "Paga S/ 15.00 con Plin",
+                imagen: "../imagen/pagos/plin.webp",
+                texto: "Escanea el QR, realiza el adelanto y guarda el número de operación."
+            },
+            BCP: {
+                titulo: "Transfiere S/ 15.00 por BCP",
+                imagen: "../imagen/pagos/bcp.webp",
+                texto: "Cuenta: 19194784840060 · CCI: 00219119478484006053"
+            }
+        };
+        const opcion = opciones[metodo] || opciones.YAPE;
+        contenedor.innerHTML = `
+            <div>
+                <strong>${opcion.titulo}</strong>
+                <p>${opcion.texto}</p>
+                <small>El pago quedará por verificar; el diseñador no comienza hasta la confirmación del administrador.</small>
+            </div>
+            <img src="${opcion.imagen}" alt="Datos para ${opcion.titulo}">`;
+    }
+
+    async function abrirDisenoAsistido() {
+        if (!usuario?.id) {
+            await guardarBorradorAhora();
+            alert("Para solicitar el trabajo del diseñador debes iniciar sesión. Tu borrador quedará guardado.");
+            window.location.href = "login.html";
+            return;
+        }
+        const idea = document.getElementById("ideaDisenador");
+        if (!idea.value.trim()) idea.value = document.getElementById("notasPedido").value.trim();
+        document.getElementById("contadorIdeaDisenador").textContent = `${idea.value.length}/800`;
+        document.getElementById("modalDisenoAsistido").hidden = false;
+        document.body.classList.add("modal-abierto");
+        window.setTimeout(() => idea.focus(), 80);
+    }
+
+    function cerrarDisenoAsistido() {
+        document.getElementById("modalDisenoAsistido").hidden = true;
+        if (document.getElementById("modalPreview").hidden) {
+            document.body.classList.remove("modal-abierto");
+        }
+    }
+
+    async function enviarSolicitudDisenoAsistido() {
+        if (!usuario?.id) {
+            await guardarBorradorAhora();
+            window.location.href = "login.html";
+            return;
+        }
+
+        const idea = document.getElementById("ideaDisenador").value.trim();
+        const metodoPagoDiseno = document.getElementById("metodoPagoDiseno").value;
+        const referenciaPagoDiseno = document.getElementById("referenciaPagoDiseno").value.trim();
+        const boton = document.getElementById("btnSolicitarDisenoAsistido");
+
+        if (idea.length < 10) {
+            return mostrarEstado("Describe un poco mejor la idea para que el diseñador sepa qué preparar.", true);
+        }
+        if (referenciaPagoDiseno.length < 3) {
+            return mostrarEstado("Escribe el código o número de operación del adelanto de S/ 15.00.", true);
+        }
+        if (productoActual && variantesColor.length && obtenerStockColorProducto(productoActual, colorProducto.value) <= 0) {
+            return mostrarEstado("El color seleccionado ya no tiene stock. Elige otra variante.", true);
+        }
+
+        guardarEstadoActual();
+        const tieneFrente = contarObjetos(estados.frente) > 0;
+        const tieneEspalda = contarObjetos(estados.espalda) > 0;
+        boton.disabled = true;
+        const textoOriginal = boton.innerHTML;
+        boton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
+        mostrarEstado("Registrando la solicitud y el adelanto para verificación...", false);
+
+        try {
+            const datos = {
+                ...crearReferenciaUsuario(usuario),
+                productoId: productoActual?.id || null,
+                productoNombre: productoActual?.nombre || "Diseño asistido",
+                categoria: productoActual?.categoria || "PERSONALIZADO_LIBRE",
+                color: colorProducto.value,
+                talla: productoActual && productoUsaTalla(productoActual.categoria, productoActual.nombre)
+                        ? tallaProducto.value : "POR_DEFINIR",
+                cantidad: Number(cantidadProducto.value),
+                notas: idea,
+                tipoServicio: "DISENO_ASISTIDO",
+                metodoPagoDiseno,
+                referenciaPagoDiseno
+            };
+
+            const formData = new FormData();
+            formData.append("datos", JSON.stringify(datos));
+
+            // Si el cliente ya avanzó algo en el editor, se adjunta como referencia privada.
+            if (tieneFrente) {
+                const frenteBlob = await exportarLadoBlob("frente");
+                formData.append("frente", frenteBlob, "referencia-frente.png");
+            }
+            if (tieneEspalda) {
+                const espaldaBlob = await exportarLadoBlob("espalda");
+                formData.append("espalda", espaldaBlob, "referencia-espalda.png");
+            }
+
+            const respuesta = await fetchConSesion(`${API_URL}/pedidos-personalizados`, {
+                method: "POST",
+                body: formData
+            });
+            if (!respuesta.ok) throw new Error(await obtenerMensajeError(respuesta));
+            const solicitud = await respuesta.json();
+
+            const respuestaCarrito = await fetchConSesion(`${API_URL}/carrito`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    productoId: productoActual?.id || null,
+                    ...crearReferenciaUsuario(usuario),
+                    cantidad: Number(cantidadProducto.value),
+                    talla: datos.talla,
+                    color: datos.color,
+                    personalizado: true,
+                    pedidoPersonalizadoId: solicitud.id
+                })
+            });
+            if (!respuestaCarrito.ok) {
+                console.warn("La solicitud asistida se creó, pero no pudo agregarse al carrito.");
+            }
+
+            cerrarDisenoAsistido();
+            await borrarBorrador();
+            mostrarEstado("Solicitud recibida. PixBen verificará el adelanto antes de que el diseñador empiece.", false, true);
+            setTimeout(() => { window.location.href = "mis-pedidos.html"; }, 1500);
+        } catch (error) {
+            console.error(error);
+            mostrarEstado(error.message || "No se pudo enviar la solicitud de diseño asistido", true);
+        } finally {
+            boton.disabled = false;
+            boton.innerHTML = textoOriginal;
+        }
     }
 
     async function exportarLadoDataUrl(lado) {
@@ -1408,7 +1593,7 @@
 
         botonSolicitar.disabled = true;
         botonSolicitar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Preparando diseño...';
-        mostrarEstado("Generando vistas previas para el diseñador...", false);
+        mostrarEstado("Preparando la referencia privada para PixBen...", false);
 
         try {
             const frenteBlob = tieneFrente ? await exportarLadoBlob("frente") : null;
@@ -1421,7 +1606,8 @@
                 color: colorProducto.value,
                 talla: productoActual && productoUsaTalla(productoActual.categoria, productoActual.nombre) ? tallaProducto.value : "POR_DEFINIR",
                 cantidad: Number(cantidadProducto.value),
-                notas: document.getElementById("notasPedido").value.trim()
+                notas: document.getElementById("notasPedido").value.trim(),
+                tipoServicio: "AUTODISENO"
             };
 
             const formData = new FormData();

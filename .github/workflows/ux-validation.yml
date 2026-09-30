@@ -1,8 +1,8 @@
-name: UX and catalog validation
+name: Frontend validation
 
 on:
-  push:
-    branches: [ "ux-wholesale-dtf-20260925" ]
+  pull_request:
+    branches: [ "master" ]
   workflow_dispatch:
 
 jobs:
@@ -17,7 +17,8 @@ jobs:
         run: |
           node --check public_html/js/config.js
           node --check public_html/js/admin.js
-          node --check public_html/js/productos.js
-          node --check public_html/js/paginas/detalles-producto.js
-          node --check public_html/js/paginas/detalles-acciones.js
+          node --check public_html/js/personaliza.js
+          node --check public_html/js/pwa-premium.js
+          node --check public_html/js/paginas/mis-pedidos.js
+          node --check public_html/js/paginas/carrito.js
           node --check public_html/service-worker.js
