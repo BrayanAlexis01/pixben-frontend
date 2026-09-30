@@ -26,6 +26,7 @@ let comprobandoRender = false;
 let ultimoReporteDatos = null;
 
 configurarTabs();
+configurarNavegacionDirecta();
 configurarEventos();
 configurarMonitorRender();
 Promise.all([cargarCategorias(), cargarProductos(), cargarPersonalizados(), cargarPedidosAdmin(), cargarMensajes(), cargarAnalitica()]);
@@ -44,6 +45,17 @@ function configurarTabs() {
             if (boton.dataset.seccion === "seccionReportes") cargarReportes();
         });
     });
+}
+
+function configurarNavegacionDirecta() {
+    const activarDesdeHash = () => {
+        const id = String(window.location.hash || "").replace(/^#/, "");
+        if (!id) return;
+        const boton = document.querySelector(`.admin-tabs button[data-seccion="${CSS.escape(id)}"]`);
+        if (boton) boton.click();
+    };
+    activarDesdeHash();
+    window.addEventListener("hashchange", activarDesdeHash);
 }
 
 function configurarEventos() {
@@ -799,7 +811,7 @@ async function cargarPersonalizados() {
         const respuesta = await fetchConSesion(`${API_URL}/pedidos-personalizados/admin/todos`);
         if (!respuesta.ok) throw new Error("No se pudieron cargar las solicitudes personalizadas");
         const solicitudes = await respuesta.json();
-        document.getElementById("contadorPersonalizados").textContent = solicitudes.filter(s => ["PENDIENTE_COTIZACION", "EN_REVISION"].includes(s.estado)).length;
+        document.getElementById("contadorPersonalizados").textContent = solicitudes.filter(s => ["PENDIENTE_PAGO_DISENO", "PENDIENTE_COTIZACION", "EN_REVISION"].includes(s.estado)).length;
         if (!solicitudes.length) {
             contenedor.innerHTML = '<p class="estado-carga">No hay solicitudes personalizadas.</p>';
             return;
@@ -814,9 +826,23 @@ function tarjetaPersonalizado(s) {
     const id = escaparAtributo(s.id);
     const fecha = formatearFecha(s.fechaCreacion);
     const imagenes = [s.imagenFrente, s.imagenEspalda].filter(Boolean);
-    return `<article class="tarjeta-personalizado">
+    const asistido = String(s.tipoServicio || "").toUpperCase() === "DISENO_ASISTIDO";
+    const estadoPagoDiseno = String(s.estadoPagoDiseno || (asistido ? "POR_VERIFICAR" : "NO_APLICA")).toUpperCase();
+    const tarifaDiseno = Number(s.tarifaDiseno ?? (asistido ? 15 : 0));
+    const pagoDiseno = asistido ? `
+        <div class="pago-diseno-admin">
+            <span class="chip-servicio-diseno"><i class="fa-solid fa-wand-magic-sparkles"></i> Diseño asistido</span>
+            <p><b>Adelanto:</b> S/ ${tarifaDiseno.toFixed(2)} · ${escaparHtml(formatearEstado(estadoPagoDiseno))}</p>
+            <p><b>Método:</b> ${escaparHtml(s.metodoPagoDiseno || "Sin método")} · <b>Op.:</b> ${escaparHtml(s.referenciaPagoDiseno || "Sin referencia")}</p>
+            <p><b>Revisiones:</b> ${Number(s.revisionesIncluidas || 2)} incluidas</p>
+        </div>` : "";
+    const galeria = imagenes.length
+            ? imagenes.map((url, i) => `<a href="${escaparAtributo(url)}" target="_blank" rel="noopener"><img src="${escaparAtributo(url)}" alt="${i ? "Espalda" : "Frente"}"></a>`).join("")
+            : '<div class="sin-preview-diseno"><i class="fa-solid fa-pen-ruler"></i><span>Sin mockup del cliente.<br>El diseñador debe preparar la propuesta.</span></div>';
+
+    return `<article class="tarjeta-personalizado ${asistido ? "es-diseno-asistido" : ""}">
         <div class="personalizado-grid">
-            <div class="galeria-solicitud">${imagenes.map((url, i) => `<a href="${escaparAtributo(url)}" target="_blank" rel="noopener"><img src="${escaparAtributo(url)}" alt="${i ? "Espalda" : "Frente"}"></a>`).join("")}</div>
+            <div class="galeria-solicitud">${galeria}</div>
             <div class="datos-solicitud">
                 <span class="estado-chip">${escaparHtml(formatearEstado(s.estado))}</span>
                 <h3>${escaparHtml(s.productoNombre || "Producto personalizado")}</h3>
@@ -824,10 +850,19 @@ function tarjetaPersonalizado(s) {
                 <p><b>Variante:</b> ${escaparHtml(s.color || "Sin color")} · ${escaparHtml(s.talla || "Unidad")} · ${Number(s.cantidad || 1)} unidad(es)</p>
                 <p><b>Fecha:</b> ${escaparHtml(fecha)}</p>
                 <p><b>Indicaciones:</b> ${escaparHtml(s.notas || "Sin indicaciones adicionales")}</p>
+                ${pagoDiseno}
             </div>
             <div class="cotizacion-form" data-form-personalizado="${id}">
-                <label>Precio final (S/)</label>
-                <input type="number" min="0" step="0.01" data-precio value="${s.precio ?? ""}" placeholder="Ej. 89.90">
+                ${asistido ? `
+                    <label>Pago del diseño</label>
+                    <select data-estado-pago-diseno>
+                        ${opcionesEstado(["POR_VERIFICAR","VERIFICADO","RECHAZADO","REEMBOLSADO"], estadoPagoDiseno)}
+                    </select>
+                    <small class="ayuda-cotizacion-admin">No empieces el trabajo del diseñador hasta marcar el adelanto como verificado.</small>
+                ` : ""}
+                <label>${asistido ? "Saldo restante a cobrar (S/)" : "Precio final (S/)"}</label>
+                <input type="number" min="0" step="0.01" data-precio value="${s.precio ?? ""}" placeholder="${asistido ? "Ej. 30.00" : "Ej. 89.90"}">
+                ${asistido ? '<small class="ayuda-cotizacion-admin">Ingresa aquí lo que falta cobrar después del adelanto de S/ 15.00.</small>' : ""}
                 <label>Estado</label>
                 <select data-estado>${opcionesEstadoPersonalizado(s.estado)}</select>
                 <label>Mensaje para el cliente</label>
@@ -839,23 +874,25 @@ function tarjetaPersonalizado(s) {
 }
 
 function opcionesEstadoPersonalizado(actual) {
-    const estados = ["PENDIENTE_COTIZACION", "EN_REVISION", "COTIZADO", "APROBADO", "EN_PRODUCCION", "LISTO", "ENVIADO", "CANCELADO"];
+    const estados = ["PENDIENTE_PAGO_DISENO", "PENDIENTE_COTIZACION", "EN_REVISION", "COTIZADO", "APROBADO", "EN_PRODUCCION", "LISTO", "ENVIADO", "CANCELADO"];
     return estados.map(e => `<option value="${e}" ${e === actual ? "selected" : ""}>${formatearEstado(e)}</option>`).join("");
 }
 
 async function guardarCotizacion(id) {
     const form = document.querySelector(`[data-form-personalizado="${CSS.escape(id)}"]`);
     const precioTexto = form.querySelector("[data-precio]").value;
+    const pagoDiseno = form.querySelector("[data-estado-pago-diseno]");
     const datos = {
         precio: precioTexto === "" ? null : Number(precioTexto),
         estado: form.querySelector("[data-estado]").value,
+        estadoPagoDiseno: pagoDiseno ? pagoDiseno.value : null,
         mensajeAdmin: form.querySelector("[data-mensaje]").value.trim()
     };
     const respuesta = await fetchConSesion(`${API_URL}/pedidos-personalizados/${encodeURIComponent(id)}`, {
         method: "PATCH", headers: {"Content-Type": "application/json"}, body: JSON.stringify(datos)
     });
     if (!respuesta.ok) return alert(await obtenerMensajeError(respuesta));
-    alert("Cotización actualizada");
+    alert("Solicitud personalizada actualizada");
     cargarPersonalizados();
 }
 
