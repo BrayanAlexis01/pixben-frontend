@@ -3,7 +3,7 @@
 (() => {
     const CONFIG = {
         swUrl: "/service-worker.js",
-        icono: "/imagensponsor/favicon-192.png",
+        icono: "/imagensponsor/app-icon-v4-192.png",
         badge: "/imagensponsor/favicon-192.png",
         tiempoSplashMinimo: 900,
         tiempoSplashMaximo: 2200
