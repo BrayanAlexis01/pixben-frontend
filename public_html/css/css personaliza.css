@@ -181,3 +181,26 @@ button:disabled{cursor:not-allowed;opacity:.5}
     .adelanto-diseno-resumen{grid-template-columns:1fr}
     .adelanto-diseno-resumen p{grid-column:1}
 }
+
+
+.datos-pago-diseno{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 116px;
+    gap:14px;
+    align-items:center;
+    padding:13px;
+    border:1px solid #e3d7eb;
+    border-radius:12px;
+    background:#fbf9fc;
+}
+.datos-pago-diseno strong{display:block;margin-bottom:5px;color:#2d2432;font-size:12px}
+.datos-pago-diseno p{margin:0;color:#5f5664;font-size:11px;line-height:1.45}
+.datos-pago-diseno small{display:block;margin-top:6px;color:#776b7b;font-size:10px;line-height:1.4}
+.datos-pago-diseno img{
+    width:116px;height:116px;object-fit:contain;border-radius:10px;background:#fff;border:1px solid #ece5ef
+}
+@media(max-width:540px){
+    .datos-pago-diseno{grid-template-columns:1fr}
+    .datos-pago-diseno img{width:100%;height:auto;max-height:220px}
+}
