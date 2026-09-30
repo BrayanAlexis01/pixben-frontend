@@ -301,6 +301,32 @@
         return registroServiceWorker || await navigator.serviceWorker.ready;
     }
 
+    function contextoNotificacionesActual() {
+        try {
+            const usuario = typeof obtenerUsuarioSesion === "function" ? obtenerUsuarioSesion() : null;
+            const esAdmin = Boolean(usuario && usuario.rol === "admin");
+            return {
+                modo: esAdmin ? "admin" : "cliente",
+                url: esAdmin ? "/htmls/admin.html#seccionPedidos" : "/htmls/mis-pedidos.html"
+            };
+        } catch {
+            return {modo: "cliente", url: "/htmls/mis-pedidos.html"};
+        }
+    }
+
+    async function sincronizarContextoServiceWorker() {
+        try {
+            const registro = await obtenerRegistroServiceWorker();
+            const worker = navigator.serviceWorker.controller || registro.active || registro.waiting;
+            worker?.postMessage({
+                tipo: "CONFIG_PUSH_CONTEXT",
+                contexto: contextoNotificacionesActual()
+            });
+        } catch (error) {
+            console.warn("No se pudo guardar el contexto de notificaciones", error);
+        }
+    }
+
     async function registrarSuscripcionEnBackend(suscripcion) {
         const apiUrl = obtenerApiUrl();
         if (!apiUrl || !suscripcion?.endpoint) return false;
@@ -352,7 +378,9 @@
                 applicationServerKey: urlBase64AUint8Array(configuracion.publicKey)
             });
         }
-        return registrarSuscripcionEnBackend(suscripcion);
+        const registrado = await registrarSuscripcionEnBackend(suscripcion);
+        if (registrado) await sincronizarContextoServiceWorker();
+        return registrado;
     }
 
     async function desuscribirNotificacionesCuenta() {
@@ -378,7 +406,10 @@
         try {
             const registro = await obtenerRegistroServiceWorker();
             const suscripcion = await registro.pushManager.getSubscription();
-            if (suscripcion) await registrarSuscripcionEnBackend(suscripcion);
+            if (suscripcion) {
+                await registrarSuscripcionEnBackend(suscripcion);
+                await sincronizarContextoServiceWorker();
+            }
         } catch (error) {
             console.warn("No se pudo comprobar la suscripción Push", error);
         }
@@ -412,12 +443,15 @@
 
         try {
             const pushActivo = await crearOSincronizarSuscripcionPush();
+            const contexto = contextoNotificacionesActual();
             await mostrarNotificacion(
                 "Avisos activados",
                 pushActivo
-                    ? "PixBen te avisará cuando cambie el estado de tu pedido."
+                    ? (contexto.modo === "admin"
+                        ? "Te avisaremos cuando entre un pedido nuevo en PixBen."
+                        : "PixBen te avisará cuando cambie el estado de tu pedido.")
                     : "Los avisos locales están activos; revisa la configuración del servidor para recibirlos con la app cerrada.",
-                "/htmls/mis-pedidos.html"
+                contexto.url
             );
             document.getElementById("pixbenNotificationCard")?.remove();
             return true;
@@ -452,26 +486,65 @@
 
     function insertarActivadorNotificaciones() {
         const esPedidos = /\/htmls\/mis-pedidos\.html$/i.test(location.pathname);
-        if (!esPedidos || !("Notification" in window) || Notification.permission !== "default") return;
+        const esAdmin = /\/htmls\/admin\.html$/i.test(location.pathname)
+                && contextoNotificacionesActual().modo === "admin";
+        if ((!esPedidos && !esAdmin) || !("Notification" in window)) return;
 
         cuandoDOMListo(() => {
             if (document.getElementById("pixbenNotificationCard")) return;
-            const encabezado = document.querySelector(".encabezado-pedidos");
+            const encabezado = esAdmin
+                    ? document.querySelector(".titulo-panel-admin")
+                    : document.querySelector(".encabezado-pedidos");
             if (!encabezado) return;
 
             const tarjeta = document.createElement("section");
             tarjeta.id = "pixbenNotificationCard";
-            tarjeta.className = "pixben-notification-card";
+            tarjeta.className = `pixben-notification-card${esAdmin ? " is-admin" : ""}`;
+
+            const concedido = Notification.permission === "granted";
             tarjeta.innerHTML = `
                 <div>
-                    <strong>Recibe avisos de tus pedidos</strong>
-                    <p>Recibe una notificación aunque no tengas abierta la página de pedidos.</p>
+                    <strong>${esAdmin ? "Avisos de pedidos nuevos" : "Recibe avisos de tus pedidos"}</strong>
+                    <p>${esAdmin
+                        ? (concedido
+                            ? "Las notificaciones están activadas en este dispositivo. Cuando entre un pedido, el aviso te llevará al panel de Pedidos."
+                            : "Actívalas una vez y PixBen te avisará aunque estés haciendo otra cosa.")
+                        : "Recibe una notificación aunque no tengas abierta la página de pedidos."}</p>
                 </div>`;
+
             const boton = document.createElement("button");
             boton.type = "button";
             boton.className = "pixben-notification-button";
-            boton.textContent = "Activar avisos";
-            boton.addEventListener("click", solicitarNotificaciones);
+            boton.textContent = concedido ? "Sincronizar avisos" : "Activar avisos";
+            boton.addEventListener("click", async () => {
+                if (Notification.permission === "granted") {
+                    try {
+                        await crearOSincronizarSuscripcionPush();
+                        await sincronizarContextoServiceWorker();
+                        mostrarAviso({
+                            id: "pixben-push-sincronizado",
+                            tipo: "online",
+                            icono: "✓",
+                            titulo: "Avisos sincronizados",
+                            mensaje: esAdmin
+                                ? "Este dispositivo recibirá alertas de pedidos nuevos."
+                                : "Este dispositivo seguirá recibiendo avisos de tus pedidos.",
+                            duracion: 5200
+                        });
+                    } catch (error) {
+                        mostrarAviso({
+                            id: "pixben-push-error",
+                            tipo: "offline",
+                            icono: "!",
+                            titulo: "No se pudo sincronizar",
+                            mensaje: error.message || "Inténtalo nuevamente.",
+                            duracion: 6500
+                        });
+                    }
+                    return;
+                }
+                solicitarNotificaciones();
+            });
             tarjeta.appendChild(boton);
             encabezado.insertAdjacentElement("afterend", tarjeta);
         });
@@ -480,7 +553,8 @@
     document.documentElement.classList.add(esStandalone() ? "pwa-standalone" : "pwa-browser");
     mostrarSplash();
     insertarActivadorNotificaciones();
-    registrarServiceWorker().then(() => {
+    registrarServiceWorker().then(async () => {
+        await sincronizarContextoServiceWorker();
         window.setTimeout(sincronizarSuscripcionExistente, 1800);
     });
 
@@ -499,6 +573,7 @@
         mostrarNotificacion,
         mostrarAviso,
         crearOSincronizarSuscripcionPush,
+        sincronizarContextoServiceWorker,
         desuscribirNotificacionesCuenta
     });
 })();
