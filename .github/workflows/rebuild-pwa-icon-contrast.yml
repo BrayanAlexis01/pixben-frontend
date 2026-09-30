@@ -73,8 +73,8 @@ jobs:
 
           rebuild(src_dir/"app-icon-512.png", src_dir/"app-icon-v4-512.png", 512, 0.82)
           rebuild(src_dir/"app-icon-512.png", src_dir/"app-icon-v4-192.png", 192, 0.82)
-          rebuild(src_dir/"app-icon-maskable-512.png", src_dir/"app-icon-maskable-v4-512.png", 512, 0.70)
-          rebuild(src_dir/"app-icon-maskable-512.png", src_dir/"app-icon-maskable-v4-192.png", 192, 0.70)
+          rebuild(src_dir/"app-icon-512.png", src_dir/"app-icon-maskable-v4-512.png", 512, 0.70)
+          rebuild(src_dir/"app-icon-512.png", src_dir/"app-icon-maskable-v4-192.png", 192, 0.70)
           PY
 
       - name: Commit rebuilt icons
