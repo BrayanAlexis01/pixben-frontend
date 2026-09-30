@@ -324,3 +324,14 @@ body.pixben-splash-activo{
         transition:none !important;
     }
 }
+
+
+.pixben-notification-card.is-admin{
+    margin:0 0 22px;
+    border-color:#d9b9ef;
+    background:linear-gradient(135deg,#fff,#f5eafd);
+    box-shadow:0 14px 38px rgba(122,38,184,.12);
+}
+.pixben-notification-card.is-admin strong{color:#51177b}
+.pixben-notification-card.is-admin .pixben-notification-button{background:#7423ad}
+.pixben-notification-card.is-admin .pixben-notification-button:hover{background:#5a168d}
