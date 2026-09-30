@@ -402,16 +402,17 @@
     }
 
     async function sincronizarSuscripcionExistente() {
-        if (!("Notification" in window) || Notification.permission !== "granted") return;
+        if (!("Notification" in window) || Notification.permission !== "granted") return false;
         try {
-            const registro = await obtenerRegistroServiceWorker();
-            const suscripcion = await registro.pushManager.getSubscription();
-            if (suscripcion) {
-                await registrarSuscripcionEnBackend(suscripcion);
-                await sincronizarContextoServiceWorker();
-            }
+            // Si el usuario habilitó las notificaciones desde Ajustes de Android,
+            // puede existir el permiso pero todavía no una suscripción Push.
+            // En ese caso la creamos automáticamente al abrir PixBen.
+            const activo = await crearOSincronizarSuscripcionPush();
+            if (activo) await sincronizarContextoServiceWorker();
+            return activo;
         } catch (error) {
-            console.warn("No se pudo comprobar la suscripción Push", error);
+            console.warn("No se pudo comprobar o crear la suscripción Push", error);
+            return false;
         }
     }
 
