@@ -148,7 +148,7 @@ function actualizarEstadoRender(estado, detalle = "") {
     const etiquetas = {
         online: "Servidor online",
         comprobando: "Comprobando servidor...",
-        iniciando: "Render iniciando o sin respuesta"
+        iniciando: "Render sin respuesta"
     };
     texto.textContent = etiquetas[estado] || "Estado del servidor";
     if (detalle) detalleElemento.textContent = detalle;
@@ -183,7 +183,7 @@ async function comprobarEstadoRender({silencioso = false} = {}) {
         actualizarEstadoRender("online", `Última señal: ${hora} · ${ms} ms · ${datos.version || "PixBen"}`);
     } catch (error) {
         const mensaje = error?.name === "AbortError" ? "sin respuesta tras 30 s" : (error?.message || "sin conexión");
-        actualizarEstadoRender("iniciando", `Puede estar despertando. ${mensaje}.`);
+        actualizarEstadoRender("iniciando", `Servidor sin respuesta: ${mensaje}.`);
     } finally {
         clearTimeout(limite);
         comprobandoRender = false;
@@ -201,20 +201,11 @@ function sincronizarMantenerRender() {
 }
 
 function configurarMonitorRender() {
-    document.getElementById("btnMantenerRender")?.addEventListener("click", () => {
-        const activo = !mantenerRenderActivo();
-        sessionStorage.setItem(CLAVE_MANTENER_RENDER, activo ? "1" : "0");
-        sincronizarMantenerRender();
-        alert(activo
-                ? "Render se mantendrá activo mientras esta pestaña de Admin permanezca abierta."
-                : "Mantenimiento desactivado. Render podrá suspenderse por inactividad.");
-    });
     window.addEventListener("focus", () => comprobarEstadoRender({silencioso: true}));
     document.addEventListener("visibilitychange", () => {
         if (!document.hidden) comprobarEstadoRender({silencioso: true});
     });
     comprobarEstadoRender();
-    sincronizarMantenerRender();
 }
 
 async function cargarCategorias() {
