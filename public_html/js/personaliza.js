@@ -250,6 +250,8 @@
         document.getElementById("ideaDisenador").addEventListener("input", () => {
             document.getElementById("contadorIdeaDisenador").textContent = `${document.getElementById("ideaDisenador").value.length}/800`;
         });
+        document.getElementById("metodoPagoDiseno").addEventListener("change", renderizarDatosPagoDiseno);
+        renderizarDatosPagoDiseno();
 
         document.getElementById("notasPedido").addEventListener("input", () => {
             document.getElementById("contadorNotas").textContent = `${document.getElementById("notasPedido").value.length}/800`;
@@ -1346,8 +1348,8 @@
         boton.disabled = true;
         boton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generando...';
         try {
-            previewActual.frente = await exportarLadoDataUrl("frente");
-            previewActual.espalda = await exportarLadoDataUrl("espalda");
+            previewActual.frente = await protegerPreviewDataUrl(await exportarLadoDataUrl("frente"));
+            previewActual.espalda = await protegerPreviewDataUrl(await exportarLadoDataUrl("espalda"));
             document.getElementById("previewFrente").src = previewActual.frente;
             document.getElementById("previewEspalda").src = previewActual.espalda;
             document.getElementById("modalPreview").hidden = false;
@@ -1364,6 +1366,74 @@
     function cerrarVistaPrevia() {
         document.getElementById("modalPreview").hidden = true;
         document.body.classList.remove("modal-abierto");
+    }
+
+    async function protegerPreviewDataUrl(dataUrl) {
+        if (!dataUrl) return dataUrl;
+        const imagen = await new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.onerror = reject;
+            img.src = dataUrl;
+        });
+
+        const salida = document.createElement("canvas");
+        salida.width = imagen.naturalWidth || imagen.width;
+        salida.height = imagen.naturalHeight || imagen.height;
+        const ctx = salida.getContext("2d");
+        ctx.drawImage(imagen, 0, 0, salida.width, salida.height);
+
+        ctx.save();
+        ctx.translate(salida.width / 2, salida.height / 2);
+        ctx.rotate(-Math.PI / 6);
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.font = `900 ${Math.max(22, Math.round(salida.width * 0.055))}px Arial, sans-serif`;
+        ctx.fillStyle = "rgba(91,24,142,.28)";
+        ctx.strokeStyle = "rgba(255,255,255,.72)";
+        ctx.lineWidth = Math.max(2, salida.width * .004);
+
+        const saltoX = salida.width * .72;
+        const saltoY = salida.height * .28;
+        for (let y = -salida.height; y <= salida.height; y += saltoY) {
+            for (let x = -salida.width; x <= salida.width; x += saltoX) {
+                ctx.strokeText("PIXBEN · VISTA PREVIA", x, y);
+                ctx.fillText("PIXBEN · VISTA PREVIA", x, y);
+            }
+        }
+        ctx.restore();
+        return salida.toDataURL("image/jpeg", .86);
+    }
+
+    function renderizarDatosPagoDiseno() {
+        const contenedor = document.getElementById("datosPagoDiseno");
+        if (!contenedor) return;
+        const metodo = document.getElementById("metodoPagoDiseno")?.value || "YAPE";
+        const opciones = {
+            YAPE: {
+                titulo: "Paga S/ 15.00 con Yape",
+                imagen: "../imagen/pagos/yape.webp",
+                texto: "Escanea el QR, realiza el adelanto y copia el código de operación."
+            },
+            PLIN: {
+                titulo: "Paga S/ 15.00 con Plin",
+                imagen: "../imagen/pagos/plin.webp",
+                texto: "Escanea el QR, realiza el adelanto y guarda el número de operación."
+            },
+            BCP: {
+                titulo: "Transfiere S/ 15.00 por BCP",
+                imagen: "../imagen/pagos/bcp.webp",
+                texto: "Cuenta: 19194784840060 · CCI: 00219119478484006053"
+            }
+        };
+        const opcion = opciones[metodo] || opciones.YAPE;
+        contenedor.innerHTML = `
+            <div>
+                <strong>${opcion.titulo}</strong>
+                <p>${opcion.texto}</p>
+                <small>El pago quedará por verificar; el diseñador no comienza hasta la confirmación del administrador.</small>
+            </div>
+            <img src="${opcion.imagen}" alt="Datos para ${opcion.titulo}">`;
     }
 
     async function abrirDisenoAsistido() {
