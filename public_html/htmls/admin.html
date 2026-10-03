@@ -58,6 +58,7 @@
         <button role="tab" aria-selected="false" aria-controls="seccionPedidos" data-seccion="seccionPedidos"><i class="fa-solid fa-receipt"></i> Pedidos</button>
         <button role="tab" aria-selected="false" aria-controls="seccionReportes" data-seccion="seccionReportes"><i class="fa-solid fa-chart-column"></i> Reportes</button>
         <button role="tab" aria-selected="false" aria-controls="seccionMensajes" data-seccion="seccionMensajes"><i class="fa-solid fa-envelope"></i> Mensajes <span id="contadorMensajes" class="badge">0</span></button>
+        <button role="tab" aria-selected="false" aria-controls="seccionReclamos" data-seccion="seccionReclamos"><i class="fa-solid fa-book-open"></i> Reclamos <span id="contadorReclamos" class="badge">0</span></button>
         <button role="tab" aria-selected="false" aria-controls="seccionAnalitica" data-seccion="seccionAnalitica"><i class="fa-solid fa-chart-line"></i> Analítica</button>
     </div>
 
@@ -194,6 +195,12 @@
     <section id="seccionMensajes" class="admin-seccion" role="tabpanel">
         <div class="encabezado-seccion"><div><h2>Mensajes de contacto</h2><p>Todo se consulta dentro del panel. El formulario no permite adjuntos.</p></div><button id="btnRecargarMensajes" class="btn-secundario"><i class="fa-solid fa-rotate"></i> Actualizar</button></div>
         <div id="listaMensajes" class="lista-mensajes"><p class="estado-carga">Cargando mensajes...</p></div>
+    </section>
+
+    <section id="seccionReclamos" class="admin-seccion" role="tabpanel">
+        <div class="encabezado-seccion"><div><h2>Libro de Reclamaciones</h2><p>Reclamos y quejas registrados desde la web. Conserva la evidencia de atención.</p></div><button id="btnRecargarReclamos" class="btn-secundario"><i class="fa-solid fa-rotate"></i> Actualizar</button></div>
+        <div class="nota-privacidad">El plazo legal vigente para responder reclamos y quejas es de hasta 15 días hábiles.</div>
+        <div id="listaReclamos" class="lista-mensajes"><p class="estado-carga">Cargando reclamos...</p></div>
     </section>
 
     <section id="seccionAnalitica" class="admin-seccion" role="tabpanel">
