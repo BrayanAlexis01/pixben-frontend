@@ -64,3 +64,7 @@ body{margin:0;font-family:Arial,sans-serif;color:var(--texto);background:#f7f5f8
     .policy-card,.policy-section{padding:21px}
     .policy-contact{align-items:flex-start;flex-direction:column}
 }
+
+/* Formularios legales y Libro de Reclamaciones */
+.policy-form-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:24px;align-items:start;margin:28px 0}.policy-claim-form{display:grid;gap:14px}.policy-claim-form label{display:grid;gap:6px;font-weight:700;font-size:13px}.policy-claim-form input,.policy-claim-form select,.policy-claim-form textarea{width:100%;box-sizing:border-box;border:1px solid #d9d0df;border-radius:10px;padding:11px 12px;background:#fff;color:#222;font:inherit}.policy-check{display:flex!important;align-items:flex-start;gap:9px!important;font-weight:400!important;line-height:1.5}.policy-check input{width:auto!important;margin-top:3px}.policy-form-status{min-height:20px;margin:0;font-size:12px}.policy-form-status.ok{color:#176b35}.policy-form-status.error{color:#b42318}.policy-inline-btn{border:0;background:none;padding:0;color:#7a23b8;text-decoration:underline;font:inherit;cursor:pointer}.policy-note{border:1px solid #dec98a;background:#fff8e4;border-radius:12px;padding:14px 16px;margin:16px 0;line-height:1.55}
+@media(max-width:800px){.policy-form-grid{grid-template-columns:1fr}}
