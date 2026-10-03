@@ -303,6 +303,9 @@ async function confirmarCompra() {
     if (!metodoEnvio || !destinoEnvio) return alert("Selecciona el envío y escribe el destino");
     if (!metodoPago) return alert("Selecciona un método de pago");
     if (!referenciaPago) return alert("Escribe el código o número de operación del pago");
+    if (!document.getElementById("aceptarLegalesCheckout")?.checked) {
+        return alert("Debes aceptar los Términos y la Política de privacidad para registrar el pedido");
+    }
 
     const items = itemsPagables.map(({item, producto, solicitud, personalizado, subtotal}) => ({
         productoId: producto.id,
