@@ -29,7 +29,7 @@ configurarTabs();
 configurarNavegacionDirecta();
 configurarEventos();
 configurarMonitorRender();
-Promise.all([cargarCategorias(), cargarProductos(), cargarPersonalizados(), cargarPedidosAdmin(), cargarMensajes(), cargarAnalitica()]);
+Promise.all([cargarCategorias(), cargarProductos(), cargarPersonalizados(), cargarPedidosAdmin(), cargarMensajes(), cargarReclamos(), cargarAnalitica()]);
 
 function configurarTabs() {
     document.querySelectorAll(".admin-tabs button[data-seccion]").forEach(boton => {
@@ -79,6 +79,7 @@ function configurarEventos() {
     document.getElementById("btnRecargarPersonalizados").addEventListener("click", cargarPersonalizados);
     document.getElementById("btnRecargarPedidos").addEventListener("click", cargarPedidosAdmin);
     document.getElementById("btnRecargarMensajes").addEventListener("click", cargarMensajes);
+    document.getElementById("btnRecargarReclamos")?.addEventListener("click", cargarReclamos);
     document.getElementById("btnRecargarAnalitica")?.addEventListener("click", cargarAnalitica);
     document.getElementById("btnRecargarReportes")?.addEventListener("click", cargarReportes);
     document.getElementById("periodoReportes")?.addEventListener("change", cargarReportes);
@@ -131,6 +132,11 @@ function configurarEventos() {
         const eliminar = evento.target.closest("button[data-eliminar-mensaje]");
         if (guardar) guardarEstadoMensaje(guardar.dataset.guardarMensaje);
         if (eliminar) eliminarMensaje(eliminar.dataset.eliminarMensaje);
+    });
+
+    document.getElementById("listaReclamos")?.addEventListener("click", evento => {
+        const guardar = evento.target.closest("button[data-guardar-reclamo]");
+        if (guardar) guardarEstadoReclamo(guardar.dataset.guardarReclamo);
     });
 }
 
@@ -973,6 +979,35 @@ async function guardarEstadoMensaje(id) {
     const respuesta = await fetchConSesion(`${API_URL}/contactos/${encodeURIComponent(id)}/estado?estado=${encodeURIComponent(select.value)}`, {method: "PATCH"});
     if (!respuesta.ok) return alert(await obtenerMensajeError(respuesta));
     cargarMensajes();
+}
+
+async function cargarReclamos() {
+    const contenedor = document.getElementById("listaReclamos");
+    if (!contenedor) return;
+    contenedor.innerHTML = '<p class="estado-carga">Cargando reclamos...</p>';
+    try {
+        const respuesta = await fetchConSesion(`${API_URL}/reclamos/admin/todos`);
+        if (!respuesta.ok) throw new Error(await obtenerMensajeError(respuesta));
+        const reclamos = await respuesta.json();
+        const pendientes = reclamos.filter(r => !["RESPONDIDO","CERRADO"].includes(String(r.estado || "").toUpperCase())).length;
+        const badge = document.getElementById("contadorReclamos");
+        if (badge) badge.textContent = pendientes;
+        contenedor.innerHTML = reclamos.length ? reclamos.map(r => `<article class="tarjeta-mensaje">
+            <div class="mensaje-cabecera"><div><h3>${escaparHtml(r.tipo || "RECLAMO")} · ${escaparHtml(r.pedidoReferencia || "Sin pedido")}</h3><p class="mensaje-meta">${escaparHtml(r.nombre)} · ${escaparHtml(r.documento)} · ${escaparHtml(r.correo)} · ${escaparHtml(r.telefono)} · ${escaparHtml(formatearFecha(r.fecha))}</p></div><span class="estado-chip">${escaparHtml(formatearEstado(r.estado))}</span></div>
+            <p class="mensaje-cuerpo"><b>Detalle:</b> ${escaparHtml(r.detalle)}</p>
+            <p class="mensaje-cuerpo"><b>Pedido del consumidor:</b> ${escaparHtml(r.pedidoConsumidor)}</p>
+            <div class="mensaje-acciones"><select data-estado-reclamo="${escaparAtributo(r.id)}">${["RECIBIDO","EN_PROCESO","RESPONDIDO","CERRADO"].map(e => `<option value="${e}" ${e === r.estado ? "selected" : ""}>${formatearEstado(e)}</option>`).join("")}</select><button class="accion-guardar" data-guardar-reclamo="${escaparAtributo(r.id)}">Guardar estado</button><a class="accion-guardar" href="mailto:${encodeURIComponent(r.correo)}?subject=${encodeURIComponent("Respuesta PixBen - "+(r.tipo || "Reclamo"))}">Responder por correo</a></div>
+        </article>`).join("") : '<p class="estado-carga">No hay reclamos ni quejas registrados.</p>';
+    } catch (error) {
+        contenedor.innerHTML = `<p class="error-admin">${escaparHtml(error.message)}</p>`;
+    }
+}
+
+async function guardarEstadoReclamo(id) {
+    const select = document.querySelector(`[data-estado-reclamo="${CSS.escape(id)}"]`);
+    const respuesta = await fetchConSesion(`${API_URL}/reclamos/${encodeURIComponent(id)}/estado?estado=${encodeURIComponent(select.value)}`, {method:"PATCH"});
+    if (!respuesta.ok) return alert(await obtenerMensajeError(respuesta));
+    cargarReclamos();
 }
 
 async function eliminarPersonalizado(id) {
