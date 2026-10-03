@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" href="../imagensponsor/favicon.ico" sizes="any"><link rel="manifest" href="../site.webmanifest?v=5">
+<meta name="theme-color" content="#8a2be2"><title>Libro de Reclamaciones | PixBen</title>
+<meta name="description" content="Libro de Reclamaciones virtual de PixBen para registrar reclamos y quejas."><meta name="robots" content="index,follow">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+<link rel="stylesheet" href="../css/politicas.css?v=2"><link rel="stylesheet" href="../css/responsive-global.css?v=5">
+<link href="../css/header-global.css?v=2" rel="stylesheet"><link rel="stylesheet" href="../css/accessibility.css?v=3">
+</head>
+<body><header class="site-header-pixben"><div class="logo"><a href="../index.html"><img src="../imagensponsor/logopixben.webp" alt="PixBen"></a></div><nav aria-label="Navegación principal"><a href="../index.html">Inicio</a><a href="productos.html">Productos</a><a href="personaliza.html">Personaliza</a><a href="nosotros.html">Nosotros</a><a href="contacto.html">Contacto</a></nav><div class="acciones-header"><div class="carrito"><a href="carrito de compras.html" aria-label="Carrito"><i class="fa-solid fa-cart-shopping"></i></a></div><div class="usuario-menu"><button type="button" class="usuario-icono" id="btnUsuarioMenu" aria-label="Abrir menú de usuario"><i class="fa-solid fa-user"></i><span id="nombreUsuarioHeader"></span></button><div id="menuUsuario" class="menu-usuario"><a href="login.html" id="btnLogin">Iniciar sesión</a><a href="registro.html" id="btnRegistro">Registrarse</a><a href="perfil.html" id="btnPerfil">Mi perfil</a><a href="mis-pedidos.html" id="btnPedidos">Mis pedidos</a><a href="historial.html" id="btnHistorial">Historial</a><a href="favoritos.html" id="btnFavoritos">Favoritos</a><a href="admin.html" id="btnAdmin">Panel Admin</a><a href="#" id="btnCerrarSesion">Cerrar sesión</a></div></div></div></header>
+<main class="policy-main"><section class="policy-hero"><span class="policy-kicker"><i class="fa-solid fa-book-open"></i> ATENCIÓN AL CONSUMIDOR</span><h1>Libro de Reclamaciones</h1><p>Registra una queja o reclamo y conserva el código que genera el sistema.</p><div class="policy-meta">Versión digital · 3 de octubre de 2026</div></section>
+<section class="policy-form-grid">
+<form class="policy-card policy-claim-form" id="formReclamoPixBen">
+<h2>Registrar solicitud</h2>
+<label>Tipo<select id="reclamoTipo" required><option value="RECLAMO">Reclamo — producto o servicio</option><option value="QUEJA">Queja — atención u otro aspecto</option></select></label>
+<label>Nombre completo<input id="reclamoNombre" maxlength="120" required autocomplete="name"></label>
+<label>DNI / CE u otro documento<input id="reclamoDocumento" maxlength="20" required></label>
+<label>Correo<input id="reclamoCorreo" type="email" maxlength="160" required autocomplete="email"></label>
+<label>Teléfono<input id="reclamoTelefono" maxlength="30" required autocomplete="tel"></label>
+<label>Pedido relacionado (opcional)<input id="reclamoPedido" maxlength="80" placeholder="Ej. PX-ABC12345"></label>
+<label>Detalle<textarea id="reclamoDetalle" maxlength="3000" rows="6" required></textarea></label>
+<label>Pedido del consumidor<textarea id="reclamoPedidoConsumidor" maxlength="1500" rows="4" required placeholder="Indica qué solución solicitas."></textarea></label>
+<label class="policy-check"><input type="checkbox" required><span>Declaro que la información es correcta y autorizo su tratamiento para atender esta solicitud conforme a la Política de Privacidad.</span></label>
+<button class="policy-btn" type="submit"><i class="fa-solid fa-paper-plane"></i> Registrar</button>
+<p id="estadoReclamoPixBen" class="policy-form-status" aria-live="polite"></p>
+</form>
+<aside class="policy-card"><h2>Información importante</h2><p>El registro de una queja o reclamo no limita otros derechos que correspondan al consumidor.</p><p><strong>Plazo:</strong> la atención debe realizarse dentro del plazo legal aplicable. Actualmente Indecopi establece un máximo de 15 días hábiles para responder reclamos y quejas.</p><div class="policy-note"><strong>Datos empresariales pendientes:</strong> antes de usar esta página como versión legal definitiva debes completar razón social o titular, RUC y domicilio del proveedor.</div><p>Para coordinación comercial también puedes usar la página de <a href="contacto.html">Contacto</a>.</p></aside>
+</section></main><footer class="policy-footer"><div class="policy-footer-links"><a href="preguntas frecuentes.html">Preguntas frecuentes</a><a href="politica de envios.html">Política de envíos</a><a href="cambios y devoluciones.html">Cambios y devoluciones</a><a href="terminos y condiciones.html">Términos</a><a href="politica de privacidad.html">Privacidad</a><a href="politica de cookies.html">Cookies</a><a href="libro de reclamaciones.html">Libro de Reclamaciones</a></div><p>© 2026 PixBen. Todos los derechos reservados.</p></footer>
+<script src="../js/config.js?v=20"></script><script src="../js/header-global.js?v=2"></script><script src="../js/analitica.js?v=4"></script><script src="../js/responsive-menu.js?v=4"></script><script src="../js/accessibility.js?v=3"></script><script src="../js/reclamos.js?v=1"></script></body></html>
