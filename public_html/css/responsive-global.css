@@ -779,3 +779,12 @@ body.pagina-listado > h1{
 
 /* Mantiene las acciones de cuenta alineadas a la derecha cuando no existe buscador. */
 .acciones-header{margin-left:auto;justify-content:flex-end;min-width:96px}.acciones-header .carrito,.acciones-header .usuario-menu{flex:0 0 auto}
+
+
+/* Centro global de privacidad y enlaces legales */
+.pixben-privacy-center{position:fixed;z-index:5000;left:50%;bottom:18px;transform:translateX(-50%);width:min(920px,calc(100vw - 28px));display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 20px;background:#fff;color:#1d1d1f;border:1px solid #ddd5e8;border-radius:18px;box-shadow:0 22px 65px rgba(26,16,38,.25)}
+.pixben-privacy-copy{display:flex;gap:14px;align-items:flex-start}.pixben-privacy-copy>i{width:42px;height:42px;display:grid;place-items:center;flex:0 0 auto;border-radius:50%;background:#28103d;color:#d9a9ff}.pixben-privacy-copy>div{display:grid;gap:5px}.pixben-privacy-copy strong{font-size:14px}.pixben-privacy-copy p{margin:0;max-width:650px;font-size:11px;line-height:1.55;color:#666}.pixben-privacy-copy a{font-size:10px;color:#7d2bb8;text-decoration:underline;width:max-content}
+.pixben-privacy-actions{display:flex;gap:9px;flex:0 0 auto}.pixben-privacy-actions button{border-radius:9px;padding:11px 13px;font-weight:700;cursor:pointer;white-space:nowrap}.privacy-secondary{background:#fff;border:1px solid #b9aec4;color:#3a3140}.privacy-primary{background:#7e22ce;border:1px solid #7e22ce;color:#fff}
+.pixben-legal-links{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:15px;padding:15px 20px;border-top:1px solid rgba(255,255,255,.12);font-size:12px}.pixben-legal-links a,.pixben-legal-links button{color:inherit;background:none;border:0;padding:0;font:inherit;cursor:pointer;text-decoration:none}.pixben-legal-links a:hover,.pixben-legal-links button:hover{text-decoration:underline}
+@media(max-width:760px){.pixben-privacy-center{align-items:stretch;flex-direction:column;bottom:10px}.pixben-privacy-actions{display:grid;grid-template-columns:1fr 1fr}.pixben-privacy-actions button{width:100%}}
+@media(prefers-color-scheme:dark){.pixben-privacy-center{background:#17131b;color:#f7f2fa;border-color:#403448}.pixben-privacy-copy p{color:#d0c7d4}.privacy-secondary{background:#211a25;color:#f2eaf6;border-color:#54465c}}
