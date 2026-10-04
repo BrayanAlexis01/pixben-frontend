@@ -290,28 +290,57 @@ function normalizarUsuarioSesion(datos) {
     };
 }
 
+const PIXBEN_TOKEN_CLIENTE_KEY = "pixben_session_token_v2";
+const PIXBEN_TOKEN_ADMIN_KEY = "pixben_admin_session_token_v2";
+
+function limpiarTokensSesionPixBen() {
+    localStorage.removeItem(PIXBEN_TOKEN_CLIENTE_KEY);
+    sessionStorage.removeItem(PIXBEN_TOKEN_ADMIN_KEY);
+}
+
 function guardarUsuarioSesion(datos) {
     const usuarioNuevo = normalizarUsuarioSesion(datos);
     if (!usuarioNuevo) return null;
 
-    // Algunas respuestas de perfil no vuelven a incluir el token. Se conserva el actual.
-    const actual = (() => {
-        try { return normalizarUsuarioSesion(JSON.parse(localStorage.getItem("usuario"))); }
-        catch { return null; }
-    })();
+    const actual = obtenerUsuarioSesion();
     if (!usuarioNuevo.token && actual?.token) usuarioNuevo.token = actual.token;
 
-    localStorage.setItem("usuario", JSON.stringify(usuarioNuevo));
-    return usuarioNuevo;
+    const token = usuarioNuevo.token;
+    if (usuarioNuevo.rol === "admin") {
+        localStorage.removeItem(PIXBEN_TOKEN_CLIENTE_KEY);
+        if (token) sessionStorage.setItem(PIXBEN_TOKEN_ADMIN_KEY, token);
+    } else {
+        sessionStorage.removeItem(PIXBEN_TOKEN_ADMIN_KEY);
+        if (token) localStorage.setItem(PIXBEN_TOKEN_CLIENTE_KEY, token);
+    }
+
+    const persistente = {...usuarioNuevo, token:""};
+    localStorage.setItem("usuario", JSON.stringify(persistente));
+    return {...persistente, token};
 }
 
 function obtenerUsuarioSesion() {
     try {
-        const usuario = normalizarUsuarioSesion(JSON.parse(localStorage.getItem("usuario")));
-        if (usuario) localStorage.setItem("usuario", JSON.stringify(usuario));
-        return usuario;
+        const bruto = JSON.parse(localStorage.getItem("usuario"));
+        const usuario = normalizarUsuarioSesion(bruto);
+        if (!usuario) return null;
+
+        // Migra silenciosamente sesiones antiguas que guardaban el token dentro del JSON.
+        const tokenLegado = String(bruto?.token || "").trim();
+        let token = usuario.rol === "admin"
+                ? sessionStorage.getItem(PIXBEN_TOKEN_ADMIN_KEY)
+                : localStorage.getItem(PIXBEN_TOKEN_CLIENTE_KEY);
+        if (!token && tokenLegado) {
+            token = tokenLegado;
+            if (usuario.rol === "admin") sessionStorage.setItem(PIXBEN_TOKEN_ADMIN_KEY, tokenLegado);
+            else localStorage.setItem(PIXBEN_TOKEN_CLIENTE_KEY, tokenLegado);
+        }
+        const persistente = {...usuario, token:""};
+        localStorage.setItem("usuario", JSON.stringify(persistente));
+        return {...persistente, token:String(token || "")};
     } catch {
         localStorage.removeItem("usuario");
+        limpiarTokensSesionPixBen();
         return null;
     }
 }
@@ -353,6 +382,7 @@ async function fetchConSesion(url, opciones = {}) {
     });
     if (respuesta.status === 401) {
         localStorage.removeItem("usuario");
+        limpiarTokensSesionPixBen();
         throw new Error("Tu sesión venció. Inicia sesión nuevamente");
     }
     return respuesta;
@@ -388,6 +418,7 @@ async function cerrarSesionPixben(rutaDestino = null) {
         console.warn("No se pudo cerrar la sesión en el servidor", error);
     } finally {
         localStorage.removeItem("usuario");
+        limpiarTokensSesionPixBen();
         if (rutaDestino) window.location.href = rutaDestino;
     }
 }
@@ -451,12 +482,12 @@ function agregarAlCarritoInvitado(datos) {
             && !item.personalizado);
 
     if (existente) {
-        existente.cantidad = Math.min(50, Number(existente.cantidad || 1) + cantidad);
+        existente.cantidad = Math.min(20, Number(existente.cantidad || 1) + cantidad);
     } else {
         carrito.push({
             id: crearIdCarritoInvitado(),
             productoId,
-            cantidad: Math.min(50, cantidad),
+            cantidad: Math.min(20, cantidad),
             talla,
             color,
             personalizado: false
@@ -471,7 +502,7 @@ function eliminarDelCarritoInvitado(id) {
 }
 
 function actualizarCarritoInvitado(id, cantidad) {
-    const numero = Math.max(1, Math.min(50, Number(cantidad || 1)));
+    const numero = Math.max(1, Math.min(20, Number(cantidad || 1)));
     const carrito = obtenerCarritoInvitado();
     const item = carrito.find(actual => actual.id === id);
     if (item) item.cantidad = numero;
@@ -517,3 +548,96 @@ function eliminarReferenciaPedidoInvitado(codigo) {
     const usuario = obtenerUsuarioSesion();
     if (usuario) guardarUsuarioSesion(usuario);
 })();
+
+
+/* Centro global de privacidad y enlaces legales */
+const PIXBEN_PRIVACY_CONSENT_KEY = "pixben_privacy_consent_v2";
+
+function obtenerConsentimientoPrivacidadPixBen() {
+    try {
+        const value = JSON.parse(localStorage.getItem(PIXBEN_PRIVACY_CONSENT_KEY) || "null");
+        return value && value.version === 2 ? value : null;
+    } catch {
+        return null;
+    }
+}
+
+function analiticaPermitidaPixBen() {
+    return obtenerConsentimientoPrivacidadPixBen()?.analytics === true;
+}
+
+function guardarConsentimientoPrivacidadPixBen(analytics) {
+    const value = {
+        essential:true,
+        analytics:Boolean(analytics),
+        marketing:false,
+        version:2,
+        updatedAt:new Date().toISOString()
+    };
+    localStorage.setItem(PIXBEN_PRIVACY_CONSENT_KEY, JSON.stringify(value));
+    if (!value.analytics) {
+        localStorage.removeItem("pixbenVisitanteAnonimo");
+        Object.keys(sessionStorage).filter(key => key.startsWith("pixben-visita:"))
+                .forEach(key => sessionStorage.removeItem(key));
+    }
+    window.dispatchEvent(new CustomEvent("pixben:privacy-consent", {detail:value}));
+    document.getElementById("pixbenPrivacyCenter")?.remove();
+    return value;
+}
+
+function mostrarPreferenciasPrivacidadPixBen(force = false) {
+    if (!force && obtenerConsentimientoPrivacidadPixBen()) return;
+    document.getElementById("pixbenPrivacyCenter")?.remove();
+
+    const panel = document.createElement("aside");
+    panel.id = "pixbenPrivacyCenter";
+    panel.className = "pixben-privacy-center";
+    panel.setAttribute("role", "dialog");
+    panel.setAttribute("aria-label", "Preferencias de privacidad");
+    panel.innerHTML = `
+        <div class="pixben-privacy-copy">
+            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+            <div>
+                <strong>Tu privacidad en PixBen</strong>
+                <p>Usamos almacenamiento necesario para sesión, carrito, accesibilidad y seguridad. La analítica interna es opcional y no se activa sin tu consentimiento. Actualmente no usamos cookies publicitarias.</p>
+                <a href="${location.pathname.includes("/htmls/") ? "politica de cookies.html" : "htmls/politica de cookies.html"}">Ver política de cookies</a>
+            </div>
+        </div>
+        <div class="pixben-privacy-actions">
+            <button type="button" class="privacy-secondary" data-pixben-essential>Solo necesarias</button>
+            <button type="button" class="privacy-primary" data-pixben-analytics>Aceptar analítica</button>
+        </div>`;
+    document.body.appendChild(panel);
+    panel.querySelector("[data-pixben-essential]")?.addEventListener("click", () => guardarConsentimientoPrivacidadPixBen(false));
+    panel.querySelector("[data-pixben-analytics]")?.addEventListener("click", () => guardarConsentimientoPrivacidadPixBen(true));
+}
+
+function instalarEnlacesLegalesPixBen() {
+    const footer = document.querySelector("footer");
+    if (!footer || footer.querySelector("[data-pixben-legal-links]")) return;
+    const enHtmls = location.pathname.includes("/htmls/");
+    const prefijo = enHtmls ? "" : "htmls/";
+    const nav = document.createElement("nav");
+    nav.className = "pixben-legal-links";
+    nav.dataset.pixbenLegalLinks = "true";
+    nav.setAttribute("aria-label", "Información legal");
+    nav.innerHTML = `
+        <a href="${prefijo}politica de privacidad.html">Privacidad</a>
+        <a href="${prefijo}politica de cookies.html">Cookies</a>
+        <a href="${prefijo}terminos y condiciones.html">Términos</a>
+        <a href="${prefijo}libro de reclamaciones.html">Libro de Reclamaciones</a>
+        <button type="button" data-pixben-cookie-settings>Configurar privacidad</button>`;
+    footer.appendChild(nav);
+}
+
+document.addEventListener("click", event => {
+    if (event.target.closest("[data-pixben-cookie-settings]")) {
+        event.preventDefault();
+        mostrarPreferenciasPrivacidadPixBen(true);
+    }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    instalarEnlacesLegalesPixBen();
+    setTimeout(() => mostrarPreferenciasPrivacidadPixBen(false), 250);
+});

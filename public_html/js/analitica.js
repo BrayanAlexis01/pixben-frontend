@@ -1,6 +1,7 @@
 "use strict";
 
-(async function registrarVisitaPrivada() {
+async function registrarVisitaPrivadaPixBen() {
+    if (typeof analiticaPermitidaPixBen === "function" && !analiticaPermitidaPixBen()) return;
     try {
         const ruta = `${window.location.pathname}${window.location.search}`;
         const usuario = obtenerUsuarioSesion();
@@ -28,4 +29,9 @@
     } catch (error) {
         console.debug("Analítica no disponible", error);
     }
-})();
+}
+
+registrarVisitaPrivadaPixBen();
+window.addEventListener("pixben:privacy-consent", event => {
+    if (event.detail?.analytics === true) registrarVisitaPrivadaPixBen();
+});

@@ -159,7 +159,7 @@ function renderizarItem({item, producto, solicitud}) {
             ${productoUsaTalla(producto.categoria, producto.nombre) ? `<p>Talla: ${escaparCarrito(item.talla || "No seleccionada")}</p>` : "<p>Presentación: Unidad</p>"}
             ${varianteInvalida ? `<p class="aviso-variante-carrito"><i class="fa-solid fa-circle-exclamation"></i> ${escaparCarrito(avisoVariante)}</p><a class="btn-elegir-variante" href="detalles-producto.html?id=${encodeURIComponent(producto.id)}">Elegir variante</a>` : `<p class="precio">S/ ${precio.toFixed(2)}</p><p class="subtotal-linea">Subtotal: <b>S/ ${subtotal.toFixed(2)}</b></p>`}
         </div>
-        <div class="cantidad-producto"><input type="number" min="1" max="50" value="${cantidad}" data-cantidad="${escaparAtributoCarrito(item.id)}" aria-label="Cantidad"></div>
+        <div class="cantidad-producto"><input type="number" min="1" max="20" value="${cantidad}" data-cantidad="${escaparAtributoCarrito(item.id)}" aria-label="Cantidad"></div>
         <button class="btn-eliminar" data-eliminar="${escaparAtributoCarrito(item.id)}"><i class="fa-regular fa-trash-can"></i> Eliminar</button>
     </article>`;
 }
@@ -233,7 +233,7 @@ function eliminarProducto(id) {
 
 function actualizarCantidad(id, cantidad) {
     const numero = Number(cantidad);
-    if (!Number.isInteger(numero) || numero < 1 || numero > 50) return alert("La cantidad debe estar entre 1 y 50");
+    if (!Number.isInteger(numero) || numero < 1 || numero > 20) return alert("La cantidad debe estar entre 1 y 20");
     if (!compraConCuenta) {
         actualizarCarritoInvitado(id, numero);
         cargarCarrito();
@@ -303,6 +303,9 @@ async function confirmarCompra() {
     if (!metodoEnvio || !destinoEnvio) return alert("Selecciona el envío y escribe el destino");
     if (!metodoPago) return alert("Selecciona un método de pago");
     if (!referenciaPago) return alert("Escribe el código o número de operación del pago");
+    if (!document.getElementById("aceptarLegalesCheckout")?.checked) {
+        return alert("Debes aceptar los Términos y la Política de privacidad para registrar el pedido");
+    }
 
     const items = itemsPagables.map(({item, producto, solicitud, personalizado, subtotal}) => ({
         productoId: producto.id,
