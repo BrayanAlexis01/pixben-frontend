@@ -652,29 +652,52 @@ function actualizarSeleccionProductosAdmin() {
 }
 
 async function eliminarProductosSeleccionados() {
-    const ids=[...productosSeleccionadosAdmin];
+    const ids=[...productosSeleccionadosAdmin].map(Number).filter(Number.isFinite);
     if(!ids.length) return;
     if(!confirm(`¿Eliminar ${ids.length} producto(s) seleccionados? Esta acción no se puede deshacer.`)) return;
+
     const boton=document.getElementById("btnEliminarSeleccionados");
+    const textoOriginal=boton.innerHTML;
     boton.disabled=true;
+    boton.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Eliminando...';
+
     try {
-        const resultados = await Promise.all(ids.map(async id => {
-            try {
-                const respuesta = await fetchConSesion(`${API_URL}/productos/${id}`, {method:"DELETE"});
-                return {id, ok: respuesta.ok};
-            } catch {
-                return {id, ok:false};
-            }
-        }));
-        const eliminados = new Set(resultados.filter(r => r.ok).map(r => Number(r.id)));
+        const respuesta = await fetchConSesion(`${API_URL}/productos/eliminar-lote`, {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify(ids)
+        });
+
+        if(!respuesta.ok) {
+            throw new Error(await obtenerMensajeError(respuesta));
+        }
+
+        const resultado = await respuesta.json();
+        const eliminados = new Set([
+            ...(Array.isArray(resultado.eliminados) ? resultado.eliminados : []),
+            ...(Array.isArray(resultado.noEncontrados) ? resultado.noEncontrados : [])
+        ].map(Number));
+
         productosAdmin = productosAdmin.filter(p => !eliminados.has(Number(p.id)));
-        productosSeleccionadosAdmin.clear();
+        eliminados.forEach(id => productosSeleccionadosAdmin.delete(id));
         actualizarFiltroCategoriasAdmin();
         renderizarProductosAdmin();
-        const errores = resultados.length - eliminados.size;
-        if(errores) alert(`${errores} producto(s) no pudieron eliminarse.`);
+
+        await cargarProductos();
+
+        const eliminadosReales = Array.isArray(resultado.eliminados) ? resultado.eliminados.length : 0;
+        if (eliminadosReales > 0) {
+            alert(`${eliminadosReales} producto(s) eliminado(s) correctamente.`);
+        }
+    } catch (error) {
+        console.error("Error al eliminar productos seleccionados:", error);
+        alert(error.message || "No se pudieron eliminar los productos seleccionados");
+        actualizarSeleccionProductosAdmin();
     } finally {
-        boton.disabled=false;
+        boton.disabled=productosSeleccionadosAdmin.size===0;
+        boton.innerHTML=textoOriginal;
+        const contador=document.getElementById("contadorSeleccionados");
+        if(contador) contador.textContent=productosSeleccionadosAdmin.size;
     }
 }
 
