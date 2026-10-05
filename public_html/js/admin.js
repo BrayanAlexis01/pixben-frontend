@@ -498,17 +498,19 @@ async function guardarProducto(evento) {
         let huboCargaImagenes = false;
         if (colores.length) {
             const filas = Array.from(document.querySelectorAll("#listaColoresAdmin .fila-color-admin"));
-            const cargas = [];
+
+            // Las galerías de colores se suben en orden, no en paralelo.
+            // Así varias variantes del mismo producto no intentan crear la
+            // galería de MongoDB al mismo tiempo.
             for (const colorGuardado of (guardado.colores || [])) {
                 const fila = filas.find(item => normalizarTexto(item.querySelector("[data-color-nombre]").value) === normalizarTexto(colorGuardado.nombre));
                 if (!fila) continue;
                 const archivosColor = archivosColorFila(fila);
                 if (archivosColor.length) {
                     huboCargaImagenes = true;
-                    cargas.push(subirGaleriaVariante(guardado.id, colorGuardado.clave, archivosColor));
+                    await subirGaleriaVariante(guardado.id, colorGuardado.clave, archivosColor);
                 }
             }
-            if (cargas.length) await Promise.all(cargas);
         } else if (archivos.length) {
             huboCargaImagenes = true;
             await subirGaleria(guardado.id, archivos);
