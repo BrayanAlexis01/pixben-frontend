@@ -8,7 +8,7 @@ const assert = require("node:assert/strict");
 const root = path.join(__dirname, "..");
 const source = fs.readFileSync(path.join(root, "public_html/js/paginas/mis-pedidos.js"), "utf8");
 const html = fs.readFileSync(path.join(root, "public_html/htmls/mis-pedidos.html"), "utf8");
-const ids = new Set([...html.matchAll(/\\bid=["']([^"']+)["']/g)].map(match => match[1]));
+const ids = new Set([...html.matchAll(/id=["']([^"']+)["']/g)].map(match => match[1]));
 
 function fakeElement() {
     return {
