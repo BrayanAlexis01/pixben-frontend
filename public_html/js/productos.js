@@ -343,10 +343,14 @@ async function cargarPaginaServidor() {
         if (!respuesta.ok) throw Error(`Error ${respuesta.status}`);
         const resultado = await respuesta.json();
         if (version !== estadoCatalogo.versionConsulta) return;
-        const servicios = estadoCatalogo.pagina === 1 && !estadoCatalogo.busqueda &&
-                estadoCatalogo.categoria === "todos" && estadoCatalogo.colores.size === 0 &&
-                estadoCatalogo.tallas.size === 0 && !elementosCatalogo.soloStock?.checked &&
-                Number(elementosCatalogo.precioMin?.value || 0) === 0 ? SERVICIOS_COTIZABLES : [];
+        const servicios = estadoCatalogo.pagina === 1 && estadoCatalogo.colores.size === 0 &&
+                estadoCatalogo.tallas.size === 0 && !elementosCatalogo.soloStock?.checked
+                ? SERVICIOS_COTIZABLES.filter(servicio =>
+                    (estadoCatalogo.categoria === "todos" ||
+                     normalizarTexto(servicio.categoria) === normalizarTexto(estadoCatalogo.categoria)) &&
+                    (!estadoCatalogo.busqueda ||
+                     normalizarTexto(`${servicio.nombre} ${servicio.descripcion} ${servicio.categoria}`).includes(estadoCatalogo.busqueda)))
+                : [];
         estadoCatalogo.filtrados = [...(resultado.content || []), ...servicios];
         estadoCatalogo.totalServidor = Number(resultado.totalElements || 0);
         renderizarCatalogo();
@@ -376,8 +380,10 @@ function ordenarProductos() {
 }
 
 function renderizarCatalogo() {
-    const total = estadoCatalogo.servidorPaginado ? estadoCatalogo.totalServidor : estadoCatalogo.filtrados.length;
-    const totalPaginas = Math.max(1, Math.ceil(total / PRODUCTOS_POR_PAGINA));
+    const total = estadoCatalogo.servidorPaginado
+            ? estadoCatalogo.totalServidor + estadoCatalogo.filtrados.filter(p => p.esServicioCotizable).length
+            : estadoCatalogo.filtrados.length;
+    const totalPaginas = Math.max(1, Math.ceil((estadoCatalogo.servidorPaginado ? estadoCatalogo.totalServidor : total) / PRODUCTOS_POR_PAGINA));
     estadoCatalogo.pagina = Math.min(estadoCatalogo.pagina, totalPaginas);
 
     if (elementosCatalogo.contador) {
