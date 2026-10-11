@@ -5,6 +5,10 @@ on:
     branches: ["master"]
     paths:
       - ".github/workflows/postdeploy-frontend.yml"
+      - "public_html/js/paginas/mis-pedidos.js"
+      - "public_html/js/paginas/carrito.js"
+      - "public_html/js/productos.js"
+      - "public_html/css/css carrito de compras.css"
   workflow_dispatch:
 
 permissions:
@@ -21,10 +25,14 @@ jobs:
           import time,urllib.request
           BASE = "https://pixben.netlify.app/"
           expected = {
-              "htmls/productos.html": "productos.js?v=11",
-              "js/productos.js?v=11": "/productos/pagina",
+              "htmls/productos.html": "productos.js?v=12",
+              "js/productos.js?v=12": "primeraPagina.content",
+              "htmls/mis-pedidos.html": "mis-pedidos.js?v=8",
+              "js/paginas/mis-pedidos.js?v=8": "Promise.allSettled",
+              "htmls/carrito de compras.html": "css carrito de compras.css?v=9",
+              "js/paginas/carrito.js?v=11": "Promise.allSettled",
               "js/paginas/index-destacados.js?v=2": "/productos/destacados",
-              "js/paginas/carrito.js?v=10": "/productos/por-ids",
+              "css/css carrito de compras.css?v=9": ".checkout-legal-consent input[type=\"checkbox\"]",
               "js/admin.js?v=20": "/pedidos/admin/pagina",
           }
           for attempt in range(36):
