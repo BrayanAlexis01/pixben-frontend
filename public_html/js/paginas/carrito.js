@@ -84,7 +84,8 @@ async function cargarCarrito() {
         const necesitaCatalogo = carrito.some(item => !item.personalizado || item.productoId != null);
         let productosPorId = new Map();
         if (necesitaCatalogo) {
-            const respuestaProductos = await fetch(`${API_URL}/productos`);
+            const idsProductos = [...new Set(carrito.map(item => Number(item.productoId)).filter(Number.isInteger))];
+            const respuestaProductos = await fetch(`${API_URL}/productos/por-ids?ids=${idsProductos.join(",")}`);
             if (respuestaProductos.ok) {
                 const productos = await respuestaProductos.json();
                 productosPorId = new Map((Array.isArray(productos) ? productos : []).map(producto => [Number(producto.id), producto]));
