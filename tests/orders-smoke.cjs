@@ -34,7 +34,7 @@ async function scenario({user = null, failure = false}) {
         fecha:"2026-10-11T00:00:00Z",items:[{nombre:"Polo prueba",cantidad:1}],
         subtotal:49,estado:"PENDIENTE"};
     const ctx = {
-        document, URL, console, setTimeout, clearTimeout,
+        document, URL, URLSearchParams, console, setTimeout, clearTimeout,
         window: {
             location:{href:"https://pixben.netlify.app/htmls/mis-pedidos.html",search:""},
             history:{replaceState() {}},
