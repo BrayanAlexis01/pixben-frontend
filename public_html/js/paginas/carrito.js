@@ -360,8 +360,20 @@ async function confirmarCompra() {
         if (!respuesta.ok) throw new Error(await obtenerMensajeRespuesta(respuesta, "No se pudo registrar el pedido"));
         const pedidoGuardado = await respuesta.json();
 
+        // El pedido ya fue registrado. Si falla la limpieza del carrito,
+        // no bloquear la confirmación ni confundir al comprador con un error.
         if (compraConCuenta) {
-            await Promise.all(itemsPagables.map(({item}) => fetchConSesion(`${API_URL}/carrito/${encodeURIComponent(item.id)}`, {method: "DELETE"})));
+            const limpieza = await Promise.allSettled(
+                itemsPagables.map(({item}) =>
+                    fetchConSesion(`${API_URL}/carrito/${encodeURIComponent(item.id)}`, {method: "DELETE"})
+                        .then(respuesta => {
+                            if (!respuesta.ok) throw new Error("No se pudo retirar un artículo del carrito");
+                        })
+                )
+            );
+            if (limpieza.some(resultado => resultado.status === "rejected")) {
+                console.warn("Pedido confirmado; algunos artículos no pudieron retirarse del carrito.");
+            }
         } else {
             vaciarCarritoInvitado();
         }

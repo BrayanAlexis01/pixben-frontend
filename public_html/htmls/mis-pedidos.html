@@ -16,7 +16,7 @@
     <meta name="robots" content="noindex,nofollow">
     <title>Mis pedidos | PixBen</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-    <link rel="stylesheet" href="../css/mis-pedidos.css?v=5">
+    <link rel="stylesheet" href="../css/mis-pedidos.css?v=6">
     <link rel="stylesheet" href="../css/responsive-global.css?v=4">
     <link rel="stylesheet" href="../css/pwa-premium.css?v=2">
     <script src="../js/pwa-premium.js?v=4" defer></script>
@@ -76,10 +76,14 @@
                 <p>Escribe el código de seguimiento y el mismo correo utilizado al comprar.</p>
             </div>
             <form id="formConsultaInvitado">
-                <label for="codigoPedidoInvitado">Código de seguimiento</label>
-                <input id="codigoPedidoInvitado" type="text" maxlength="40" placeholder="Ej. PX-A2B3C4D5" autocomplete="off" required>
-                <label for="correoPedidoInvitado">Correo de compra</label>
-                <input id="correoPedidoInvitado" type="email" maxlength="160" placeholder="tu-correo@ejemplo.com" autocomplete="email" required>
+                <div class="consulta-campo">
+                    <label for="codigoPedidoInvitado">Código de seguimiento</label>
+                    <input id="codigoPedidoInvitado" type="text" maxlength="40" placeholder="Ej. PX-A2B3C4D5" autocomplete="off" required>
+                </div>
+                <div class="consulta-campo">
+                    <label for="correoPedidoInvitado">Correo de compra</label>
+                    <input id="correoPedidoInvitado" type="email" maxlength="160" placeholder="tu-correo@ejemplo.com" autocomplete="email" required>
+                </div>
                 <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> Consultar pedido</button>
             </form>
             <div id="pedidosGuardadosInvitado" class="pedidos-guardados-invitado"></div>
@@ -92,7 +96,7 @@
 <script src="../js/config.js?v=19"></script>
 <script src="../js/header-global.js?v=2"></script>
 <script src="../js/analitica.js?v=3"></script>
-<script src="../js/paginas/mis-pedidos.js?v=7"></script>
+<script src="../js/paginas/mis-pedidos.js?v=8"></script>
     <script src="../js/eventos-html.js?v=3"></script>
 <script src="../js/responsive-menu.js?v=4"></script>
 <script src="../js/accessibility.js?v=1"></script>
