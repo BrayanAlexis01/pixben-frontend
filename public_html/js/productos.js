@@ -90,7 +90,18 @@ async function cargarProductosCatalogo() {
         estadoCatalogo.usandoPrecarga = false;
         configurarRangoPrecio();
         crearCategorias();
-        await aplicarFiltros();
+        // La primera página ya está descargada: no repetir exactamente la misma
+        // consulta antes de mostrar el catálogo.
+        if (estadoCatalogo.categoria === "todos" && !estadoCatalogo.busqueda &&
+                !estadoCatalogo.colores.size && !estadoCatalogo.tallas.size &&
+                !elementosCatalogo.soloStock?.checked &&
+                estadoCatalogo.orden === "popular" &&
+                Number(elementosCatalogo.precioMin?.value || 0) === 0) {
+            estadoCatalogo.filtrados = [...(primeraPagina.content || []), ...SERVICIOS_COTIZABLES];
+            renderizarCatalogo();
+        } else {
+            await aplicarFiltros();
+        }
         mostrarEstado("");
     } catch (error) {
         console.warn("Catálogo paginado no disponible; se intenta compatibilidad.", error);

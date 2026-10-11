@@ -35,16 +35,17 @@ body.pagina-pedidos{min-height:100vh;background:#f5f4f8;color:#17131d;font-famil
 .consulta-pedido-invitado{margin-bottom:26px;padding:24px;border:1px solid #e6dcef;border-radius:18px;background:linear-gradient(135deg,#fff,#fbf7ff);box-shadow:0 8px 30px rgba(24,12,34,.07)}
 .consulta-pedido-invitado>div:first-child span{display:block;margin-bottom:7px;color:#7c2bc1;font-size:.72rem;font-weight:950;letter-spacing:.15em}
 .consulta-pedido-invitado h2{margin-bottom:7px}.consulta-pedido-invitado p{color:#6c6470;line-height:1.5}
-#formConsultaInvitado{display:grid;grid-template-columns:1fr 1.4fr auto;gap:9px 12px;align-items:end;margin-top:20px}
-#formConsultaInvitado label{font-size:12px;font-weight:850;color:#514a55}
-#formConsultaInvitado label:nth-of-type(2){grid-column:2}
-#formConsultaInvitado input{width:100%;padding:12px 13px;border:1px solid #dcd2e2;border-radius:10px;background:#fff;font-size:14px}
-#formConsultaInvitado button{grid-column:3;grid-row:1/3;align-self:end;min-height:43px;padding:11px 17px;border:0;border-radius:10px;background:#111;color:#fff;font-weight:850;cursor:pointer}
+#formConsultaInvitado{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr) auto;gap:12px;align-items:end;margin-top:20px}
+#formConsultaInvitado .consulta-campo{display:flex;flex-direction:column;gap:8px;min-width:0}
+#formConsultaInvitado label{display:block;font-size:12px;font-weight:850;color:#514a55}
+#formConsultaInvitado input{display:block;width:100%;min-width:0;height:46px;padding:12px 13px;border:1px solid #dcd2e2;border-radius:10px;background:#fff;font-size:14px}
+#formConsultaInvitado button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:11px 17px;border:0;border-radius:10px;background:#111;color:#fff;font-weight:850;white-space:nowrap;cursor:pointer}
 #formConsultaInvitado button:disabled{opacity:.65;cursor:wait}
 .pedidos-guardados-invitado{margin-top:18px}.pedidos-guardados-invitado h3{margin-bottom:10px;font-size:14px}.pedidos-guardados-invitado>div{display:flex;gap:9px;flex-wrap:wrap}
 .referencia-invitado{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1px solid #dfd4e6;border-radius:11px;background:#fff;cursor:pointer;text-align:left}.referencia-invitado i{color:#8a2be2}.referencia-invitado span{display:flex;flex-direction:column;gap:2px}.referencia-invitado small{color:#777}
 .sin-referencias{font-size:13px}.pedido-items li{margin-bottom:7px}.pedido-items li:last-child{margin-bottom:0}.pedido-items li small{display:block;color:#756c79;font-size:12px}
-@media(max-width:760px){#formConsultaInvitado{grid-template-columns:1fr}#formConsultaInvitado label:nth-of-type(2),#formConsultaInvitado button{grid-column:1;grid-row:auto}.consulta-pedido-invitado{padding:18px}}
+@media(max-width:960px){#formConsultaInvitado{grid-template-columns:repeat(2,minmax(0,1fr))}#formConsultaInvitado button{grid-column:1/-1;width:100%}}
+@media(max-width:640px){#formConsultaInvitado{grid-template-columns:1fr}#formConsultaInvitado button{grid-column:1}.consulta-pedido-invitado{padding:18px}}
 
 
 /* Seguimiento de diseño asistido */

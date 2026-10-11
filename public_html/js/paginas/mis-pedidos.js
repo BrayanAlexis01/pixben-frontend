@@ -155,12 +155,22 @@ async function cargarPedidosCuenta() {
     cargaPedidosEnCurso = true;
     mostrarEstadoPedidos("Cargando tus pedidos...");
     try {
-        const [normales, personalizados] = await Promise.all([
+        const [resultadoNormales, resultadoPersonalizados] = await Promise.allSettled([
             obtenerColeccionUsuario("pedidos", usuarioPedidos),
             obtenerColeccionUsuario("pedidos-personalizados", usuarioPedidos)
         ]);
+        if (resultadoNormales.status === "rejected" && resultadoPersonalizados.status === "rejected") {
+            throw resultadoNormales.reason || resultadoPersonalizados.reason;
+        }
+        const normales = resultadoNormales.status === "fulfilled" ? resultadoNormales.value : [];
+        const personalizados = resultadoPersonalizados.status === "fulfilled" ? resultadoPersonalizados.value : [];
+        // Una consulta lenta o fallida no debe ocultar los pedidos de la otra.
+        if (resultadoNormales.status === "rejected" || resultadoPersonalizados.status === "rejected") {
+            mostrarEstadoPedidos("Algunos pedidos no pudieron actualizarse. Vuelve a intentar en un momento.", true);
+        } else {
+            mostrarEstadoPedidos("");
+        }
         detectarCambiosPedidos(normales, personalizados);
-        mostrarEstadoPedidos("");
         if (!normales.length && !personalizados.length) {
             listaPedidos.innerHTML = '<div class="sin-pedidos"><i class="fa-solid fa-box-open"></i><h2>Todavía no tienes pedidos</h2><p>Tus compras y solicitudes personalizadas aparecerán aquí.</p></div>';
             return;
@@ -231,8 +241,6 @@ async function cargarPedidosInvitadoGuardados() {
 
 function configurarVistaInvitado() {
     document.getElementById("consultaPedidoInvitado").hidden = false;
-    document.getElementById("enlacePerfilPedidos").hidden = true;
-    document.getElementById("enlaceLoginPedidos").hidden = false;
     document.getElementById("etiquetaPedidos").textContent = "SEGUIMIENTO";
     document.getElementById("tituloPedidos").textContent = "Consulta tus pedidos";
     document.getElementById("descripcionPedidos").textContent = "Puedes comprar y revisar el avance sin crear una cuenta.";
@@ -280,8 +288,6 @@ function configurarVistaInvitado() {
 
 if (compraConCuentaPedidos) {
     document.getElementById("consultaPedidoInvitado").hidden = true;
-    document.getElementById("enlacePerfilPedidos").hidden = false;
-    document.getElementById("enlaceLoginPedidos").hidden = true;
     cargarPedidosCuenta();
 } else {
     configurarVistaInvitado();

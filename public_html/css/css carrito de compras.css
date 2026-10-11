@@ -505,3 +505,32 @@ footer{
 .btn-elegir-variante:hover { background: #8a2be2; }
 
 .checkout-legal-consent{display:flex;align-items:flex-start;gap:9px;margin:14px 0;font-size:12px;line-height:1.5;color:#555}.checkout-legal-consent input{margin-top:3px;flex:0 0 auto}.checkout-legal-consent a{color:#7626b5;text-decoration:underline}
+
+
+/* Checkout: impedir que reglas generales de inputs estiren el checkbox y el texto legal. */
+#modalCheckout .checkout-contenido{max-width:calc(100vw - 24px);overflow-x:hidden}
+#modalCheckout .checkout-grid > *,#modalCheckout .checkout-bloque{min-width:0}
+#modalCheckout .checkout-legal-consent{
+    display:grid;grid-template-columns:20px minmax(0,1fr);align-items:start;
+    gap:12px;width:100%;max-width:100%;margin:16px 0 20px;
+    padding:15px 17px;border:1px solid #e7dceb;border-radius:12px;
+    background:#fff;color:#403b45;font-size:13px;font-weight:400;line-height:1.6;
+    cursor:pointer;text-align:left;
+}
+#modalCheckout .checkout-legal-consent input[type="checkbox"]{
+    appearance:auto;display:block;box-sizing:border-box;
+    width:18px!important;min-width:18px!important;max-width:18px!important;
+    height:18px!important;min-height:18px!important;
+    padding:0!important;margin:2px 0 0!important;flex:none;
+    accent-color:#7c2bc1;cursor:pointer;
+}
+#modalCheckout .checkout-legal-consent span{
+    display:block;min-width:0;width:auto;overflow-wrap:anywhere;word-break:normal;
+}
+#modalCheckout .checkout-legal-consent a{color:#7425ae;font-weight:700;text-decoration:underline}
+#modalCheckout .checkout-legal-consent:focus-within{outline:2px solid #b589d4;outline-offset:2px}
+@media(max-width:640px){
+    #modalCheckout .checkout-legal-consent{padding:13px 12px;gap:10px}
+    #modalCheckout .checkout-total-final{grid-template-columns:minmax(0,1fr) auto;gap:8px}
+    #modalCheckout .checkout-total-final strong{font-size:21px}
+}
