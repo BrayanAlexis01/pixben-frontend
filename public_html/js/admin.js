@@ -17,6 +17,7 @@ let cantidadImagenesActuales = 0;
 let datosGaleriaEdicion = {imagenes: [], imagenesPorVariante: {}};
 let productosAdmin = [];
 let paginaProductosAdmin = 1;
+let paginaPedidosAdmin = 0;
 const PRODUCTOS_ADMIN_POR_PAGINA = 20;
 const productosSeleccionadosAdmin = new Set();
 const CLAVE_MANTENER_RENDER = "pixben_admin_mantener_render_activo";
@@ -920,13 +921,45 @@ async function guardarCotizacion(id) {
 
 async function cargarPedidosAdmin() {
     const tbody = document.querySelector("#tablaPedidos tbody");
+    if (!tbody) return;
+    const tabla = tbody.closest("table");
+    let control = document.getElementById("paginacionPedidosAdmin");
+    if (!control && tabla) {
+        control = document.createElement("div");
+        control.id = "paginacionPedidosAdmin";
+        control.className = "paginacion-admin";
+        control.setAttribute("aria-label", "Paginación de pedidos");
+        tabla.insertAdjacentElement("afterend", control);
+    }
     try {
-        const respuesta = await fetchConSesion(`${API_URL}/pedidos/admin/todos`);
+        const respuesta = await fetchConSesion(`${API_URL}/pedidos/admin/pagina?pagina=${paginaPedidosAdmin}&limite=20`);
         if (!respuesta.ok) throw new Error("No se pudieron cargar los pedidos");
-        const pedidos = await respuesta.json();
-        tbody.innerHTML = pedidos.length ? pedidos.slice().reverse().map(renderizarPedidoAdmin).join("") : '<tr><td colspan="7">No hay pedidos.</td></tr>';
+        const resultado = await respuesta.json();
+        const pedidos = Array.isArray(resultado.content) ? resultado.content : [];
+        const paginas = Math.max(1, Number(resultado.totalPages || 1));
+        if (paginaPedidosAdmin >= paginas && paginaPedidosAdmin !== 0) {
+            paginaPedidosAdmin = paginas - 1;
+            return cargarPedidosAdmin();
+        }
+        tbody.innerHTML = pedidos.length ? pedidos.map(renderizarPedidoAdmin).join("")
+                : '<tr><td colspan="7">No hay pedidos en esta página.</td></tr>';
+        if (control) {
+            control.innerHTML = `
+                <button type="button" data-pedidos-anterior ${paginaPedidosAdmin === 0 ? "disabled" : ""}>‹ Anterior</button>
+                <span>Página ${paginaPedidosAdmin + 1} de ${paginas} · ${Number(resultado.totalElements || 0)} pedidos</span>
+                <button type="button" data-pedidos-siguiente ${paginaPedidosAdmin >= paginas - 1 ? "disabled" : ""}>Siguiente ›</button>`;
+            control.querySelector("[data-pedidos-anterior]")?.addEventListener("click", () => {
+                paginaPedidosAdmin = Math.max(0, paginaPedidosAdmin - 1);
+                cargarPedidosAdmin();
+            });
+            control.querySelector("[data-pedidos-siguiente]")?.addEventListener("click", () => {
+                paginaPedidosAdmin = Math.min(paginas - 1, paginaPedidosAdmin + 1);
+                cargarPedidosAdmin();
+            });
+        }
     } catch (error) {
         tbody.innerHTML = `<tr><td colspan="7" class="error-admin">${escaparHtml(error.message)}</td></tr>`;
+        if (control) control.textContent = "";
     }
 }
 
