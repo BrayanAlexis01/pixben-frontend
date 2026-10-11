@@ -37,7 +37,12 @@ const estadoCatalogo = {
     busqueda: "",
     orden: "popular",
     soloStock: false,
-    usandoPrecarga: false
+    usandoPrecarga: false,
+    servidorPaginado: false,
+    totalServidor: 0,
+    versionConsulta: 0,
+    temporizadorBuscar: null,
+    categoriasServidor: []
 };
 
 const elementosCatalogo = {};
@@ -72,24 +77,38 @@ async function cargarProductosCatalogo() {
     );
 
     try {
-        const response = await fetchConReintentos(`${API_URL}/productos`, {cache: "no-store"}, 3, 2200);
-        if (!response.ok) throw new Error(`No se pudieron cargar los productos (${response.status})`);
-        const data = await response.json();
-        const productosApi = Array.isArray(data) ? data : [];
-        estadoCatalogo.productos = [...productosApi, ...SERVICIOS_COTIZABLES];
+        const [filtros, primeraPagina] = await Promise.all([
+            fetch(`${API_URL}/productos/filtros`).then(r => {if (!r.ok) throw Error("Filtros"); return r.json();}),
+            fetch(`${API_URL}/productos/pagina?pagina=0&limite=${PRODUCTOS_POR_PAGINA}`).then(r => {if (!r.ok) throw Error("Catálogo"); return r.json();})
+        ]);
+        estadoCatalogo.servidorPaginado = true;
+        estadoCatalogo.categoriasServidor = Array.isArray(filtros.categorias) ? filtros.categorias : [];
+        estadoCatalogo.precioMaximoServidor = Number(filtros.precioMaximo || 500);
+        estadoCatalogo.productos = [...(primeraPagina.content || []), ...SERVICIOS_COTIZABLES];
+        estadoCatalogo.totalServidor = Number(primeraPagina.totalElements || 0);
+        estadoCatalogo.primeraPagina = primeraPagina;
         estadoCatalogo.usandoPrecarga = false;
         configurarRangoPrecio();
         crearCategorias();
-        aplicarFiltros();
+        await aplicarFiltros();
         mostrarEstado("");
     } catch (error) {
-        console.error(error);
-        estadoCatalogo.productos = [...SERVICIOS_COTIZABLES];
-        estadoCatalogo.usandoPrecarga = true;
-        configurarRangoPrecio();
-        crearCategorias();
-        aplicarFiltros();
-        mostrarEstado("El catálogo de productos está iniciando, pero las consultas por DTF y Tocuyo siguen disponibles por WhatsApp.", true);
+        console.warn("Catálogo paginado no disponible; se intenta compatibilidad.", error);
+        try {
+            const response = await fetchConReintentos(`${API_URL}/productos`, {cache:"no-store"}, 2, 1500);
+            if (!response.ok) throw Error("Sin catálogo");
+            const data = await response.json();
+            estadoCatalogo.servidorPaginado = false;
+            estadoCatalogo.productos = [...(Array.isArray(data) ? data : []), ...SERVICIOS_COTIZABLES];
+            estadoCatalogo.usandoPrecarga = false;
+            configurarRangoPrecio(); crearCategorias(); aplicarFiltros(); mostrarEstado("");
+        } catch (fallbackError) {
+            estadoCatalogo.servidorPaginado = false;
+            estadoCatalogo.productos = [...SERVICIOS_COTIZABLES];
+            estadoCatalogo.usandoPrecarga = true;
+            configurarRangoPrecio(); crearCategorias(); aplicarFiltros();
+            mostrarEstado("El catálogo no está disponible temporalmente.", true);
+        }
     }
 }
 
@@ -109,7 +128,8 @@ function mostrarEsqueletoCatalogo() {
 function configurarEventosCatalogo() {
     elementosCatalogo.inputBuscar?.addEventListener("input", evento => {
         estadoCatalogo.busqueda = normalizarTexto(evento.target.value);
-        aplicarFiltros();
+        clearTimeout(estadoCatalogo.temporizadorBuscar);
+        estadoCatalogo.temporizadorBuscar = setTimeout(aplicarFiltros, 300);
     });
 
     elementosCatalogo.precioRange?.addEventListener("input", evento => {
@@ -173,7 +193,9 @@ function configurarRangoPrecio() {
             .map(producto => Number(producto.precio))
             .filter(Number.isFinite);
 
-    const maximo = precios.length ? Math.ceil(Math.max(...precios) / 10) * 10 : 500;
+    const maximo = estadoCatalogo.servidorPaginado
+            ? Math.max(10, Math.ceil(estadoCatalogo.precioMaximoServidor / 10) * 10)
+            : (precios.length ? Math.ceil(Math.max(...precios) / 10) * 10 : 500);
     const minimo = precios.length ? Math.floor(Math.min(...precios)) : 0;
 
     elementosCatalogo.precioMin.min = 0;
@@ -201,7 +223,7 @@ function actualizarTextoPrecio() {
 }
 
 function crearCategorias() {
-    const categorias = [...new Set(
+    const categorias = estadoCatalogo.servidorPaginado ? [...new Set([...estadoCatalogo.categoriasServidor, ...SERVICIOS_COTIZABLES.map(s => s.categoria)])].sort((a,b) => a.localeCompare(b, "es")) : [...new Set(
         estadoCatalogo.productos
                 .map(producto => String(producto.categoria || "").trim())
                 .filter(Boolean)
@@ -249,7 +271,12 @@ function alternarSeleccion(conjunto, valor, boton) {
     }
 }
 
-function aplicarFiltros() {
+async function aplicarFiltros() {
+    if (estadoCatalogo.servidorPaginado) {
+        estadoCatalogo.pagina = 1;
+        await cargarPaginaServidor();
+        return;
+    }
     const precioMin = Number(elementosCatalogo.precioMin?.value || 0);
     const precioMax = Number(elementosCatalogo.precioMax?.value || Number.POSITIVE_INFINITY);
 
@@ -297,6 +324,37 @@ function aplicarFiltros() {
     renderizarCatalogo();
 }
 
+async function cargarPaginaServidor() {
+    const version = ++estadoCatalogo.versionConsulta;
+    const params = new URLSearchParams({
+        pagina: String(estadoCatalogo.pagina - 1),
+        limite: String(PRODUCTOS_POR_PAGINA),
+        buscar: estadoCatalogo.busqueda,
+        categoria: estadoCatalogo.categoria === "todos" ? "" : estadoCatalogo.categoria,
+        colores: [...estadoCatalogo.colores].join(","),
+        tallas: [...estadoCatalogo.tallas].join(","),
+        precioMin: String(Number(elementosCatalogo.precioMin?.value || 0)),
+        precioMax: String(Number(elementosCatalogo.precioMax?.value || estadoCatalogo.precioMaximoServidor)),
+        soloStock: String(Boolean(elementosCatalogo.soloStock?.checked)),
+        orden: estadoCatalogo.orden
+    });
+    try {
+        const respuesta = await fetch(`${API_URL}/productos/pagina?${params}`);
+        if (!respuesta.ok) throw Error(`Error ${respuesta.status}`);
+        const resultado = await respuesta.json();
+        if (version !== estadoCatalogo.versionConsulta) return;
+        const servicios = estadoCatalogo.pagina === 1 && !estadoCatalogo.busqueda &&
+                estadoCatalogo.categoria === "todos" && estadoCatalogo.colores.size === 0 &&
+                estadoCatalogo.tallas.size === 0 && !elementosCatalogo.soloStock?.checked &&
+                Number(elementosCatalogo.precioMin?.value || 0) === 0 ? SERVICIOS_COTIZABLES : [];
+        estadoCatalogo.filtrados = [...(resultado.content || []), ...servicios];
+        estadoCatalogo.totalServidor = Number(resultado.totalElements || 0);
+        renderizarCatalogo();
+    } catch (error) {
+        if (version === estadoCatalogo.versionConsulta) mostrarEstado("No se pudieron actualizar los productos. Intenta nuevamente.", true);
+    }
+}
+
 function ordenarProductos() {
     estadoCatalogo.filtrados.sort((a, b) => {
         switch (estadoCatalogo.orden) {
@@ -318,7 +376,7 @@ function ordenarProductos() {
 }
 
 function renderizarCatalogo() {
-    const total = estadoCatalogo.filtrados.length;
+    const total = estadoCatalogo.servidorPaginado ? estadoCatalogo.totalServidor : estadoCatalogo.filtrados.length;
     const totalPaginas = Math.max(1, Math.ceil(total / PRODUCTOS_POR_PAGINA));
     estadoCatalogo.pagina = Math.min(estadoCatalogo.pagina, totalPaginas);
 
@@ -339,7 +397,7 @@ function renderizarCatalogo() {
     }
 
     const inicio = (estadoCatalogo.pagina - 1) * PRODUCTOS_POR_PAGINA;
-    const pagina = estadoCatalogo.filtrados.slice(inicio, inicio + PRODUCTOS_POR_PAGINA);
+    const pagina = estadoCatalogo.servidorPaginado ? estadoCatalogo.filtrados : estadoCatalogo.filtrados.slice(inicio, inicio + PRODUCTOS_POR_PAGINA);
 
     elementosCatalogo.grid.innerHTML = pagina.map(producto => {
         const categoria = producto.categoria || "Sin categoría";
@@ -451,7 +509,7 @@ function agregarBotonPagina(texto, pagina, deshabilitado, etiqueta, activo = fal
     boton.setAttribute("aria-label", etiqueta);
     boton.addEventListener("click", () => {
         estadoCatalogo.pagina = pagina;
-        renderizarCatalogo();
+        if (estadoCatalogo.servidorPaginado) cargarPaginaServidor(); else renderizarCatalogo();
         document.querySelector(".productos-seccion")?.scrollIntoView({behavior: "smooth", block: "start"});
     });
     elementosCatalogo.paginacion.appendChild(boton);

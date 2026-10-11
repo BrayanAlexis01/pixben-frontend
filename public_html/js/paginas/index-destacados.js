@@ -2,7 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
-                fetch(`${API_URL}/productos`)
+                fetch(`${API_URL}/productos/destacados`)
                         .then(response => response.json())
                         .then(productos => {
 
