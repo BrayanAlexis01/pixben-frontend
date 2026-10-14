@@ -1429,3 +1429,107 @@ html.a11y-high-contrast #pixbenPrivacyCenter .privacy-secondary{
     html.a11y-high-contrast .pixben-legal-links{gap:6px;font-size:12px !important}
     html.a11y-high-contrast #pixbenPrivacyCenter{max-height:85dvh;overflow:auto}
 }
+
+
+/* =========================================================
+   CORRECCIÓN DE LEGIBILIDAD - INICIO Y DISEÑO ASISTIDO
+   Mantener fondo y texto coherentes en alto contraste.
+   No modifica colores del lienzo ni fotografías de productos.
+   ========================================================= */
+
+/* Inicio: «¿Cómo funciona?» conserva una superficie OSCURA para texto claro. */
+html.a11y-high-contrast .pasos{
+    background:#0d0c10 !important;
+    color:#fff !important;
+    padding:clamp(30px,4vw,60px) clamp(16px,3vw,48px);
+    border-top:1px solid #463b50 !important;
+    border-bottom:1px solid #463b50 !important;
+}
+html.a11y-high-contrast .pasos > h2{
+    color:#fff !important;
+    line-height:1.25;
+}
+html.a11y-high-contrast .pasos .contenedor-pasos{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:16px;
+    max-width:1200px;
+    margin-inline:auto;
+    align-items:stretch;
+}
+html.a11y-high-contrast .pasos :where(.paso,.paso2){
+    width:auto;
+    min-width:0;
+    padding:24px 16px;
+    border:1px solid #746585 !important;
+    border-radius:16px;
+    background:#1b1821 !important;
+    color:#fff !important;
+    text-align:center;
+}
+html.a11y-high-contrast .pasos :where(.paso,.paso2) h3{
+    color:#fff !important;
+    font-size:16px;
+    line-height:1.45;
+    margin:0 0 12px;
+    overflow-wrap:break-word;
+}
+html.a11y-high-contrast .pasos :where(.paso,.paso2) i{
+    color:#d9bbff !important;
+    margin-right:5px;
+}
+html.a11y-high-contrast .pasos :where(.paso,.paso2) p{
+    color:#e3dce9 !important;
+    line-height:1.55;
+    margin:0;
+    overflow-wrap:break-word;
+}
+
+/* Personalizador: la tarjeta anteriormente era lila claro + texto blanco
+   heredado del panel. El modo alto contraste usa tarjeta oscura. */
+html.a11y-high-contrast .resumen-pedido .diseno-asistido-card{
+    background:#1b1523 !important;
+    color:#fff !important;
+    border:1px solid #a77ac5 !important;
+    box-shadow:none !important;
+}
+html.a11y-high-contrast .resumen-pedido .diseno-asistido-card .panel-kicker{
+    color:#d9bbff !important;
+}
+html.a11y-high-contrast .resumen-pedido .diseno-asistido-card h3,
+html.a11y-high-contrast .resumen-pedido .diseno-asistido-card .diseno-asistido-descripcion,
+html.a11y-high-contrast .resumen-pedido .diseno-asistido-card .diseno-asistido-descripcion b{
+    color:#fff !important;
+}
+html.a11y-high-contrast .resumen-pedido .diseno-asistido-card .diseno-asistido-icono{
+    background:#6b279e !important;
+    color:#fff !important;
+    border:1px solid #b987ef !important;
+}
+html.a11y-high-contrast .resumen-pedido .diseno-asistido-card .btn-diseno-asistido{
+    background:#6b279e !important;
+    color:#fff !important;
+    border:1px solid #b987ef !important;
+}
+html.a11y-high-contrast .resumen-pedido .diseno-asistido-card .btn-diseno-asistido:hover{
+    background:#8038b2 !important;
+}
+html.a11y-high-contrast .resumen-pedido .diseno-asistido-card .btn-diseno-asistido :where(i,span){
+    color:#fff !important;
+}
+@media(max-width:1000px){
+    html.a11y-high-contrast .pasos .contenedor-pasos{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+}
+@media(max-width:580px){
+    html.a11y-high-contrast .pasos .contenedor-pasos{
+        grid-template-columns:1fr;
+    }
+    html.a11y-high-contrast .pasos :where(.paso,.paso2){
+        padding:18px;
+    }
+    html.a11y-high-contrast .resumen-pedido .diseno-asistido-card{
+        padding:14px;
+    }
+}

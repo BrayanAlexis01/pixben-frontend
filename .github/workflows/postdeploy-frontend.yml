@@ -12,6 +12,7 @@ on:
       - "public_html/htmls/personaliza.html"
       - "public_html/css/css personaliza.css"
       - "public_html/css/accessibility.css"
+      - "public_html/index.html"
       - "public_html/css/cuenta-listados.css"
       - "public_html/htmls/contacto.html"
       - "public_html/htmls/favoritos.html"
@@ -34,6 +35,8 @@ jobs:
           BASE = "https://pixben.netlify.app/"
           expected = {
               "css/accessibility.css?v=4": "CONTRASTE ALTO PREMIUM",
+              "css/accessibility.css?v=5": "CORRECCIÓN DE LEGIBILIDAD - INICIO Y DISEÑO ASISTIDO",
+              "index.html": "accessibility.css?v=5",
               "htmls/contacto.html": "faq-cta-link",
               "htmls/favoritos.html": "cuenta-listados.css?v=7",
               "js/paginas/favoritos.js?v=7": "productos/por-ids",
@@ -42,7 +45,7 @@ jobs:
               "htmls/productos.html": "productos.js?v=12",
               "js/productos.js?v=12": "primeraPagina.content",
               "htmls/mis-pedidos.html": "mis-pedidos.js?v=8",
-              "htmls/personaliza.html": "css personaliza.css?v=11",
+              "htmls/personaliza.html": "accessibility.css?v=5",
               "css/css personaliza.css?v=11": ".diseno-asistido-encabezado",
               "js/paginas/mis-pedidos.js?v=8": "Promise.allSettled",
               "htmls/carrito de compras.html": "css carrito de compras.css?v=9",
