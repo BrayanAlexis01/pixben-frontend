@@ -1533,3 +1533,299 @@ html.a11y-high-contrast .resumen-pedido .diseno-asistido-card .btn-diseno-asisti
         padding:14px;
     }
 }
+
+
+/* ============================================================
+   2026-10-14 · CONTRASTE ALTO UNIFICADO · PIXBEN
+   Superficies legibles para checkout, carrito y páginas legales.
+   Colores reales de imágenes, lienzo y muestras quedan intactos.
+   ============================================================ */
+html.a11y-high-contrast {
+    --pix-contrast-bg:#050506;
+    --pix-contrast-panel:#17131d;
+    --pix-contrast-panel-alt:#211b28;
+    --pix-contrast-text:#fff;
+    --pix-contrast-muted:#e4dce8;
+    --pix-contrast-line:#897a99;
+    --pix-contrast-link:#d9bbff;
+    --pix-contrast-primary:#6b279e;
+}
+html.a11y-high-contrast :where(.carrito-container,.detalle-producto-container,.politica-envios,.nosotros-container){
+    background:var(--pix-contrast-bg) !important;
+    color:var(--pix-contrast-text) !important;
+}
+html.a11y-high-contrast :where(.carrito-titulo p,.hero-envios p,.politica-envios p){
+    color:var(--pix-contrast-muted) !important;
+}
+
+/* Carrito: toda la fila debe ser una tarjeta oscura, no solo la información. */
+html.a11y-high-contrast .producto-carrito,
+html.a11y-high-contrast .carrito-vacio,
+html.a11y-high-contrast .estado-carrito,
+html.a11y-high-contrast .error-carrito{
+    background:var(--pix-contrast-panel) !important;
+    color:#fff !important;
+    border:1px solid var(--pix-contrast-line) !important;
+}
+html.a11y-high-contrast .producto-carrito .producto-info,
+html.a11y-high-contrast .producto-carrito .cantidad-producto,
+html.a11y-high-contrast .producto-carrito .subtotal-producto{
+    background:transparent !important;
+    color:#fff !important;
+    min-width:0;
+}
+html.a11y-high-contrast .producto-carrito :where(h3,p,b,strong,span),
+html.a11y-high-contrast .carrito-vacio :where(h3,p){
+    color:#fff !important;
+}
+html.a11y-high-contrast .producto-carrito :where(.subtotal-linea,.precio-pendiente){
+    color:var(--pix-contrast-muted) !important;
+}
+html.a11y-high-contrast .producto-carrito .precio{
+    color:#d9bbff !important;
+}
+html.a11y-high-contrast .producto-carrito img{
+    background:#f5f3f6 !important;
+    border-radius:9px;
+}
+html.a11y-high-contrast .producto-carrito .cantidad-producto input{
+    background:#0d0b10 !important;
+    border:1px solid #ad9dbb !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast .producto-carrito .btn-eliminar{
+    background:#792339 !important;
+    color:#fff !important;
+    border:1px solid #f3a5b7 !important;
+}
+html.a11y-high-contrast .producto-carrito .btn-elegir-variante{
+    background:var(--pix-contrast-primary) !important;
+    border:1px solid #b987ef !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast .producto-carrito.producto-variante-invalida{
+    background:#241c1e !important;
+    border:2px solid #d9a96a !important;
+}
+html.a11y-high-contrast .producto-carrito .aviso-variante-carrito{
+    color:#ffdbad !important;
+}
+html.a11y-high-contrast :where(.carrito-vacio,.estado-carrito) i{
+    color:#d9bbff !important;
+}
+html.a11y-high-contrast .resumen-carrito{
+    background:var(--pix-contrast-panel) !important;
+    border:1px solid var(--pix-contrast-line) !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast .resumen-carrito :where(h2,p,strong,span,#subtotal,#total){
+    color:#fff !important;
+}
+html.a11y-high-contrast .resumen-carrito #envioResumen{
+    color:#d9bbff !important;
+}
+html.a11y-high-contrast .resumen-carrito .total{
+    border-top:1px solid var(--pix-contrast-line) !important;
+}
+html.a11y-high-contrast .resumen-carrito :where(.resumen-pendientes,.aviso-compra-invitado){
+    background:var(--pix-contrast-panel-alt) !important;
+    color:#fff !important;
+    border:1px solid #957eaf !important;
+}
+html.a11y-high-contrast .resumen-carrito .btn-checkout{
+    background:var(--pix-contrast-primary) !important;
+    border:1px solid #bc94e4 !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast .resumen-carrito .btn-vaciar{
+    background:#241926 !important;
+    border:1px solid #ca9aa6 !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast .resumen-carrito a{
+    color:var(--pix-contrast-link) !important;
+}
+
+/* Checkout: conservar paneles, mensajes de pago y casilla legal legibles. */
+html.a11y-high-contrast #modalCheckout .checkout-contenido{
+    background:#0c0a0f !important;
+    color:#fff !important;
+    border:1px solid #897a99 !important;
+}
+html.a11y-high-contrast #modalCheckout :where(.checkout-bloque,.tarjeta-metodo-pago,
+    .checkout-legal-consent,.aviso-verificacion,.aviso-envio-directo,.ayuda-checkout,
+    .pago-vacio,.contenedor-pago){
+    background:var(--pix-contrast-panel) !important;
+    color:#fff !important;
+    border:1px solid #897a99 !important;
+}
+html.a11y-high-contrast #modalCheckout :where(.checkout-encabezado h2,.checkout-encabezado p,
+    .checkout-bloque h3,.checkout-bloque label,.checkout-bloque p,
+    .tarjeta-metodo-pago h4,.tarjeta-metodo-pago p,.pago-texto small,
+    .checkout-legal-consent span,.ayuda-checkout,.aviso-verificacion,
+    .aviso-envio-directo,.checkout-total-final small){
+    color:#fff !important;
+}
+html.a11y-high-contrast #modalCheckout .checkout-legal-consent a,
+html.a11y-high-contrast #modalCheckout .checkout-etiqueta{
+    color:var(--pix-contrast-link) !important;
+}
+html.a11y-high-contrast #modalCheckout .tarjeta-metodo-pago img{
+    background:#fff !important;
+}
+html.a11y-high-contrast #modalCheckout .pago-texto span{
+    background:var(--pix-contrast-primary) !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast #modalCheckout :where(.checkout-contenido .cerrar,.checkout-total-final){
+    background:#19151e !important;
+    color:#fff !important;
+    border:1px solid #897a99 !important;
+}
+html.a11y-high-contrast #modalCheckout .checkout-legal-consent input[type=checkbox]{
+    accent-color:#a66ee2 !important;
+}
+html.a11y-high-contrast #modalCheckout .btn-confirmar-pedido{
+    background:var(--pix-contrast-primary) !important;
+    color:#fff !important;
+    border:1px solid #b987ef !important;
+}
+
+/* Políticas, privacidad, términos, cookies, FAQ y libro de reclamaciones. */
+html.a11y-high-contrast .policy-main{
+    background:var(--pix-contrast-bg) !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast :where(.policy-card,.policy-section,.policy-step,.faq-item,.faq-question){
+    background:var(--pix-contrast-panel) !important;
+    border-color:var(--pix-contrast-line) !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast :where(.policy-card,.policy-section,.policy-step,.faq-item) :where(
+    h2,h3,h4,p,li,dt,dd,strong,small,label
+){
+    color:var(--pix-contrast-text) !important;
+}
+html.a11y-high-contrast .policy-card p,
+html.a11y-high-contrast .policy-section p,
+html.a11y-high-contrast .policy-step p,
+html.a11y-high-contrast .faq-answer > div{
+    color:var(--pix-contrast-muted) !important;
+}
+html.a11y-high-contrast .policy-card i{
+    background:#31203f !important;
+    color:#e3c9ff !important;
+    border:1px solid #b987ef !important;
+}
+html.a11y-high-contrast .policy-hero{
+    background:linear-gradient(135deg,#151018,#301a43 65%,#552079) !important;
+    border:1px solid #897a99 !important;
+}
+html.a11y-high-contrast .policy-hero :where(h1,p,.policy-meta,.policy-kicker){
+    color:#fff !important;
+}
+html.a11y-high-contrast .policy-section .policy-note,
+html.a11y-high-contrast .policy-note,
+html.a11y-high-contrast .nota-envio{
+    background:var(--pix-contrast-panel-alt) !important;
+    color:#fff !important;
+    border:1px solid #ad8ac6 !important;
+    border-left:4px solid #bc94e4 !important;
+}
+html.a11y-high-contrast .policy-note :where(strong,span,p,a){
+    color:#fff !important;
+}
+html.a11y-high-contrast .policy-step::before{
+    background:var(--pix-contrast-primary) !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast .faq-question{
+    color:#fff !important;
+}
+html.a11y-high-contrast .faq-question i{
+    color:#d9bbff !important;
+}
+html.a11y-high-contrast .faq-answer{
+    background:var(--pix-contrast-panel-alt) !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast .policy-contact{
+    background:#1a1420 !important;
+    border:1px solid #897a99 !important;
+}
+html.a11y-high-contrast .policy-contact :where(h2,p){
+    color:#fff !important;
+}
+html.a11y-high-contrast :where(.policy-btn,.policy-inline-btn){
+    background:var(--pix-contrast-primary) !important;
+    color:#fff !important;
+    border:1px solid #b987ef !important;
+    border-radius:10px;
+}
+html.a11y-high-contrast .policy-inline-btn{
+    padding:4px 8px;
+    text-decoration:underline;
+}
+html.a11y-high-contrast :where(.policy-footer,.policy-footer-links){
+    background:#0d0c10 !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast .policy-footer a{
+    color:var(--pix-contrast-link) !important;
+}
+html.a11y-high-contrast .policy-claim-form :where(input,textarea,select){
+    color:#fff !important;
+    background:#0b0a0e !important;
+    border:1px solid #aa9bb6 !important;
+}
+html.a11y-high-contrast .policy-claim-form input[type=checkbox]{
+    accent-color:#a66ee2 !important;
+}
+html.a11y-high-contrast .policy-form-status.ok{color:#9dffbd !important}
+html.a11y-high-contrast .policy-form-status.error{color:#ffb3b3 !important}
+
+/* Entregas y otros apartados heredados que tenían tarjetas blancas. */
+html.a11y-high-contrast :where(.opciones-envio article,.pasos-envio,.caracteristica,
+    .valores,.bloque-info,.cta-nosotros,.reseña-card,.detalle-item){
+    background:var(--pix-contrast-panel) !important;
+    color:#fff !important;
+    border:1px solid var(--pix-contrast-line) !important;
+}
+html.a11y-high-contrast :where(.opciones-envio article,.pasos-envio,.hero-envios,.nota-envio,
+    .caracteristica,.valores,.bloque-info,.cta-nosotros) :where(h1,h2,h3,p,li,span){
+    color:#fff !important;
+}
+html.a11y-high-contrast :where(.opciones-envio i,.hero-envios span){
+    color:#d9bbff !important;
+}
+html.a11y-high-contrast :where(.cta-nosotros button,.btn-carrito,.acciones-producto .btn-comprar){
+    background:var(--pix-contrast-primary) !important;
+    color:#fff !important;
+    border:1px solid #b987ef !important;
+}
+html.a11y-high-contrast .imagen-principal{
+    /* Preservar el fondo de producto para no distorsionar las fotografías. */
+    background:#f3f0f4 !important;
+}
+html.a11y-high-contrast .detalle-producto :where(.info-producto h1,.info-producto h2,.info-producto p,
+    .info-producto label,.descripcion){
+    color:#fff !important;
+}
+html.a11y-high-contrast .detalle-producto .precio{
+    color:#d9bbff !important;
+}
+@media(max-width:720px){
+    html.a11y-high-contrast .policy-note{
+        display:block;
+        overflow-wrap:anywhere;
+    }
+    html.a11y-high-contrast .producto-carrito{
+        flex-wrap:wrap;
+    }
+    html.a11y-high-contrast .producto-carrito .producto-info{
+        flex:1 1 min(200px,100%);
+    }
+    html.a11y-high-contrast .resumen-carrito{
+        min-width:0;
+    }
+}
