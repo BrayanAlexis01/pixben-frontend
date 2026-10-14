@@ -4,7 +4,7 @@
    ========================================================= */
 
 :root{
-    --a11y-focus:#ffcc33;
+    --a11y-focus:#652695;
 }
 
 .saltar-contenido{
@@ -69,7 +69,6 @@ html.a11y-high-contrast main{
     color:#fff !important;
 }
 html.a11y-high-contrast :where(
-    section,article,aside,form,
     .producto,.card-resumen,.tarjeta-info,.tarjeta-configuracion,
     .card-formulario,.card-tabla,.card-analitica,.tarjeta-mensaje,
     .tarjeta-personalizado,.info-producto,.reseñas-container,
@@ -80,11 +79,9 @@ html.a11y-high-contrast :where(
     color:#fff !important;
     border-color:#f5f5f5 !important;
 }
-html.a11y-high-contrast :where(h1,h2,h3,h4,p,span,small,label,dt,dd,strong){
-    color:inherit !important;
-}
+/* Respeta el contraste de texto propio de cada componente. */
 html.a11y-high-contrast a{
-    color:#ffe45c !important;
+    color:#d9bbff !important;
 }
 html.a11y-high-contrast :where(input,select,textarea){
     background:#000 !important;
@@ -272,8 +269,8 @@ body.a11y-modal-abierto{overflow:hidden}
 }
 html.a11y-high-contrast .a11y-flotante{
     background:#000 !important;
-    color:#ffe45c !important;
-    border-color:#ffe45c !important;
+    color:#d9bbff !important;
+    border-color:#b987ef !important;
 }
 
 
@@ -301,7 +298,7 @@ html.a11y-high-contrast :where(
     select,
     textarea
 ):focus-visible{
-    outline-color:#ffe45c !important;
+    outline-color:#d9bbff !important;
 }
 html.a11y-high-contrast :where(input,select,textarea)::placeholder{
     color:#d8d8d8 !important;
@@ -325,14 +322,14 @@ html.a11y-high-contrast .categoria-filtro{
     border:1px solid #d9d9d9 !important;
 }
 html.a11y-high-contrast .categoria-filtro:hover{
-    color:#ffe45c !important;
+    color:#d9bbff !important;
     background:#171717 !important;
-    border-color:#ffe45c !important;
+    border-color:#b987ef !important;
 }
 html.a11y-high-contrast .categoria-filtro.seleccionado{
-    color:#000 !important;
-    background:#ffe45c !important;
-    border-color:#ffe45c !important;
+    color:#fff !important;
+    background:#6b279e !important;
+    border-color:#b987ef !important;
     font-weight:900 !important;
 }
 
@@ -351,7 +348,7 @@ html.a11y-high-contrast .precio-campos input{
     border-color:#fff !important;
 }
 html.a11y-high-contrast input[type="range"]{
-    accent-color:#ffe45c !important;
+    accent-color:#d9bbff !important;
 }
 
 html.a11y-high-contrast .talla,
@@ -361,13 +358,13 @@ html.a11y-high-contrast .talla-filtro{
     border:1px solid #fff !important;
 }
 html.a11y-high-contrast .talla-filtro:hover{
-    color:#ffe45c !important;
-    border-color:#ffe45c !important;
+    color:#d9bbff !important;
+    border-color:#b987ef !important;
 }
 html.a11y-high-contrast .talla-filtro.seleccionado{
-    color:#000 !important;
-    background:#ffe45c !important;
-    border-color:#ffe45c !important;
+    color:#fff !important;
+    background:#6b279e !important;
+    border-color:#b987ef !important;
 }
 
 html.a11y-high-contrast .color-filtro{
@@ -375,14 +372,14 @@ html.a11y-high-contrast .color-filtro{
     box-shadow:0 0 0 1px #000 !important;
 }
 html.a11y-high-contrast .color-filtro.seleccionado{
-    outline:3px solid #ffe45c !important;
+    outline:3px solid #d9bbff !important;
     outline-offset:3px !important;
 }
 
 html.a11y-high-contrast .btn-filtrar{
-    color:#000 !important;
-    background:#ffe45c !important;
-    border:2px solid #ffe45c !important;
+    color:#fff !important;
+    background:#6b279e !important;
+    border:2px solid #b987ef !important;
     font-weight:900 !important;
 }
 html.a11y-high-contrast .btn-limpiar{
@@ -436,8 +433,8 @@ html.a11y-high-contrast .producto-imagen-contenedor{
     background:#f2f2f2 !important;
 }
 html.a11y-high-contrast .badge-destacado{
-    color:#000 !important;
-    background:#ffe45c !important;
+    color:#fff !important;
+    background:#6b279e !important;
     border:1px solid #000 !important;
 }
 html.a11y-high-contrast .badge-agotado{
@@ -464,14 +461,14 @@ html.a11y-high-contrast .paginacion button{
     border:1px solid #fff !important;
 }
 html.a11y-high-contrast .paginacion button:hover:not(:disabled){
-    color:#000 !important;
-    background:#ffe45c !important;
-    border-color:#ffe45c !important;
+    color:#fff !important;
+    background:#6b279e !important;
+    border-color:#b987ef !important;
 }
 html.a11y-high-contrast .paginacion button.activo{
-    color:#000 !important;
-    background:#ffe45c !important;
-    border-color:#ffe45c !important;
+    color:#fff !important;
+    background:#6b279e !important;
+    border-color:#b987ef !important;
 }
 html.a11y-high-contrast .paginacion button:disabled{
     color:#b5b5b5 !important;
@@ -502,8 +499,8 @@ html.a11y-high-contrast .menu-usuario a{
 }
 html.a11y-high-contrast .menu-usuario a:hover,
 html.a11y-high-contrast .menu-usuario a:focus-visible{
-    color:#000 !important;
-    background:#ffe45c !important;
+    color:#fff !important;
+    background:#6b279e !important;
 }
 
 /* Modal de accesibilidad en contraste alto */
@@ -521,7 +518,7 @@ html.a11y-high-contrast .a11y-bloque p{
     color:#f0f0f0 !important;
 }
 html.a11y-high-contrast .a11y-eyebrow{
-    color:#ffe45c !important;
+    color:#d9bbff !important;
 }
 html.a11y-high-contrast .a11y-opcion,
 html.a11y-high-contrast .a11y-toggle,
@@ -534,9 +531,9 @@ html.a11y-high-contrast .a11y-cerrar{
 html.a11y-high-contrast .a11y-opcion[aria-pressed="true"],
 html.a11y-high-contrast .a11y-toggle[aria-pressed="true"],
 html.a11y-high-contrast .a11y-listo{
-    color:#000 !important;
-    background:#ffe45c !important;
-    border-color:#ffe45c !important;
+    color:#fff !important;
+    background:#6b279e !important;
+    border-color:#b987ef !important;
 }
 
 /* El encabezado y el logo no reciben bordes artificiales */
@@ -604,9 +601,9 @@ html.a11y-high-contrast .formulario-contacto :where(input,textarea)::placeholder
 }
 html.a11y-high-contrast .formulario-contacto button,
 html.a11y-high-contrast .faq-box button{
-    background:#ffe45c !important;
-    color:#000 !important;
-    border:2px solid #ffe45c !important;
+    background:#6b279e !important;
+    color:#fff !important;
+    border:2px solid #b987ef !important;
     font-weight:900 !important;
 }
 html.a11y-high-contrast .estado-contacto.ok{color:#9dffbd !important}
@@ -635,7 +632,7 @@ html.a11y-high-contrast .caracteristica :where(h3,p){
 html.a11y-high-contrast .nosotros-texto h2,
 html.a11y-high-contrast .bloque-info h2,
 html.a11y-high-contrast .valores h2{
-    color:#ffe45c !important;
+    color:#d9bbff !important;
 }
 html.a11y-high-contrast .bloque-info,
 html.a11y-high-contrast .valor-item,
@@ -651,9 +648,9 @@ html.a11y-high-contrast .cta-nosotros :where(h2,h3,p){
     color:#fff !important;
 }
 html.a11y-high-contrast .cta-nosotros button{
-    background:#ffe45c !important;
-    color:#000 !important;
-    border:2px solid #ffe45c !important;
+    background:#6b279e !important;
+    color:#fff !important;
+    border:2px solid #b987ef !important;
     font-weight:900 !important;
 }
 html.a11y-high-contrast .nosotros-imagen{
@@ -683,7 +680,7 @@ html.a11y-high-contrast .hero-beneficios span{
 }
 html.a11y-high-contrast .hero-beneficios i,
 html.a11y-high-contrast .panel-kicker{
-    color:#ffe45c !important;
+    color:#d9bbff !important;
 }
 html.a11y-high-contrast .panel-editor,
 html.a11y-high-contrast .lienzo-seccion,
@@ -709,7 +706,7 @@ html.a11y-high-contrast .grupo-editor > summary{
     border-bottom-color:#777 !important;
 }
 html.a11y-high-contrast .grupo-editor > summary i{
-    color:#ffe45c !important;
+    color:#d9bbff !important;
 }
 html.a11y-high-contrast .grupo-editor-contenido,
 html.a11y-high-contrast .subgrupo-editor,
@@ -745,7 +742,7 @@ html.a11y-high-contrast .color-visual{
 }
 html.a11y-high-contrast .color-visual.activo,
 html.a11y-high-contrast .vista-producto.activa{
-    outline:3px solid #ffe45c !important;
+    outline:3px solid #d9bbff !important;
     outline-offset:2px !important;
 }
 
@@ -769,15 +766,15 @@ html.a11y-high-contrast .btn-herramienta-ancho:hover,
 html.a11y-high-contrast .historial-editor button:hover,
 html.a11y-high-contrast .selector-lado button:hover{
     background:#171717 !important;
-    color:#ffe45c !important;
-    border-color:#ffe45c !important;
+    color:#d9bbff !important;
+    border-color:#b987ef !important;
 }
 html.a11y-high-contrast .selector-lado .lado-activo,
 html.a11y-high-contrast .historial-editor .activo,
 html.a11y-high-contrast .presets-imagen .activo{
-    background:#ffe45c !important;
-    color:#000 !important;
-    border-color:#ffe45c !important;
+    background:#6b279e !important;
+    color:#fff !important;
+    border-color:#b987ef !important;
 }
 
 /* Fuentes, capas y elementos internos */
@@ -817,9 +814,9 @@ html.a11y-high-contrast .ayuda-whatsapp :where(strong,p){
     color:#fff !important;
 }
 html.a11y-high-contrast .ayuda-whatsapp a{
-    background:#ffe45c !important;
-    color:#000 !important;
-    border:2px solid #ffe45c !important;
+    background:#6b279e !important;
+    color:#fff !important;
+    border:2px solid #b987ef !important;
 }
 
 /* Lienzo: se mantiene claro para no falsear el color del diseño */
@@ -832,18 +829,18 @@ html.a11y-high-contrast .canvas-empty-hint{
     color:#111 !important;
 }
 html.a11y-high-contrast .zona-impresion span{
-    color:#000 !important;
-    background:#ffe45c !important;
+    color:#fff !important;
+    background:#6b279e !important;
 }
 
 /* Resumen / estado */
 html.a11y-high-contrast .badge-cotizacion{
-    background:#ffe45c !important;
-    color:#000 !important;
-    border:1px solid #ffe45c !important;
+    background:#6b279e !important;
+    color:#fff !important;
+    border:1px solid #b987ef !important;
 }
 html.a11y-high-contrast .precio-pendiente{
-    color:#ffe45c !important;
+    color:#d9bbff !important;
 }
 html.a11y-high-contrast .estado-borrador{
     background:#171717 !important;
@@ -869,8 +866,8 @@ html.a11y-high-contrast .como-funciona article :where(h3,p){
     color:#fff !important;
 }
 html.a11y-high-contrast .como-funciona article > span{
-    background:#ffe45c !important;
-    color:#000 !important;
+    background:#6b279e !important;
+    color:#fff !important;
 }
 
 /* Vista previa */
@@ -887,8 +884,8 @@ html.a11y-high-contrast .preview-imagen-wrap{
     background:#fff !important;
 }
 html.a11y-high-contrast .preview-etiqueta{
-    background:#ffe45c !important;
-    color:#000 !important;
+    background:#6b279e !important;
+    color:#fff !important;
 }
 html.a11y-high-contrast .preview-grid article > button,
 html.a11y-high-contrast .cerrar-preview{
@@ -941,7 +938,7 @@ html.a11y-high-contrast .bienvenida{
     box-shadow:none !important;
 }
 html.a11y-high-contrast .bienvenida .eyebrow{
-    color:#ffe45c !important;
+    color:#d9bbff !important;
 }
 html.a11y-high-contrast .bienvenida p{
     color:#fff !important;
@@ -954,12 +951,12 @@ html.a11y-high-contrast .card-resumen{
 }
 html.a11y-high-contrast .card-resumen i{
     background:#151515 !important;
-    color:#ffe45c !important;
+    color:#d9bbff !important;
     border:1px solid #fff !important;
 }
 html.a11y-high-contrast .card-resumen span,
 html.a11y-high-contrast .card-resumen strong{
-    color:#ffe45c !important;
+    color:#d9bbff !important;
 }
 html.a11y-high-contrast .tarjeta-info,
 html.a11y-high-contrast .tarjeta-configuracion{
@@ -971,7 +968,7 @@ html.a11y-high-contrast .tarjeta-configuracion{
 html.a11y-high-contrast .tarjeta-info .eyebrow,
 html.a11y-high-contrast .tarjeta-configuracion .eyebrow,
 html.a11y-high-contrast .icono-tarjeta{
-    color:#ffe45c !important;
+    color:#d9bbff !important;
 }
 html.a11y-high-contrast .datos-perfil{
     background:transparent !important;
@@ -988,9 +985,9 @@ html.a11y-high-contrast .datos-perfil dd{
     color:#fff !important;
 }
 html.a11y-high-contrast .chip-rol{
-    background:#ffe45c !important;
-    color:#000 !important;
-    border:1px solid #ffe45c !important;
+    background:#6b279e !important;
+    color:#fff !important;
+    border:1px solid #b987ef !important;
 }
 html.a11y-high-contrast .tarjeta-configuracion label,
 html.a11y-high-contrast .texto-ayuda{
@@ -1003,9 +1000,9 @@ html.a11y-high-contrast .tarjeta-configuracion input{
 }
 html.a11y-high-contrast .btn-secundario-perfil,
 html.a11y-high-contrast .btn-principal{
-    background:#ffe45c !important;
-    color:#000 !important;
-    border:2px solid #ffe45c !important;
+    background:#6b279e !important;
+    color:#fff !important;
+    border:2px solid #b987ef !important;
 }
 html.a11y-high-contrast .estado-formulario.exito{
     color:#9dffbd !important;
@@ -1020,7 +1017,7 @@ html.a11y-high-contrast .panel-admin{
     color:#fff !important;
 }
 html.a11y-high-contrast .titulo-panel span{
-    color:#ffe45c !important;
+    color:#d9bbff !important;
 }
 html.a11y-high-contrast .titulo-panel p,
 html.a11y-high-contrast .encabezado-seccion p,
@@ -1056,9 +1053,9 @@ html.a11y-high-contrast .btn-respaldo-admin{
 }
 html.a11y-high-contrast .btn-render-admin:hover,
 html.a11y-high-contrast .btn-respaldo-admin:hover{
-    background:#ffe45c !important;
-    color:#000 !important;
-    border-color:#ffe45c !important;
+    background:#6b279e !important;
+    color:#fff !important;
+    border-color:#b987ef !important;
 }
 html.a11y-high-contrast .admin-tabs{
     background:transparent !important;
@@ -1069,9 +1066,9 @@ html.a11y-high-contrast .admin-tabs button{
     border:2px solid #fff !important;
 }
 html.a11y-high-contrast .admin-tabs button.tab-activo{
-    background:#ffe45c !important;
-    color:#000 !important;
-    border-color:#ffe45c !important;
+    background:#6b279e !important;
+    color:#fff !important;
+    border-color:#b987ef !important;
 }
 html.a11y-high-contrast .admin-tabs .badge{
     background:#fff !important;
@@ -1113,9 +1110,9 @@ html.a11y-high-contrast .selector-tallas-admin span{
     border:2px solid #fff !important;
 }
 html.a11y-high-contrast .selector-tallas-admin input:checked + span{
-    background:#ffe45c !important;
-    color:#000 !important;
-    border-color:#ffe45c !important;
+    background:#6b279e !important;
+    color:#fff !important;
+    border-color:#b987ef !important;
     box-shadow:none !important;
 }
 html.a11y-high-contrast .fila-color-admin input[type="color"],
@@ -1152,7 +1149,7 @@ html.a11y-high-contrast .metricas-reportes article{
 }
 html.a11y-high-contrast .metricas-admin i{
     background:#151515 !important;
-    color:#ffe45c !important;
+    color:#d9bbff !important;
     border:1px solid #fff !important;
 }
 html.a11y-high-contrast .metricas-admin span,
@@ -1174,7 +1171,7 @@ html.a11y-high-contrast .barra-dia > div{
 }
 html.a11y-high-contrast .barra-reporte span,
 html.a11y-high-contrast .barra-dia i{
-    background:#ffe45c !important;
+    background:#6b279e !important;
 }
 html.a11y-high-contrast .modal-admin-contenido{
     background:#080808 !important;
@@ -1182,8 +1179,8 @@ html.a11y-high-contrast .modal-admin-contenido{
     border:2px solid #fff !important;
 }
 html.a11y-high-contrast .preview-categoria{
-    background:#ffe45c !important;
-    color:#000 !important;
+    background:#6b279e !important;
+    color:#fff !important;
 }
 html.a11y-high-contrast .datos-preview-admin > p:not(.preview-precio),
 html.a11y-high-contrast .datos-preview-admin dt,
@@ -1194,4 +1191,241 @@ html.a11y-high-contrast .datos-preview-admin dd{
 /* Evita bloques blancos residuales en alto contraste */
 html.a11y-high-contrast :where(.perfil-shell,.panel-admin) :where(div,section,article,form):not(.canvas-shell):not(.preview-imagen-wrap){
     border-color:inherit;
+}
+
+/* =========================================================
+   CONTRASTE ALTO PREMIUM — PixBen, sin acentos amarillos.
+   Acciones oscuras con texto blanco, enlaces lilas y foco visible.
+   ========================================================= */
+html.a11y-high-contrast{
+    --a11y-focus:#d9bbff;
+    --a11y-bg:#050506;
+    --a11y-surface:#111014;
+    --a11y-surface-alt:#1b1821;
+    --a11y-border:#857691;
+    --a11y-text:#ffffff;
+    --a11y-muted:#e3dce9;
+    --a11y-link:#d9bbff;
+    --a11y-active-bg:#6b279e;
+}
+html.a11y-high-contrast :where(a,button,input,select,textarea,[tabindex]):focus-visible{
+    outline:3px solid var(--a11y-focus) !important;
+    outline-offset:3px !important;
+}
+html.a11y-high-contrast :where(input[type="checkbox"],input[type="radio"]){
+    accent-color:#a66ee2 !important;
+}
+html.a11y-high-contrast :where(input[type="color"],input[type="range"]){
+    /* Nunca ocultar la paleta ni las muestras reales del editor. */
+    border:0 !important;
+}
+html.a11y-high-contrast :where(.a11y-modal-contenido,.a11y-modal-cabecera,.a11y-modal-cuerpo,.a11y-modal-pie){
+    background:var(--a11y-surface) !important;
+    color:var(--a11y-text) !important;
+    border-color:var(--a11y-border) !important;
+}
+html.a11y-high-contrast :where(.a11y-bloque,.a11y-modal-pie){
+    border-color:#6e6477 !important;
+}
+html.a11y-high-contrast :where(.a11y-opcion[aria-pressed="true"],.a11y-toggle[aria-pressed="true"],.a11y-listo){
+    background:var(--a11y-active-bg) !important;
+    border-color:#b987ef !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast .a11y-eyebrow,
+html.a11y-high-contrast .a11y-flotante{
+    color:var(--a11y-link) !important;
+}
+html.a11y-high-contrast .a11y-flotante{border-color:var(--a11y-link) !important}
+
+/* Secciones de comercio: no forzar estilos en TODAS las etiquetas section/aside. */
+html.a11y-high-contrast :where(
+    .tarjeta-cuenta,.cuenta-hero,.cuenta-contenedor,.tarjeta-cuenta-contenido,
+    .perfil-sidebar,.perfil-contenido,.producto-resumen,
+    .beneficio-box,.faq-box,.info-contacto,.formulario-contacto,
+    .panel-editor,.lienzo-seccion,.card-resumen,.tarjeta-configuracion,
+    .footer-contenido,.footer-copy
+){
+    color:var(--a11y-text) !important;
+    border-color:var(--a11y-border) !important;
+}
+html.a11y-high-contrast :where(.tarjeta-cuenta,.tarjeta-cuenta-contenido,.cuenta-hero,
+    .beneficio-box,.faq-box,.info-contacto,.formulario-contacto){
+    background:var(--a11y-surface) !important;
+}
+html.a11y-high-contrast :where(.tarjeta-cuenta h2,.tarjeta-cuenta-precio,.barra-listado p,
+    .cuenta-eyebrow,.cuenta-hero h1,.cuenta-hero p,.faq-box h3,.faq-box p){
+    color:#fff !important;
+}
+html.a11y-high-contrast .tarjeta-cuenta-imagen{background:#f4f4f5 !important}
+html.a11y-high-contrast .variante-favorito{
+    display:block;
+    width:fit-content;
+    max-width:100%;
+    white-space:normal;
+    overflow-wrap:break-word;
+    border:1px solid #9066b7 !important;
+    border-radius:10px;
+    background:var(--a11y-surface-alt) !important;
+    color:#e8d6ff !important;
+    font-size:12px;
+    line-height:1.45;
+}
+html.a11y-high-contrast .grid-cuenta-productos{
+    grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));
+    align-items:stretch;
+    gap:18px;
+}
+html.a11y-high-contrast .tarjeta-cuenta{min-width:0;max-width:none}
+html.a11y-high-contrast .tarjeta-cuenta-contenido{min-width:0}
+html.a11y-high-contrast .tarjeta-cuenta-precio{margin-top:10px}
+html.a11y-high-contrast .tarjeta-cuenta .btn-quitar-tarjeta{
+    background:#1d1722 !important;
+    color:#fff !important;
+    border:2px solid #baa1d3 !important;
+}
+html.a11y-high-contrast :where(.cuenta-contenedor,.perfil-shell,.personalizador-page){
+    background:var(--a11y-bg) !important;
+}
+html.a11y-high-contrast .faq-box .faq-cta-link,
+html.a11y-high-contrast .estado-vacio a{
+    background:var(--a11y-active-bg) !important;
+    color:#fff !important;
+    border:1px solid #b987ef !important;
+}
+html.a11y-high-contrast .faq-box .faq-cta-link:hover{
+    background:#7934ad !important;
+}
+html.a11y-high-contrast .faq-box .faq-cta-link:focus-visible{
+    outline-color:var(--a11y-focus) !important;
+}
+html.a11y-high-contrast :where(.footer-contenido,.footer-copy,.footer-legal,
+    .footer-links,.footer-info,.footer-redes){
+    background:#0d0c10 !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast :where(.footer-contenido a,.footer-copy a,.footer-legal a){
+    color:var(--a11y-link) !important;
+}
+html.a11y-high-contrast :where(.footer-legal,.footer-bottom-links){
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    max-width:100%;
+}
+/* Editor: ningún botón de selección pierde su etiqueta al activarse. */
+html.a11y-high-contrast :where(
+  .categoria-filtro.seleccionado,.talla-filtro.seleccionado,
+  .paginacion button.activo,.selector-lado .lado-activo,
+  .historial-editor .activo,.presets-imagen .activo,
+  .admin-tabs button.tab-activo,.chip-rol,.badge-cotizacion
+){
+    background:var(--a11y-active-bg) !important;
+    border-color:#b987ef !important;
+    color:#fff !important;
+}
+html.a11y-high-contrast :where(
+  .categoria-filtro.seleccionado,.talla-filtro.seleccionado,
+  .paginacion button.activo,.selector-lado .lado-activo,
+  .historial-editor .activo,.presets-imagen .activo,
+  .admin-tabs button.tab-activo,.chip-rol,.badge-cotizacion
+) :where(span,small,b,i,strong){
+    color:#fff !important;
+}
+html.a11y-high-contrast .color-visual .swatch{
+    background:var(--swatch) !important;
+    border:2px solid #fff !important;
+}
+html.a11y-high-contrast .control-color-lienzo{
+    background:var(--a11y-surface-alt) !important;
+}
+html.a11y-high-contrast .control-color-lienzo :where(span,label){
+    color:#fff !important;
+}
+html.a11y-high-contrast .barra-lienzo,
+html.a11y-high-contrast .lienzo-seccion{color:#fff !important}
+html.a11y-high-contrast .canvas-shell,
+html.a11y-high-contrast #editorCanvas{
+    background:#fff !important;
+}
+/* Evita la doble barra de scroll del personalizador: una página, un scroll. */
+@media (min-width:1181px) {
+    .panel-configuracion,.resumen-pedido{
+        position:static;
+        top:auto;
+        max-height:none;
+        overflow:visible;
+        overscroll-behavior:auto;
+    }
+}
+@media (max-width:640px){
+    html.a11y-high-contrast .grid-cuenta-productos{
+        grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr));
+    }
+    .faq-box .faq-cta-link{width:100%}
+}
+
+/* Privacidad y enlaces legales inyectados por config.js en el footer. */
+html.a11y-high-contrast .pixben-legal-links{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    gap:8px 14px;
+    padding:18px 16px;
+    background:#111014 !important;
+    border-top:1px solid #685b75 !important;
+    font-size:13px !important;
+    line-height:1.5;
+}
+html.a11y-high-contrast .pixben-legal-links a,
+html.a11y-high-contrast .pixben-legal-links button{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:36px;
+    width:auto;
+    max-width:100%;
+    padding:7px 10px !important;
+    background:transparent !important;
+    border:1px solid transparent !important;
+    border-radius:8px;
+    color:#d9bbff !important;
+    font:inherit !important;
+    text-decoration:none;
+    white-space:normal;
+    cursor:pointer;
+}
+html.a11y-high-contrast .pixben-legal-links a:hover,
+html.a11y-high-contrast .pixben-legal-links button:hover{
+    background:#24162f !important;
+    border-color:#ac79dd !important;
+    text-decoration:underline;
+}
+html.a11y-high-contrast #pixbenPrivacyCenter{
+    background:#111014 !important;
+    color:#fff !important;
+    border:1px solid #9073ad !important;
+}
+html.a11y-high-contrast #pixbenPrivacyCenter :where(p,strong){
+    color:#fff !important;
+}
+html.a11y-high-contrast #pixbenPrivacyCenter a{
+    color:#d9bbff !important;
+}
+html.a11y-high-contrast #pixbenPrivacyCenter .privacy-primary{
+    background:#6b279e !important;
+    color:#fff !important;
+    border:1px solid #b987ef !important;
+}
+html.a11y-high-contrast #pixbenPrivacyCenter .privacy-secondary{
+    background:#1b1821 !important;
+    color:#fff !important;
+    border:1px solid #9386a0 !important;
+}
+@media(max-width:420px){
+    html.a11y-high-contrast .pixben-legal-links{gap:6px;font-size:12px !important}
+    html.a11y-high-contrast #pixbenPrivacyCenter{max-height:85dvh;overflow:auto}
 }

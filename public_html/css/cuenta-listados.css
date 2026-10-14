@@ -3,3 +3,39 @@
 /* El botón queda siempre por encima de la imagen incluso durante el hover. */
 .tarjeta-cuenta{isolation:isolate}.tarjeta-cuenta-imagen{position:relative;z-index:1}.tarjeta-cuenta-contenido{position:relative;z-index:2}.btn-quitar-tarjeta{z-index:30;pointer-events:auto;transition:background .18s,color .18s,transform .18s}.btn-quitar-tarjeta:hover{transform:scale(1.06)}.tarjeta-cuenta:hover .btn-quitar-tarjeta{opacity:1;visibility:visible}.tarjeta-cuenta:hover .tarjeta-cuenta-imagen img{pointer-events:none}
 .variante-favorito{display:inline-flex;margin:8px 0 2px;padding:6px 9px;border-radius:999px;background:#f2e7f8;color:#6f259d;font-size:12px;font-weight:850}
+
+
+/* Favoritos e historial: tarjetas completas, etiquetas legibles y sin cortes. */
+@media(min-width:721px){
+    .grid-cuenta-productos{
+        grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));
+    }
+}
+.tarjeta-cuenta{display:flex;flex-direction:column;min-width:0;height:100%}
+.tarjeta-cuenta-imagen{flex:none}
+.tarjeta-cuenta-contenido{display:flex;flex-direction:column;align-items:flex-start;flex:1;gap:8px;min-width:0}
+.tarjeta-cuenta-contenido h2{overflow-wrap:anywhere;margin:0}
+.tarjeta-cuenta-contenido .tarjeta-cuenta-precio{margin-top:auto;padding-top:6px}
+.variante-favorito{
+    display:block;
+    box-sizing:border-box;
+    width:fit-content;
+    max-width:100%;
+    white-space:normal;
+    overflow-wrap:break-word;
+    border-radius:10px;
+    line-height:1.45;
+    margin:0;
+    color:#552478;
+}
+.tarjeta-favorito-no-disponible{
+    border-style:dashed;
+    justify-content:center;
+    min-height:220px;
+    background:#faf8fc;
+}
+.tarjeta-favorito-no-disponible .tarjeta-cuenta-contenido{
+    justify-content:center;
+    padding:26px 18px;
+}
+.tarjeta-favorito-no-disponible p{line-height:1.5;color:#67616d;margin:0}

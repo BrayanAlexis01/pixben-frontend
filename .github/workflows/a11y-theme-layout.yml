@@ -1,0 +1,35 @@
+name: PixBen accessibility contrast and layout test
+
+on:
+  pull_request:
+    branches: ["master"]
+    paths:
+      - "public_html/css/accessibility.css"
+      - "public_html/css/cuenta-listados.css"
+      - "public_html/css/css contacto.css"
+      - "public_html/htmls/**"
+      - "public_html/js/paginas/favoritos.js"
+      - "tests/a11y-theme-layout.cjs"
+      - ".github/workflows/a11y-theme-layout.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install Chromium browser
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Validate contrast and overflow at desktop and mobile sizes
+        run: node tests/a11y-theme-layout.cjs
+      - name: Check favorites JavaScript syntax
+        run: node --check public_html/js/paginas/favoritos.js

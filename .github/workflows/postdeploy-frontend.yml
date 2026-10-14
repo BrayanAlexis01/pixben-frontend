@@ -11,6 +11,11 @@ on:
       - "public_html/css/css carrito de compras.css"
       - "public_html/htmls/personaliza.html"
       - "public_html/css/css personaliza.css"
+      - "public_html/css/accessibility.css"
+      - "public_html/css/cuenta-listados.css"
+      - "public_html/htmls/contacto.html"
+      - "public_html/htmls/favoritos.html"
+      - "public_html/js/paginas/favoritos.js"
   workflow_dispatch:
 
 permissions:
@@ -28,6 +33,12 @@ jobs:
           from urllib.parse import quote
           BASE = "https://pixben.netlify.app/"
           expected = {
+              "css/accessibility.css?v=4": "CONTRASTE ALTO PREMIUM",
+              "htmls/contacto.html": "faq-cta-link",
+              "htmls/favoritos.html": "cuenta-listados.css?v=7",
+              "js/paginas/favoritos.js?v=7": "productos/por-ids",
+              "css/cuenta-listados.css?v=7": "tarjeta-favorito-no-disponible",
+              "htmls/perfil.html": "accessibility.css?v=4",
               "htmls/productos.html": "productos.js?v=12",
               "js/productos.js?v=12": "primeraPagina.content",
               "htmls/mis-pedidos.html": "mis-pedidos.js?v=8",
