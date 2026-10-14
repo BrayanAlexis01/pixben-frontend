@@ -19,7 +19,7 @@ assert.ok(!accessibilityCSS.includes("--a11y-focus:#ffcc33"), "El foco sigue sie
 assert.match(contactHTML, /<a class="faq-cta-link" href="preguntas frecuentes.html">/);
 assert.doesNotMatch(contactHTML, /<button[^>]*>\s*<a[^>]*preguntas frecuentes/i);
 assert.ok(favoritesHTML.includes("cuenta-listados.css?v=7"));
-assert.ok(personalizerHTML.includes("accessibility.css?v=5"));
+assert.ok(personalizerHTML.includes("accessibility.css?v=6"));
 assert.match(read("public_html/js/paginas/favoritos.js"), /productos\/por-ids/);
 
 function channel(c) {
