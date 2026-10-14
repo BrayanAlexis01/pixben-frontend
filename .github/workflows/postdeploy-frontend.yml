@@ -13,6 +13,10 @@ on:
       - "public_html/css/css personaliza.css"
       - "public_html/css/accessibility.css"
       - "public_html/index.html"
+      - "public_html/htmls/carrito de compras.html"
+      - "public_html/htmls/politica de privacidad.html"
+      - "public_html/htmls/politica de cookies.html"
+      - "public_html/htmls/preguntas frecuentes.html"
       - "public_html/css/cuenta-listados.css"
       - "public_html/htmls/contacto.html"
       - "public_html/htmls/favoritos.html"
@@ -35,17 +39,20 @@ jobs:
           BASE = "https://pixben.netlify.app/"
           expected = {
               "css/accessibility.css?v=4": "CONTRASTE ALTO PREMIUM",
-              "css/accessibility.css?v=5": "CORRECCIÓN DE LEGIBILIDAD - INICIO Y DISEÑO ASISTIDO",
-              "index.html": "accessibility.css?v=5",
+              "css/accessibility.css?v=6": "CONTRASTE ALTO UNIFICADO",
+              "index.html": "accessibility.css?v=6",
               "htmls/contacto.html": "faq-cta-link",
               "htmls/favoritos.html": "cuenta-listados.css?v=7",
               "js/paginas/favoritos.js?v=7": "productos/por-ids",
               "css/cuenta-listados.css?v=7": "tarjeta-favorito-no-disponible",
-              "htmls/perfil.html": "accessibility.css?v=4",
+              "htmls/perfil.html": "accessibility.css?v=6",
               "htmls/productos.html": "productos.js?v=12",
               "js/productos.js?v=12": "primeraPagina.content",
               "htmls/mis-pedidos.html": "mis-pedidos.js?v=8",
-              "htmls/personaliza.html": "accessibility.css?v=5",
+              "htmls/personaliza.html": "accessibility.css?v=6",
+              "htmls/carrito de compras.html": "accessibility.css?v=6",
+              "htmls/politica de privacidad.html": "accessibility.css?v=6",
+              "htmls/preguntas frecuentes.html": "accessibility.css?v=6",
               "css/css personaliza.css?v=11": ".diseno-asistido-encabezado",
               "js/paginas/mis-pedidos.js?v=8": "Promise.allSettled",
               "htmls/carrito de compras.html": "css carrito de compras.css?v=9",
