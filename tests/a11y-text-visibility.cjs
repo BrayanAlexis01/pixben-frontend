@@ -39,17 +39,17 @@ async function main(){
         for(const highContrast of [false,true]){
             for(const width of [1440,820,390,320]){
                 const page=await browser.newPage({viewport:{width,height:900},deviceScaleFactor:1});
-                const html=\`<!doctype html><html lang="es" class="\${highContrast?"a11y-high-contrast":""}">
+                const html=`<!doctype html><html lang="es" class="${highContrast?"a11y-high-contrast":""}">
                     <head><meta name="viewport" content="width=device-width,initial-scale=1">
-                    <style>\${css}</style></head>
+                    <style>${css}</style></head>
                     <body><main>
-                        \${steps}
+                        ${steps}
                         <section class="personalizador-page">
                            <div class="editor-layout">
-                              <aside class="panel-editor resumen-pedido">\${assisted}</aside>
+                              <aside class="panel-editor resumen-pedido">${assisted}</aside>
                            </div>
                         </section>
-                    </main></body></html>\`;
+                    </main></body></html>`;
                 await page.setContent(html);
                 const actual=await page.evaluate(()=>{
                     const css=selector=>{
@@ -84,7 +84,7 @@ async function main(){
                     ];
                     for(const [label,foreground,background] of checks){
                         const score=contrast(foreground,background);
-                        assert.ok(score>=4.5, \`\${width}px \${label}: contrast \${score.toFixed(2)}:1 (\${foreground} / \${background})\`);
+                        assert.ok(score>=4.5, `${width}px ${label}: contrast ${score.toFixed(2)}:1 (${foreground} / ${background})`);
                     }
                     assert.ok(lum(actual.steps.background)<.15, "High contrast steps background must not be white");
                     assert.ok(lum(actual.card.background)<.15, "High contrast assisted card must not be pastel");
@@ -92,10 +92,10 @@ async function main(){
                     assert.ok(contrast(actual.stepTitle.color,actual.steps.background)>=4.5,
                         "Normal-mode step heading lost contrast");
                 }
-                assert.ok(!actual.overflow,\`\${width}px: page horizontal overflow \${JSON.stringify(actual)}\`);
-                assert.ok(actual.card.scrollWidth<=actual.card.clientWidth+2,\`\${width}px: assisted card clips content\`);
+                assert.ok(!actual.overflow,`${width}px: page horizontal overflow ${JSON.stringify(actual)}`);
+                assert.ok(actual.card.scrollWidth<=actual.card.clientWidth+2,`${width}px: assisted card clips content`);
                 assert.ok(actual.button.width>=actual.card.width*.7,"Action too narrow");
-                console.log(\`PASS \${highContrast?"HIGH CONTRAST":"NORMAL"} \${width}px | steps=\${actual.steps.background}, card=\${actual.card.background}\`);
+                console.log(`PASS ${highContrast?"HIGH CONTRAST":"NORMAL"} ${width}px | steps=${actual.steps.background}, card=${actual.card.background}`);
                 await page.close();
             }
         }
