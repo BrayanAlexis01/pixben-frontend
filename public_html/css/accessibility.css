@@ -1366,3 +1366,66 @@ html.a11y-high-contrast #editorCanvas{
     }
     .faq-box .faq-cta-link{width:100%}
 }
+
+/* Privacidad y enlaces legales inyectados por config.js en el footer. */
+html.a11y-high-contrast .pixben-legal-links{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    gap:8px 14px;
+    padding:18px 16px;
+    background:#111014 !important;
+    border-top:1px solid #685b75 !important;
+    font-size:13px !important;
+    line-height:1.5;
+}
+html.a11y-high-contrast .pixben-legal-links a,
+html.a11y-high-contrast .pixben-legal-links button{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:36px;
+    width:auto;
+    max-width:100%;
+    padding:7px 10px !important;
+    background:transparent !important;
+    border:1px solid transparent !important;
+    border-radius:8px;
+    color:#d9bbff !important;
+    font:inherit !important;
+    text-decoration:none;
+    white-space:normal;
+    cursor:pointer;
+}
+html.a11y-high-contrast .pixben-legal-links a:hover,
+html.a11y-high-contrast .pixben-legal-links button:hover{
+    background:#24162f !important;
+    border-color:#ac79dd !important;
+    text-decoration:underline;
+}
+html.a11y-high-contrast #pixbenPrivacyCenter{
+    background:#111014 !important;
+    color:#fff !important;
+    border:1px solid #9073ad !important;
+}
+html.a11y-high-contrast #pixbenPrivacyCenter :where(p,strong){
+    color:#fff !important;
+}
+html.a11y-high-contrast #pixbenPrivacyCenter a{
+    color:#d9bbff !important;
+}
+html.a11y-high-contrast #pixbenPrivacyCenter .privacy-primary{
+    background:#6b279e !important;
+    color:#fff !important;
+    border:1px solid #b987ef !important;
+}
+html.a11y-high-contrast #pixbenPrivacyCenter .privacy-secondary{
+    background:#1b1821 !important;
+    color:#fff !important;
+    border:1px solid #9386a0 !important;
+}
+@media(max-width:420px){
+    html.a11y-high-contrast .pixben-legal-links{gap:6px;font-size:12px !important}
+    html.a11y-high-contrast #pixbenPrivacyCenter{max-height:85dvh;overflow:auto}
+}
