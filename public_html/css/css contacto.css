@@ -227,15 +227,29 @@ nav a:hover{
     align-items: center;
 }
 
-.faq-box button{
-    padding: 15px 25px;
-    border: 2px solid #8a2be2;
-    background: white;
-    color: #8a2be2;
-    cursor: pointer;
-    border-radius: 5px;
+.faq-box .faq-cta-link{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    min-height:46px;
+    padding:12px 19px;
+    flex:0 0 auto;
+    border:2px solid #7430a6;
+    border-radius:9px;
+    background:#7430a6;
+    color:#fff;
+    font-weight:800;
+    font-size:14px;
+    line-height:1.4;
+    text-decoration:none;
+    text-align:center;
+    white-space:normal;
 }
-
+.faq-box .faq-cta-link:hover{background:#602588;border-color:#602588;color:#fff}
+.faq-box .faq-cta-link:focus-visible{outline:3px solid #ac75d1;outline-offset:3px}
+.faq-box>div{min-width:0}
+.faq-box h3,.faq-box p{overflow-wrap:break-word}
 /* RESPONSIVE */
 @media(max-width:900px){
 
