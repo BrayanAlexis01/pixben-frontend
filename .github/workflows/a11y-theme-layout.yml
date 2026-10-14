@@ -5,11 +5,14 @@ on:
     branches: ["master"]
     paths:
       - "public_html/css/accessibility.css"
+      - "public_html/index.html"
+      - "public_html/css/css index.css"
       - "public_html/css/cuenta-listados.css"
       - "public_html/css/css contacto.css"
       - "public_html/htmls/**"
       - "public_html/js/paginas/favoritos.js"
       - "tests/a11y-theme-layout.cjs"
+      - "tests/a11y-text-visibility.cjs"
       - ".github/workflows/a11y-theme-layout.yml"
   workflow_dispatch:
 
@@ -31,5 +34,7 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Validate contrast and overflow at desktop and mobile sizes
         run: node tests/a11y-theme-layout.cjs
+      - name: Verify readable real text in Home and Personalizer
+        run: node tests/a11y-text-visibility.cjs
       - name: Check favorites JavaScript syntax
         run: node --check public_html/js/paginas/favoritos.js
