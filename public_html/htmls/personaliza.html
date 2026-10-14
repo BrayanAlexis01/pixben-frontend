@@ -31,7 +31,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Alfa+Slab+One&family=Anton&family=Archivo+Black&family=Bangers&family=Bebas+Neue&family=Black+Ops+One&family=Bungee&family=Caveat:wght@400;700&family=Chakra+Petch:wght@400;700&family=Cinzel:wght@400;700&family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:wght@400;700&family=Dancing+Script:wght@400;700&family=Exo+2:wght@400;700&family=Great+Vibes&family=Kaushan+Script&family=Lobster&family=Luckiest+Guy&family=Montserrat:wght@400;600;700;800&family=Orbitron:wght@400;700&family=Oswald:wght@400;600;700&family=Pacifico&family=Permanent+Marker&family=Playfair+Display:wght@400;700&family=Poppins:wght@400;600;700&family=Press+Start+2P&family=Righteous&family=Roboto+Slab:wght@400;700&family=Rubik+Mono+One&family=Sacramento&family=Satisfy&family=VT323&display=swap" rel="stylesheet">
-    <link href="../css/css personaliza.css?v=10" rel="stylesheet">
+    <link href="../css/css personaliza.css?v=11" rel="stylesheet">
     <link href="../css/responsive-global.css?v=3" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
     <link rel="stylesheet" href="../css/pwa-premium.css?v=2">
@@ -355,13 +355,15 @@
             <p class="nota-cuenta-personalizado"><i class="fa-solid fa-shield-halved"></i> El editor puede probarse gratis, pero la vista previa lleva marca de agua y no permite descargar el archivo final. Para enviar, guardar como solicitud o continuar con el pedido se requiere una cuenta.</p>
 
             <section class="diseno-asistido-card" aria-labelledby="tituloDisenoAsistidoCard">
-                <div class="diseno-asistido-icono"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-                <div>
-                    <span class="panel-kicker">DISEÑO ASISTIDO</span>
-                    <h3 id="tituloDisenoAsistidoCard">¿Prefieres que PixBen lo diseñe por ti?</h3>
-                    <p>Deja tu idea al diseñador con un adelanto de <b>S/ 15.00</b>. El trabajo empieza después de verificar el pago, incluye hasta 2 revisiones y el adelanto se descuenta del saldo del pedido si continúas.</p>
+                <div class="diseno-asistido-encabezado">
+                    <div class="diseno-asistido-icono" aria-hidden="true"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                    <div class="diseno-asistido-titulos">
+                        <span class="panel-kicker">DISEÑO ASISTIDO</span>
+                        <h3 id="tituloDisenoAsistidoCard">¿Prefieres que PixBen lo diseñe por ti?</h3>
+                    </div>
                 </div>
-                <button type="button" id="btnAbrirDisenoAsistido" class="btn-diseno-asistido">Solicitar diseñador</button>
+                <p class="diseno-asistido-descripcion">Cuéntanos tu idea y nuestro diseñador la hará realidad. El adelanto es de <b>S/ 15.00</b>; empezamos después de verificar el pago. Incluye hasta 2 revisiones y el adelanto se descuenta del saldo si continúas con tu pedido.</p>
+                <button type="button" id="btnAbrirDisenoAsistido" class="btn-diseno-asistido"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Solicitar diseñador</button>
             </section>
 
             <div class="ayuda-whatsapp">
