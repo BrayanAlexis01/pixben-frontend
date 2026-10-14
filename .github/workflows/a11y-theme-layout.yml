@@ -13,6 +13,7 @@ on:
       - "public_html/js/paginas/favoritos.js"
       - "tests/a11y-theme-layout.cjs"
       - "tests/a11y-text-visibility.cjs"
+      - "tests/a11y-sitewide-surfaces.cjs"
       - ".github/workflows/a11y-theme-layout.yml"
   workflow_dispatch:
 
@@ -36,5 +37,7 @@ jobs:
         run: node tests/a11y-theme-layout.cjs
       - name: Verify readable real text in Home and Personalizer
         run: node tests/a11y-text-visibility.cjs
+      - name: Check cart, legal and shipping contrast
+        run: node tests/a11y-sitewide-surfaces.cjs
       - name: Check favorites JavaScript syntax
         run: node --check public_html/js/paginas/favoritos.js

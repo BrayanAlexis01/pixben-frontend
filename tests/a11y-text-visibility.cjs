@@ -15,8 +15,8 @@ const css = [
     read("public_html/css/accessibility.css")
 ].join("\n");
 
-assert.match(home, /accessibility\.css\?v=5/);
-assert.match(customize, /accessibility\.css\?v=5/);
+assert.match(home, /accessibility\.css\?v=6/);
+assert.match(customize, /accessibility\.css\?v=6/);
 const steps = home.match(/<section class="pasos">[\s\S]*?<\/section>/)?.[0];
 const assisted = customize.match(/<section class="diseno-asistido-card"[\s\S]*?<\/section>/)?.[0];
 assert.ok(steps && assisted, "Must test actual PixBen home and personalizer markup");
