@@ -57,13 +57,15 @@ const fixtures=[
     [".policy-contact h2",null],
     [".policy-btn",null]
  ]},
- {name:"Envios",html:mainFrom(shippingHTML),css:shippingCSS+"\n"+responsive,selectors:[
-    [".hero-envios h1",null],
-    [".opciones-envio article",null],
-    [".opciones-envio article h2",null],
-    [".opciones-envio article p",null],
-    [".pasos-envio li",null],
-    [".nota-envio",null]
+ {name:"Envios",html:mainFrom(shippingHTML),css:legalCSS+"\n"+responsive,selectors:[
+    [".policy-hero h1",null],
+    [".policy-card",null],
+    [".policy-card h2",null],
+    [".policy-card p",null],
+    [".policy-step h3",null],
+    [".policy-step p",null],
+    [".policy-note",null],
+    [".policy-contact h2",null]
  ]}
 ];
 
