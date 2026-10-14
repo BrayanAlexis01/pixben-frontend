@@ -9,6 +9,8 @@ on:
       - "public_html/js/paginas/carrito.js"
       - "public_html/js/productos.js"
       - "public_html/css/css carrito de compras.css"
+      - "public_html/htmls/personaliza.html"
+      - "public_html/css/css personaliza.css"
   workflow_dispatch:
 
 permissions:
@@ -29,6 +31,8 @@ jobs:
               "htmls/productos.html": "productos.js?v=12",
               "js/productos.js?v=12": "primeraPagina.content",
               "htmls/mis-pedidos.html": "mis-pedidos.js?v=8",
+              "htmls/personaliza.html": "css personaliza.css?v=11",
+              "css/css personaliza.css?v=11": ".diseno-asistido-encabezado",
               "js/paginas/mis-pedidos.js?v=8": "Promise.allSettled",
               "htmls/carrito de compras.html": "css carrito de compras.css?v=9",
               "js/paginas/carrito.js?v=11": "Promise.allSettled",
