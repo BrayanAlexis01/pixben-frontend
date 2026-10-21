@@ -85,6 +85,7 @@ function configurarEventos() {
     document.getElementById("btnRecargarReportes")?.addEventListener("click", cargarReportes);
     document.getElementById("periodoReportes")?.addEventListener("change", cargarReportes);
     document.getElementById("btnExportarReportes")?.addEventListener("click", exportarReporteCsv);
+    document.getElementById("btnExportarCatalogoExcel")?.addEventListener("click", exportarCatalogoXlsx);
     document.getElementById("btnBorrarAnaliticaAntigua")?.addEventListener("click", () => borrarAnalitica(false));
     document.getElementById("btnBorrarAnalitica")?.addEventListener("click", () => borrarAnalitica(true));
     document.getElementById("btnDescargarRespaldo")?.addEventListener("click", descargarRespaldo);
@@ -1312,5 +1313,35 @@ async function cargarAnalitica() {
     } catch (error) {
         estado.textContent = error.message;
         estado.classList.add("error-admin");
+    }
+}
+
+/**
+ * APF3: descarga el catálogo generado con Apache POI en Spring Boot.
+ * La comprobación real de rol la hace el backend, no este botón.
+ */
+async function exportarCatalogoXlsx() {
+    const boton = document.getElementById("btnExportarCatalogoExcel");
+    if (!boton) return;
+    const anterior = boton.innerHTML;
+    boton.disabled = true;
+    boton.textContent = "Generando Excel...";
+    try {
+        const respuesta = await fetchConSesion(`${API_URL}/admin/reportes/catalogo.xlsx`);
+        if (!respuesta.ok) throw new Error(await obtenerMensajeError(respuesta));
+        const archivo = await respuesta.blob();
+        const url = URL.createObjectURL(archivo);
+        const enlace = document.createElement("a");
+        enlace.href = url;
+        enlace.download = "pixben-catalogo.xlsx";
+        document.body.appendChild(enlace);
+        enlace.click();
+        enlace.remove();
+        URL.revokeObjectURL(url);
+    } catch (error) {
+        alert(error.message || "No se pudo exportar el catálogo a Excel");
+    } finally {
+        boton.disabled = false;
+        boton.innerHTML = anterior;
     }
 }
