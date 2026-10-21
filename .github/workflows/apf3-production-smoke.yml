@@ -1,0 +1,63 @@
+name: APF3 production smoke verification
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - ".github/workflows/apf3-production-smoke.yml"
+      - "public_html/htmls/admin.html"
+      - "public_html/js/admin.js"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify JavaScript syntax
+        run: node --check public_html/js/admin.js
+      - name: Verify frontend publication and protected backend endpoint
+        run: |
+          python3 - <<'PY'
+          import time
+          import urllib.request
+          from urllib.error import HTTPError
+          
+          site="https://pixben.netlify.app"
+          api="https://pixben-backend.onrender.com"
+          checks={
+              "/htmls/admin.html": "btnExportarCatalogoExcel",
+              "/js/admin.js?v=21": "async function exportarCatalogoXlsx"
+          }
+          for intento in range(30):
+              try:
+                  for path, expected in checks.items():
+                      req=urllib.request.Request(site+path, headers={"Cache-Control":"no-cache","User-Agent":"PixBenAPF3Smoke/1.0"})
+                      with urllib.request.urlopen(req,timeout=20) as response:
+                          body=response.read().decode("utf-8")
+                          assert response.status == 200 and expected in body, ("frontend not updated",path)
+                          print("PASS",path,response.status,flush=True)
+                  req=urllib.request.Request(
+                      api+"/admin/reportes/catalogo.xlsx",
+                      headers={"X-Session-Token":"apf3-invalid-token","User-Agent":"PixBenAPF3Smoke/1.0"})
+                  try:
+                      with urllib.request.urlopen(req,timeout=20) as response:
+                          raise AssertionError("Export endpoint must refuse anonymous test token")
+                  except HTTPError as error:
+                      assert error.code == 401, ("expected 401 for unauthorized report",error.code)
+                      print("PASS protected export rejects invalid token", error.code,flush=True)
+                  print("APF3_PRODUCTION_VERIFIED",flush=True)
+                  break
+              except Exception as exc:
+                  print(f"Checking deployed versions {intento+1}/30: {str(exc)[:220]}",flush=True)
+                  if intento == 29:
+                      raise
+                  time.sleep(12)
+          PY
