@@ -42,10 +42,10 @@
     <script src="js/pwa-premium.js?v=3" defer></script>
     <link href="css/header-global.css?v=2" rel="stylesheet">
     <link rel="stylesheet" href="css/accessibility.css?v=6">
-</head>
-    <body>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="css/pixben-editorial.css?v=1"><script src="js/pixben-motion.js?v=1" defer></script></head>
+    <body class="pb-editorial">
 
-        <!-- HEADER -->
+        <div class="pb-announcement">DISEÑA SIN LÍMITES <span>✦</span> ROPA Y ACCESORIOS PERSONALIZADOS <span>✦</span> <a href="htmls/personaliza.html">EMPIEZA AQUÍ</a></div><!-- HEADER -->
         <header class="site-header-pixben">
     <div class="logo">
         <a href="index.html"><img src="imagensponsor/logopixben.webp" alt="PixBen"></a>
@@ -102,10 +102,7 @@
 
 </div>
             <div class="contenido-banner">
-                <p>DISEÑA TU ESTILO</p>
-                <h1>ROPA PERSONALIZADA</h1>
-                <p>Crea prendas únicas con tus diseños, ideas o tu marca.</p>
-                <a href="htmls/productos.html" class="btn-comprar">Comprar ahora</a>
+                <p class="pb-eyebrow">EXPRESA LO QUE ERES · PIXBEN</p><h1>TU ESTILO.<br>TUS REGLAS.</h1><p class="pb-hero-description">Prendas y accesorios que llevan tu creatividad al siguiente nivel. Diseña, personaliza y hazlo tuyo.</p><div class="pb-hero-actions"><a href="htmls/personaliza.html" class="btn-comprar">Diseña el tuyo <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a><a href="htmls/productos.html" class="pb-btn-outline">Explorar colección</a></div>
             </div>
 
         </section>
@@ -121,10 +118,17 @@
 
 
 
-        <!-- PRODUCTOS DESTACADOS -->
+        <section class="pb-trust-strip" aria-label="Conoce PixBen"><div class="pb-trust-item"><i class="fa-solid fa-wand-magic-sparkles"></i><div><strong>Tu creatividad, primero</strong><small>Personaliza a tu manera</small></div></div><div class="pb-trust-item"><i class="fa-solid fa-shirt"></i><div><strong>Prendas y accesorios</strong><small>Encuentra tu próximo proyecto</small></div></div><div class="pb-trust-item"><i class="fa-solid fa-comments"></i><div><strong>Atención personalizada</strong><small>Consulta tu diseño antes de pedir</small></div></div></section>
+<section class="pb-collections" aria-labelledby="colecciones-pixben"><div class="pb-section-wrap"><div class="pb-section-intro pb-reveal"><span class="pb-section-topline">ELIGE TU LIENZO</span><h2 class="pb-section-heading" id="colecciones-pixben">No solo lo uses.<br>Hazlo tuyo.</h2><p class="pb-section-subtext">Cada prenda puede contar una historia. Explora nuestras colecciones y encuentra la base perfecta para tus ideas.</p></div><div class="pb-collection-grid">
+<a class="pb-collection-card pb-polos pb-reveal" href="htmls/productos.html"><span class="pb-collection-type">01 / ESTILO DIARIO</span><h3>Polos</h3><p>Diseños que hablan por ti.</p><span class="pb-collection-link">Ver productos →</span></a>
+<a class="pb-collection-card pb-poleras pb-reveal" href="htmls/productos.html"><span class="pb-collection-type">02 / CAPAS CON PERSONALIDAD</span><h3>Poleras</h3><p>Tu estilo, en cada temporada.</p><span class="pb-collection-link">Explorar →</span></a>
+<a class="pb-collection-card pb-bolsos pb-reveal" href="htmls/productos.html"><span class="pb-collection-type">03 / LLEVA TU IDEA</span><h3>Bolsos y accesorios</h3><p>Pequeños detalles, grandes ideas.</p><span class="pb-collection-link">Descubrir →</span></a>
+<a class="pb-collection-card pb-film pb-reveal" href="htmls/productos.html"><span class="pb-collection-type">04 / PARA TUS PROYECTOS</span><h3>Film DTF</h3><p>Haz realidad tus proyectos de estampado.</p><span class="pb-collection-link">Conocer más →</span></a>
+</div></div></section>
+<!-- PRODUCTOS DESTACADOS -->
 
         <section class="productos zoomIn">
-            <h2>PRODUCTOS DESTACADOS</h2>
+            <span class="pb-section-topline">SELECCIÓN PIXBEN</span><h2>Descubre los destacados</h2><p class="pb-section-subtext" style="margin-bottom:30px">Ideas para inspirarte, crear y llevar tu estilo a todas partes.</p>
 
             <div
                 class="contenedor-productos"
@@ -135,7 +139,7 @@
 
 
 
-        <!-- COMO FUNCIONA -->
+        <section class="pb-story"><div class="pb-story-content pb-reveal"><span class="pb-section-topline">HECHO PARA DESTACAR</span><h2>Una idea puede convertirse en algo increíble.</h2><p>Tu logo, tu frase favorita o un diseño único: haz que lo que llevas refleje quién eres.</p><a class="pb-btn-primary" href="htmls/personaliza.html">Comenzar a personalizar →</a></div><div class="pb-story-photo" role="img" aria-label="Inspiración de productos personalizados PixBen"></div></section><!-- COMO FUNCIONA -->
         <section class="pasos">
 
             <h2>¿Cómo funciona?</h2>
@@ -183,7 +187,7 @@
 
 
 
-        <!-- FOOTER -->
+        <section class="pb-final-cta"><div class="pb-section-wrap pb-reveal"><span class="pb-section-topline">EL SIGUIENTE DISEÑO ES TUYO</span><h2>¿Listo para crear algo único?</h2><p>Elige tu producto o empieza a personalizar tu propia idea.</p><div class="pb-hero-actions"><a class="pb-btn-primary" href="htmls/personaliza.html">Personalizar ahora</a><a class="pb-btn-outline" href="htmls/productos.html">Ver catálogo</a></div></div></section><!-- FOOTER -->
         <footer>
 
             <!-- BENEFICIOS -->
