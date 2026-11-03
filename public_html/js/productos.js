@@ -49,10 +49,17 @@ const elementosCatalogo = {};
 
 /* Colecciones que enlazan desde la portada.
    Se resuelven con los nombres reales devueltos por el catálogo. */
+function categoriaPublicaPixBen(categoria) {
+    const valor = String(categoria || "").trim();
+    const normalizada = normalizarTexto(valor).replace(/\s*\/\s*/g, " / ");
+    return normalizada === "bolsos / totebags" || normalizada === "bolsos de tocuyo"
+            ? "Bolsos de Tocuyo" : valor;
+}
+
 const ALIAS_COLECCIONES_PIXBEN = {
     polos: ["Polos", "Polos personalizados", "Polo", "Camisetas"],
     poleras: ["Hoodies / Poleras", "Hoodies/Poleras", "Hoodies y Poleras", "Poleras", "Hoodies", "Sudaderas"],
-    bolsos: ["Bolsos / Totebags", "Bolsos de Tocuyo", "Bolsos", "Totebags", "Accesorios"],
+    bolsos: ["Bolsos de Tocuyo", "Bolsos / Totebags", "Bolsos", "Totebags"],
     dtf: ["Film DTF Premium", "Film DTF", "DTF"]
 };
 
@@ -66,11 +73,11 @@ function seleccionarCategoriaDesdeURL() {
         ...estadoCatalogo.categoriasServidor,
         ...estadoCatalogo.productos.map(item => item.categoria),
         ...SERVICIOS_COTIZABLES.map(item => item.categoria)
-    ].filter(valor => typeof valor === "string" && valor.trim()))];
+    ].filter(valor => typeof valor === "string" && valor.trim()).map(categoriaPublicaPixBen))];
 
     const alias = Object.prototype.hasOwnProperty.call(ALIAS_COLECCIONES_PIXBEN, coleccion)
         ? ALIAS_COLECCIONES_PIXBEN[coleccion]
-        : (categoriaDirecta ? [categoriaDirecta] : []);
+        : (categoriaDirecta ? [categoriaPublicaPixBen(categoriaDirecta)] : []);
 
     // Primero coincidencias exactas; luego variantes con nombres más descriptivos.
     let encontrada = null;
@@ -88,7 +95,7 @@ function seleccionarCategoriaDesdeURL() {
             if (encontrada) break;
         }
     }
-    estadoCatalogo.categoria = encontrada || "todos";
+    estadoCatalogo.categoria = categoriaPublicaPixBen(encontrada) || "todos";
 }
 
 function actualizarEnlaceCategoria() {
@@ -326,11 +333,12 @@ function actualizarTextoPrecio() {
 }
 
 function crearCategorias() {
-    const categorias = estadoCatalogo.servidorPaginado ? [...new Set([...estadoCatalogo.categoriasServidor, ...SERVICIOS_COTIZABLES.map(s => s.categoria)])].sort((a,b) => a.localeCompare(b, "es")) : [...new Set(
-        estadoCatalogo.productos
-                .map(producto => String(producto.categoria || "").trim())
-                .filter(Boolean)
-    )].sort((a, b) => a.localeCompare(b, "es"));
+    const categoriasOrigen = estadoCatalogo.servidorPaginado
+            ? [...estadoCatalogo.categoriasServidor, ...SERVICIOS_COTIZABLES.map(s => s.categoria)]
+            : estadoCatalogo.productos.map(producto => producto.categoria);
+    const categorias = [...new Set(categoriasOrigen
+            .map(categoriaPublicaPixBen)
+            .filter(Boolean))].sort((a, b) => a.localeCompare(b, "es"));
 
     elementosCatalogo.categorias.innerHTML = "";
     elementosCatalogo.categorias.appendChild(crearBotonCategoria("Todos los productos", "todos"));
@@ -403,7 +411,7 @@ async function aplicarFiltros() {
 
         const coincideBusqueda = !estadoCatalogo.busqueda || textoProducto.includes(estadoCatalogo.busqueda);
         const coincideCategoria = categoriaNormalizada === "todos"
-                || normalizarTexto(producto.categoria) === categoriaNormalizada;
+                || normalizarTexto(categoriaPublicaPixBen(producto.categoria)) === categoriaNormalizada;
         const coincidePrecio = esServicio || (Number.isFinite(precio)
                 && precio >= estadoCatalogo.precioMin
                 && precio <= estadoCatalogo.precioMax);
@@ -454,7 +462,7 @@ async function cargarPaginaServidor() {
                 estadoCatalogo.tallas.size === 0 && !elementosCatalogo.soloStock?.checked
                 ? SERVICIOS_COTIZABLES.filter(servicio =>
                     (estadoCatalogo.categoria === "todos" ||
-                     normalizarTexto(servicio.categoria) === normalizarTexto(estadoCatalogo.categoria)) &&
+                     normalizarTexto(categoriaPublicaPixBen(servicio.categoria)) === normalizarTexto(estadoCatalogo.categoria)) &&
                     (!estadoCatalogo.busqueda ||
                      normalizarTexto(`${servicio.nombre} ${servicio.descripcion} ${servicio.categoria}`).includes(estadoCatalogo.busqueda)))
                 : [];
@@ -513,7 +521,7 @@ function renderizarCatalogo() {
     const pagina = estadoCatalogo.servidorPaginado ? estadoCatalogo.filtrados : estadoCatalogo.filtrados.slice(inicio, inicio + PRODUCTOS_POR_PAGINA);
 
     elementosCatalogo.grid.innerHTML = pagina.map(producto => {
-        const categoria = producto.categoria || "Sin categoría";
+        const categoria = categoriaPublicaPixBen(producto.categoria) || "Sin categoría";
 
         if (producto.esServicioCotizable) {
             const icono = producto.tipoServicio === "dtf" ? "fa-layer-group" : "fa-bag-shopping";
