@@ -122,7 +122,7 @@ function mostrarColeccionSeleccionada() {
     const categoria = estadoCatalogo.categoria;
     const normalizada = normalizarTexto(categoria);
     etiqueta.textContent = "EXPLORA PIXBEN / COLECCIONES";
-    titulo.textContent = categoria.replace(/\\s*\\/\\s*/g, " y ");
+    titulo.textContent = categoria.split("/").map(parte => parte.trim()).join(" y ");
     descripcion.textContent = normalizada.includes("dtf")
         ? "Dale vida a tus diseños con Film DTF. Consulta metraje, formatos y cotizaciones para tus proyectos."
         : normalizada.includes("bolso") || normalizada.includes("tote")
