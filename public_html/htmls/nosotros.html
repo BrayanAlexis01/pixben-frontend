@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="es">
     <head>
         <link href="../css/css nosotros.css" rel="stylesheet" type="text/css"/>
@@ -34,9 +35,16 @@
     <script src="../js/pwa-premium.js?v=2" defer></script>
     <link href="../css/header-global.css?v=2" rel="stylesheet">
     <link rel="stylesheet" href="../css/accessibility.css?v=6">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/pixben-editorial.css?v=2">
+    <link rel="stylesheet" href="../css/nosotros-premium.css?v=1">
+    <script src="../js/pixben-motion.js?v=1" defer></script>
 </head>
-    <body>
+    <body class="pb-about-page">
 
+        <div class="pb-announcement">TUS IDEAS MERECEN DESTACAR <span>✦</span> ROPA Y ACCESORIOS PERSONALIZADOS <span>✦</span> <a href="personaliza.html">CREA EL TUYO</a></div>
         <!-- HEADER -->
         <header class="site-header-pixben">
     <div class="logo">
@@ -70,138 +78,98 @@
         </div>
     </div>
 </header>
-    
-    
-    
-    <body>
-     
-        
-        <main class="nosotros-container">
-
-    <!-- HERO -->
-    <section class="nosotros-hero">
-
-        <div class="nosotros-texto">
-            <h1>NOSOTROS</h1>
-            <h2>CREAMOS PRENDAS ÚNICAS, COMO TÚ.</h2>
-
-            <p>
-                En PixBen creemos que la ropa es mucho más que algo que usas,
-                es una forma de expresarte, de compartir tus ideas y dejar tu huella.
-            </p>
-
-            <p>
-                Nos especializamos en personalización de prendas de alta calidad,
-                combinando creatividad, tecnología y pasión.
-            </p>
+        <main class="pb-about" id="contenido-principal">
+    <section class="pb-about-hero" aria-labelledby="pb-about-title">
+        <div class="pb-about-wrap pb-about-hero__grid">
+            <div class="pb-about-hero__content pb-reveal">
+                <div class="pb-about-eyebrow"><span class="pb-about-sparkle" aria-hidden="true">✳</span> PIXBEN / NUESTRA ESENCIA</div>
+                <h1 id="pb-about-title">Tu idea.<br><span>Tu esencia.</span><br>Tu estilo.</h1>
+                <p class="pb-about-hero__lead">Creemos que lo que llevas también cuenta tu historia. Por eso transformamos tus ideas en prendas y accesorios que expresan quién eres.</p>
+                <div class="pb-about-hero__actions">
+                    <a class="pb-about-btn pb-about-btn--primary" href="personaliza.html">Empieza a crear <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+                    <a class="pb-about-btn pb-about-btn--text" href="#nuestra-historia">Conoce nuestra esencia <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></a>
+                </div>
+                <div class="pb-about-hero__footnote"><span class="pb-about-hero__line"></span> ROPA Y ACCESORIOS PERSONALIZADOS · LIMA, PERÚ</div>
+            </div>
+            <div class="pb-about-hero__visual pb-reveal">
+                <div class="pb-about-photo pb-about-photo--primary">
+                    <img src="../imagensponsor/banners/banner-polos.webp" alt="Prendas estampadas de la colección PixBen" width="760" height="900" fetchpriority="high">
+                </div>
+                <div class="pb-about-photo pb-about-photo--secondary">
+                    <img src="../imagensponsor/banners/banner-bolsos.webp" alt="Bolsos personalizados de la colección PixBen" width="500" height="620" loading="lazy">
+                </div>
+                <div class="pb-about-hero__seal" aria-hidden="true"><span>HECHO PARA<br>DESTACAR</span><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+                <span class="pb-about-hero__ring" aria-hidden="true"></span>
+            </div>
         </div>
-
-        <div class="nosotros-imagen">
-            <img src="../imagensponsor/fondo.webp" alt="Nosotros PixBen">
-        </div>
-
     </section>
 
-    <!-- CARACTERISTICAS -->
-    <section class="caracteristicas">
-
-        <div class="caracteristica">
-            <h3>Calidad premium</h3>
-            <p>Usamos materiales de alta calidad para mayor durabilidad.</p>
+    <section class="pb-about-pillars" aria-label="Lo que nos define">
+        <div class="pb-about-wrap pb-about-pillars__grid">
+            <div class="pb-about-pillar pb-reveal"><span class="pb-about-pillar__icon"><i class="fa-regular fa-lightbulb" aria-hidden="true"></i></span><div><strong>Creatividad sin límites</strong><p>Diseños que nacen de tus ideas.</p></div></div>
+            <div class="pb-about-pillar pb-reveal"><span class="pb-about-pillar__icon"><i class="fa-solid fa-shirt" aria-hidden="true"></i></span><div><strong>Detalles que importan</strong><p>Prendas y productos para destacar.</p></div></div>
+            <div class="pb-about-pillar pb-reveal"><span class="pb-about-pillar__icon"><i class="fa-regular fa-comments" aria-hidden="true"></i></span><div><strong>A tu manera</strong><p>Te acompañamos al personalizar.</p></div></div>
         </div>
-
-        <div class="caracteristica">
-            <h3>Diseños únicos</h3>
-            <p>Cada diseño es creado con creatividad y detalle.</p>
-        </div>
-
-        <div class="caracteristica">
-            <h3>Hecho para ti</h3>
-            <p>Personalizamos cada prenda según tu estilo.</p>
-        </div>
-
     </section>
 
-    <!-- VALORES + MISION -->
-    <section class="info-nosotros">
-
-        <!-- VALORES -->
-        <div class="valores">
-
-            <h2>Nuestros valores</h2>
-
-            <div class="valor-item">
-                <h3>Creatividad</h3>
-                <p>Fomentamos ideas originales e innovación.</p>
+    <section class="pb-about-story" id="nuestra-historia" aria-labelledby="pb-about-story-title">
+        <div class="pb-about-wrap pb-about-story__grid">
+            <div class="pb-about-story__intro pb-reveal">
+                <span class="pb-about-overline">01 / NUESTRA FILOSOFÍA</span>
+                <h2 id="pb-about-story-title">Más que imprimir.<br><em>Hacerlo tuyo.</em></h2>
             </div>
-
-            <div class="valor-item">
-                <h3>Calidad</h3>
-                <p>Cuidamos cada detalle para darte lo mejor.</p>
-            </div>
-
-            <div class="valor-item">
-                <h3>Confianza</h3>
-                <p>Comprometidos con un servicio transparente.</p>
-            </div>
-
-            <div class="valor-item">
-                <h3>Sostenibilidad</h3>
-                <p>Trabajamos con responsabilidad para cuidar el planeta.</p>
-            </div>
-            
-                        <div class="valor-item">
-                <h3>Empatia</h3>
-                <p> Fomentamos las ideas para mayor comodidad del cliente </p>
-            </div>
-            
-        </div>
-
-        <!-- MISION Y VISION -->
-        <div class="mision-vision">
-
-            <div class="bloque-info">
-                <h2>Propuesta de Valor</h2>
-                <p>
-                   Nos diferenciamos por ofrecer una solución integral. 
-                   No solo imprimimos; materializamos tu visión en cualquier superficie, 
-                   garantizando que tu mensaje destaque tanto en el día a día como en las campañas más ambiciosas.
-                </p>
-            </div>
-
-            <div class="bloque-info">
-                <h2>Nuestra Filosofìa</h2>
-                <p>
-                    Transformamos conceptos en realidades tangibles mediante impresión multiformato de alta precisión. 
-                    Creemos que cada detalle cuenta, ya sea en la textura de una prenda o en el impacto de un anuncio a gran escala, 
-                    uniendo tecnología y creatividad para potenciar tu identidad.
-                </p>
-            </div>
-            
-            <div class="bloque-info">
-                <h2>​​Lo que hacemos</h2>
-                <p>
- ​                <p>Personalización Premium: Expertos en DTF textil para polos, poleras y gorros con acabados duraderos y vibrantes.                </p>
-​                 <p>Merchandising Exclusivo: Tazas, mousepads y artículos personalizados con calidad fotográfica.                </p>
-                ​ <p>Publicidad de Gran Impacto: Soluciones en banner, lona, vinil y backlights para llevar tu marca al siguiente nivel visual.                </p>
-              
+            <div class="pb-about-story__copy pb-reveal">
+                <p class="pb-about-story__big">Una buena idea merece salir de la pantalla y convertirse en algo que puedas llevar, regalar o compartir.</p>
+                <p>En PixBen unimos creatividad y personalización para ayudarte a darle forma a tus proyectos. Desde un polo para ti hasta productos para tu emprendimiento, queremos que cada detalle tenga intención.</p>
+                <a href="productos.html" class="pb-about-story__link">Explorar nuestros productos <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
             </div>
         </div>
-
+        <span class="pb-about-story__watermark" aria-hidden="true">PIXBEN</span>
     </section>
 
-    <!-- CTA -->
-    <section class="cta-nosotros">
-
-        <div>
-            <h3>¿Listo para crear algo único?</h3>
-            <p>Explora nuestros productos y personaliza tu estilo.</p>
+    <section class="pb-about-values" aria-labelledby="pb-about-values-title">
+        <div class="pb-about-wrap">
+            <div class="pb-about-section-heading pb-reveal">
+                <div><span class="pb-about-overline">02 / LO QUE NOS MUEVE</span><h2 id="pb-about-values-title">Tres ideas que nos <em>representan.</em></h2></div>
+                <p>Nuestra esencia está en las ideas de quienes nos eligen. Queremos que el proceso de personalización sea creativo, cercano y claro.</p>
+            </div>
+            <div class="pb-about-values__grid">
+                <article class="pb-about-value-card pb-reveal"><span class="pb-about-value-card__number">01</span><span class="pb-about-value-card__icon"><i class="fa-regular fa-lightbulb" aria-hidden="true"></i></span><h3>Creatividad</h3><p>Tu estilo no tiene por qué parecerse al de nadie. Queremos darte espacio para expresarlo.</p><span class="pb-about-value-card__line" aria-hidden="true"></span></article>
+                <article class="pb-about-value-card pb-reveal"><span class="pb-about-value-card__number">02</span><span class="pb-about-value-card__icon"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></span><h3>Cuidado en los detalles</h3><p>Nos importa cómo se ve tu diseño, cómo se siente el producto y cómo llega a tus manos.</p><span class="pb-about-value-card__line" aria-hidden="true"></span></article>
+                <article class="pb-about-value-card pb-reveal"><span class="pb-about-value-card__number">03</span><span class="pb-about-value-card__icon"><i class="fa-regular fa-heart" aria-hidden="true"></i></span><h3>Conexión</h3><p>Escuchamos tus ideas y buscamos una experiencia de compra clara y personalizada.</p><span class="pb-about-value-card__line" aria-hidden="true"></span></article>
+            </div>
         </div>
-        <a href="personaliza.html">
-        <button>Personaliza ahora</button>
-        </a>
     </section>
 
+    <section class="pb-about-range" aria-labelledby="pb-about-range-title">
+        <div class="pb-about-range__media" aria-hidden="true">
+            <img src="../imagensponsor/banners/banner-poleras.webp" alt="" width="1000" height="1000" loading="lazy">
+            <span class="pb-about-range__media-label">ESTILO QUE SE SIENTE / PIXBEN</span>
+        </div>
+        <div class="pb-about-range__content pb-reveal">
+            <span class="pb-about-overline">03 / LO QUE CREAMOS</span>
+            <h2 id="pb-about-range-title">Un lienzo para<br><em>cada idea.</em></h2>
+            <p>Personalizar es mucho más que elegir una imagen. Es encontrar el producto ideal para darle vida a lo que imaginas.</p>
+            <div class="pb-about-range__list">
+                <a href="productos.html?coleccion=polos"><span>01</span><strong>Polos personalizados</strong><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+                <a href="productos.html?coleccion=poleras"><span>02</span><strong>Hoodies y poleras</strong><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+                <a href="productos.html?coleccion=bolsos"><span>03</span><strong>Bolsos de tocuyo</strong><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+                <a href="productos.html?coleccion=dtf"><span>04</span><strong>Film DTF</strong><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <section class="pb-about-cta" aria-labelledby="pb-about-cta-title">
+        <div class="pb-about-wrap pb-about-cta__inner pb-reveal">
+            <span class="pb-about-overline">TU SIGUIENTE CREACIÓN EMPIEZA AQUÍ</span>
+            <h2 id="pb-about-cta-title">Lo imaginas.<br><em>Lo hacemos tuyo.</em></h2>
+            <p>Explora nuestras colecciones o empieza a diseñar algo que se sienta completamente tuyo.</p>
+            <div class="pb-about-cta__actions">
+                <a class="pb-about-btn pb-about-btn--primary" href="personaliza.html">Personaliza ahora <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                <a class="pb-about-btn pb-about-btn--outline" href="contacto.html">Hablemos de tu idea <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    </section>
 </main>
         
         <!-- FOOTER -->
@@ -265,7 +233,7 @@
                 <!-- REDES -->
                 <div class="footer-redes">
                     <h3>Síguenos</h3>
-                    <a href="#">
+                    <a href="https://www.instagram.com/pixben.pe/" target="_blank" rel="noopener noreferrer">
                         <i class="fa-brands fa-instagram"></i>
                         Instagram
                     </a>
@@ -277,7 +245,7 @@
                         <i class="fa-brands fa-facebook"></i>
                         Facebook
                     </a>
-                 <a href="https://wa.me/51933626970?text=Hola%20PixBen%2C%20necesito%20ayuda%20con%20un%20pedido%20personalizado" target="_blank" rel="noopener noreferrer">
+                 <a href="https://wa.me/51947565664?text=Hola%20PixBen%2C%20necesito%20ayuda%20con%20un%20pedido%20personalizado" target="_blank" rel="noopener noreferrer">
                         <i class="fa-brands fa-whatsapp"></i>
                         WhatsApp
                     </a>
