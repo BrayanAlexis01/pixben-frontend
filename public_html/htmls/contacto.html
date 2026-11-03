@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="es">
     <head>
         <link href="../css/css contacto.css?v=4" rel="stylesheet" type="text/css"/>
@@ -34,9 +35,16 @@
     <script src="../js/pwa-premium.js?v=3" defer></script>
     <link href="../css/header-global.css?v=2" rel="stylesheet">
     <link rel="stylesheet" href="../css/accessibility.css?v=6">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/pixben-editorial.css?v=2">
+    <link rel="stylesheet" href="../css/contacto-premium.css?v=1">
+    <script src="../js/pixben-motion.js?v=1" defer></script>
 </head>
-    <body>
+    <body class="pb-contact-page">
 
+        <div class="pb-announcement">TU IDEA MERECE DESTACAR <span>✦</span> CREACIONES Y ACCESORIOS PERSONALIZADOS <span>✦</span> <a href="personaliza.html">PERSONALIZA AQUÍ</a></div>
         <!-- HEADER -->
         <header class="site-header-pixben">
     <div class="logo">
@@ -77,108 +85,146 @@
 
 
 
-        <main class="contacto-container">
 
-            <!-- TITULO -->
-            <section class="contacto-titulo">
-                <h1>CONTÁCTANOS</h1>
-                <p>
-                    Estamos aquí para ayudarte. Escríbenos y nuestro equipo
-                    te responderá lo antes posible.
-                </p>
-            </section>
-
-            <!-- BENEFICIOS SUPERIORES -->
-            <section class="contacto-beneficios">
-
-                <div class="beneficio-box">
-                    <h3>Respuesta rápida</h3>
-                    <p>Te respondemos en menos de 24 horas.</p>
-                </div>
-
-                <div class="beneficio-box">
-                    <h3>Atención personalizada</h3>
-                    <p>Te ayudamos a crear algo increíble.</p>
-                </div>
-
-                <div class="beneficio-box">
-                    <h3>Compra segura</h3>
-                    <p>Tu información está protegida.</p>
-                </div>
-
-            </section>
-
-            <!-- FORM + INFO -->
-            <section class="contacto-contenido">
-
-                <!-- FORMULARIO -->
-                <div class="formulario-contacto">
-
-                    <h2>Envíanos un mensaje</h2>
-                    <p>Completa el formulario y nos pondremos en contacto contigo.</p>
-
-                    <form id="formContacto">
-
-                        <div class="fila">
-                            <input type="text" id="contactoNombre" name="nombre" maxlength="120" placeholder="Nombre completo" required>
-                            <input type="email" id="contactoCorreo" name="correo" maxlength="160" placeholder="Correo electrónico" required>
+        <main class="pb-contact" id="contenido">
+            <section class="pb-contact-hero" aria-labelledby="contactoHeroTitulo">
+                <div class="pb-contact-hero__inner">
+                    <div class="pb-contact-hero__copy pb-reveal">
+                        <span class="pb-contact-kicker"><span class="pb-contact-kicker__dot"></span> PIXBEN / HABLEMOS</span>
+                        <h1 id="contactoHeroTitulo">Tu próxima idea<br>comienza con un <em>hola.</em></h1>
+                        <p>¿Tienes un diseño en mente, una consulta sobre tu pedido o quieres personalizar algo especial? Estamos aquí para ayudarte a hacerlo realidad.</p>
+                        <div class="pb-contact-hero__actions">
+                            <a class="pb-contact-button pb-contact-button--light" href="#formContacto">Cuéntanos tu idea <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                            <a class="pb-contact-button pb-contact-button--ghost" href="https://wa.me/51947565664?text=Hola%20PixBen%2C%20quiero%20hacer%20una%20consulta%20sobre%20sus%20productos." target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Escribir por WhatsApp</a>
                         </div>
-
-                        <input type="text" id="contactoAsunto" name="asunto" maxlength="180" placeholder="Asunto" required>
-
-                        <textarea id="contactoMensaje" name="mensaje" maxlength="2000" placeholder="Cuéntanos cómo podemos ayudarte..." required></textarea>
-                        <p id="estadoContacto" class="estado-contacto" aria-live="polite"></p>
-
-                        <button type="submit">
-                            Enviar mensaje
-                        </button>
-
-                    </form>
-
+                        <div class="pb-contact-hero__micro"><span class="pb-contact-hero__micro-mark">✳</span> Diseños, ideas y consultas. Todo comienza aquí.</div>
+                    </div>
+                    <div class="pb-contact-hero__visual" aria-hidden="true">
+                        <div class="pb-contact-hero__photo"></div>
+                        <span class="pb-contact-hero__orbit pb-contact-hero__orbit--one"></span>
+                        <span class="pb-contact-hero__orbit pb-contact-hero__orbit--two"></span>
+                        <div class="pb-contact-hero__floating">
+                            <span>CREA ALGO DIFERENTE</span>
+                            <strong>Lo imaginas.<br>Lo hacemos tuyo.</strong>
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </div>
+                    </div>
                 </div>
-
-                <!-- INFORMACION -->
-                <div class="info-contacto">
-
-                    <h2>Otras formas de contacto</h2>
-
-                    <div class="info-item">
-                        <h3>Correo electrónico</h3>
-                        <p>wendincs@gmail.com</p>
-                    </div>
-
-                    <div class="info-item">
-                        <h3>WhatsApp</h3>
-                        <p>+51 947 565 664</p>
-                    </div>
-
-                    <div class="info-item">
-                        <h3>Instagram</h3>
-                        <a href="#">@pixben.pe</a>
-                    </div>
-
-                    <div class="info-item">
-                        <h3>Dirección</h3>
-                        <a href ="https://www.bing.com/maps/search?v=2&pc=FACEBK&mid=8100&mkt=es-MX&FORM=FBKPL1&q=Chicmabamba+segunda+etapa+Mz.+I+Lt.4%2C+San+Mart%C3%ADn+de+Porres%2C+Peru%2C+15102&cp=-12.046000%7E-74.613510&lvl=7&style=r" target="_blank" rel="noopener noreferrer">Chicmabamba segunda etapa Mz. I Lt.4, San Martín de Porres, Peru, 15102</a>
-                    </div>
-
-                </div>
-
             </section>
 
-            <!-- FAQ -->
-            <section class="faq-box">
-
-                <div>
-                    <h3>¿Tienes dudas frecuentes?</h3>
-                    <p>Visita nuestra sección de preguntas frecuentes.</p>
+            <section class="pb-contact-values" aria-label="Cómo te ayudamos">
+                <div class="pb-contact-values__inner">
+                    <div class="pb-contact-value pb-reveal">
+                        <span class="pb-contact-value__icon"><i class="fa-regular fa-lightbulb" aria-hidden="true"></i></span>
+                        <div><h2>Ideas con personalidad</h2><p>Hablemos del diseño que quieres crear.</p></div>
+                    </div>
+                    <div class="pb-contact-value pb-reveal">
+                        <span class="pb-contact-value__icon"><i class="fa-regular fa-comments" aria-hidden="true"></i></span>
+                        <div><h2>Atención cercana</h2><p>Te orientamos con productos y pedidos.</p></div>
+                    </div>
+                    <div class="pb-contact-value pb-reveal">
+                        <span class="pb-contact-value__icon"><i class="fa-solid fa-box-open" aria-hidden="true"></i></span>
+                        <div><h2>Personaliza a tu manera</h2><p>Polos, poleras, bolsos y mucho más.</p></div>
+                    </div>
                 </div>
-
-                <a class="faq-cta-link" href="preguntas frecuentes.html">Ver preguntas frecuentes <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
-
             </section>
 
+            <section class="pb-contact-main" aria-labelledby="contactoSeccionTitulo">
+                <div class="pb-contact-section-heading pb-reveal">
+                    <div>
+                        <span class="pb-contact-overline">01 / ESTAMOS PARA AYUDARTE</span>
+                        <h2 id="contactoSeccionTitulo">Hablemos de <em>tu proyecto.</em></h2>
+                    </div>
+                    <p>Elige cómo prefieres contactarnos. Puedes escribirnos desde el formulario o conversar directamente con PixBen.</p>
+                </div>
+
+                <div class="pb-contact-layout">
+                    <section class="formulario-contacto pb-contact-form-card pb-reveal" aria-labelledby="contactoFormularioTitulo">
+                        <div class="pb-contact-form-card__heading">
+                            <div>
+                                <span class="pb-contact-overline">MENSAJE DIRECTO</span>
+                                <h3 id="contactoFormularioTitulo">Cuéntanos tu idea.</h3>
+                                <p>Deja tus datos y tu consulta. Nuestro equipo podrá responderte por correo.</p>
+                            </div>
+                            <span class="pb-contact-form-card__decoration" aria-hidden="true"><i class="fa-regular fa-paper-plane"></i></span>
+                        </div>
+                        <form id="formContacto" autocomplete="on">
+                            <div class="fila pb-contact-fields-row">
+                                <div class="pb-contact-field">
+                                    <label for="contactoNombre">Nombre completo <span aria-hidden="true">*</span></label>
+                                    <input type="text" id="contactoNombre" name="nombre" maxlength="120" autocomplete="name" placeholder="¿Cómo te llamas?" required>
+                                </div>
+                                <div class="pb-contact-field">
+                                    <label for="contactoCorreo">Correo electrónico <span aria-hidden="true">*</span></label>
+                                    <input type="email" id="contactoCorreo" name="correo" maxlength="160" autocomplete="email" placeholder="tunombre@correo.com" required>
+                                </div>
+                            </div>
+                            <div class="pb-contact-field">
+                                <label for="contactoAsunto">¿Sobre qué nos escribes? <span aria-hidden="true">*</span></label>
+                                <input type="text" id="contactoAsunto" name="asunto" maxlength="180" list="contactoTemas" placeholder="Ej. Personalización de un polo" required>
+                                <datalist id="contactoTemas">
+                                    <option value="Personalización de un producto"></option>
+                                    <option value="Consulta sobre mi pedido"></option>
+                                    <option value="Cotización por mayor"></option>
+                                    <option value="Envíos y entregas"></option>
+                                    <option value="Otra consulta"></option>
+                                </datalist>
+                            </div>
+                            <div class="pb-contact-field">
+                                <label for="contactoMensaje">Tu mensaje <span aria-hidden="true">*</span></label>
+                                <textarea id="contactoMensaje" name="mensaje" maxlength="2000" rows="6" placeholder="Cuéntanos qué tienes en mente, qué producto te interesa o cómo podemos ayudarte..." required></textarea>
+                            </div>
+                            <div class="pb-contact-submit-row">
+                                <p><i class="fa-solid fa-lock" aria-hidden="true"></i> Usaremos estos datos para responder a tu consulta.</p>
+                                <button class="pb-contact-send" type="submit"><span class="pb-contact-send__label">Enviar mensaje</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                            </div>
+                            <p id="estadoContacto" class="estado-contacto" role="status" aria-live="polite" aria-atomic="true"></p>
+                        </form>
+                    </section>
+
+                    <aside class="pb-contact-side" aria-label="Otras formas de contacto">
+                        <section class="pb-contact-whatsapp pb-reveal">
+                            <span class="pb-contact-overline">¿PREFIERES ALGO MÁS RÁPIDO?</span>
+                            <div class="pb-contact-whatsapp__symbol"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
+                            <h3>Un mensaje puede ser el comienzo de algo increíble.</h3>
+                            <p>Conversemos directamente por WhatsApp sobre tu diseño, pedido o consulta.</p>
+                            <a href="https://wa.me/51947565664?text=Hola%20PixBen%2C%20me%20gustar%C3%ADa%20recibir%20asesor%C3%ADa%20sobre%20un%20producto%20personalizado." target="_blank" rel="noopener noreferrer">Abrir WhatsApp <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+                        </section>
+                        <section class="pb-contact-methods pb-reveal">
+                            <h3>También puedes encontrarnos aquí</h3>
+                            <a class="pb-contact-method" href="mailto:wendincs@gmail.com">
+                                <span class="pb-contact-method__icon"><i class="fa-regular fa-envelope" aria-hidden="true"></i></span>
+                                <span class="pb-contact-method__copy"><strong>Correo electrónico</strong><small>wendincs@gmail.com</small></span>
+                                <i class="fa-solid fa-arrow-up-right-from-square pb-contact-method__arrow" aria-hidden="true"></i>
+                            </a>
+                            <a class="pb-contact-method" href="https://www.instagram.com/pixben.pe/" target="_blank" rel="noopener noreferrer">
+                                <span class="pb-contact-method__icon"><i class="fa-brands fa-instagram" aria-hidden="true"></i></span>
+                                <span class="pb-contact-method__copy"><strong>Instagram</strong><small>@pixben.pe</small></span>
+                                <i class="fa-solid fa-arrow-up-right-from-square pb-contact-method__arrow" aria-hidden="true"></i>
+                            </a>
+                            <a class="pb-contact-method" href="https://www.google.com/maps/search/?api=1&amp;query=Chicmabamba%20segunda%20etapa%20Mz.%20I%20Lt.4%2C%20San%20Mart%C3%ADn%20de%20Porres%2C%20Per%C3%BA" target="_blank" rel="noopener noreferrer">
+                                <span class="pb-contact-method__icon"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></span>
+                                <span class="pb-contact-method__copy"><strong>Ubicación</strong><small>San Martín de Porres, Lima</small></span>
+                                <i class="fa-solid fa-arrow-up-right-from-square pb-contact-method__arrow" aria-hidden="true"></i>
+                            </a>
+                        </section>
+                    </aside>
+                </div>
+            </section>
+
+            <section class="pb-contact-faq" aria-labelledby="contactoFaqTitulo">
+                <div class="pb-contact-faq__inner pb-reveal">
+                    <div class="pb-contact-faq__icon" aria-hidden="true"><i class="fa-regular fa-circle-question"></i></div>
+                    <div>
+                        <span class="pb-contact-overline">UNA AYUDA EXTRA</span>
+                        <h2 id="contactoFaqTitulo">¿Tienes algunas dudas?</h2>
+                        <p>Resolvemos preguntas sobre personalización, pagos, entregas y pedidos.</p>
+                    </div>
+                    <a href="preguntas frecuentes.html">Ir a preguntas frecuentes <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                </div>
+            </section>
         </main>
+
 
 
         <!-- FOOTER -->
@@ -242,7 +288,7 @@
                 <!-- REDES -->
                 <div class="footer-redes">
                     <h3>Síguenos</h3>
-                    <a href="#">
+                    <a href="https://www.instagram.com/pixben.pe/" target="_blank" rel="noopener noreferrer">
                         <i class="fa-brands fa-instagram"></i>
                         Instagram
                     </a>
@@ -254,7 +300,7 @@
                         <i class="fa-brands fa-facebook"></i>
                         Facebook
                     </a>
-                    <a href="https://wa.me/51933626970?text=Hola%20PixBen%2C%20necesito%20ayuda%20con%20un%20pedido%20personalizado" target="_blank" rel="noopener noreferrer">
+                    <a href="https://wa.me/51947565664?text=Hola%20PixBen%2C%20necesito%20ayuda%20con%20un%20pedido%20personalizado" target="_blank" rel="noopener noreferrer">
                         <i class="fa-brands fa-whatsapp"></i>
                         WhatsApp
                     </a>
@@ -274,7 +320,7 @@
 <script src="../js/header-global.js?v=2"></script>
 <script src="../js/analitica.js?v=3"></script>
 
-        <script src="../js/paginas/contacto-formulario.js?v=2" type="text/javascript"></script>
+        <script src="../js/paginas/contacto-formulario.js?v=3" type="text/javascript"></script>
         <script src="../js/eventos-html.js?v=3" type="text/javascript"></script>
         <script src="../js/responsive-menu.js?v=4" type="text/javascript"></script>
 <script src="../js/accessibility.js?v=1"></script>
