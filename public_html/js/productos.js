@@ -47,6 +47,67 @@ const estadoCatalogo = {
 
 const elementosCatalogo = {};
 
+/* Colecciones que enlazan desde la portada.
+   Se resuelven con los nombres reales devueltos por el catálogo. */
+const ALIAS_COLECCIONES_PIXBEN = {
+    polos: ["Polos", "Polos personalizados", "Polo", "Camisetas"],
+    poleras: ["Hoodies / Poleras", "Hoodies/Poleras", "Hoodies y Poleras", "Poleras", "Hoodies", "Sudaderas"],
+    bolsos: ["Bolsos / Totebags", "Bolsos de Tocuyo", "Bolsos", "Totebags", "Accesorios"],
+    dtf: ["Film DTF Premium", "Film DTF", "DTF"]
+};
+
+function seleccionarCategoriaDesdeURL() {
+    const parametros = new URLSearchParams(window.location.search);
+    const coleccion = String(parametros.get("coleccion") || "").toLowerCase().trim();
+    const categoriaDirecta = String(parametros.get("categoria") || "").trim();
+    if (!coleccion && !categoriaDirecta) return;
+
+    const categoriasDisponibles = [...new Set([
+        ...estadoCatalogo.categoriasServidor,
+        ...estadoCatalogo.productos.map(item => item.categoria),
+        ...SERVICIOS_COTIZABLES.map(item => item.categoria)
+    ].filter(valor => typeof valor === "string" && valor.trim()))];
+
+    const alias = Object.prototype.hasOwnProperty.call(ALIAS_COLECCIONES_PIXBEN, coleccion)
+        ? ALIAS_COLECCIONES_PIXBEN[coleccion]
+        : (categoriaDirecta ? [categoriaDirecta] : []);
+
+    // Primero coincidencias exactas; luego variantes con nombres más descriptivos.
+    let encontrada = null;
+    for (const nombre of alias) {
+        encontrada = categoriasDisponibles.find(categoria =>
+            normalizarTexto(categoria) === normalizarTexto(nombre)
+        );
+        if (encontrada) break;
+    }
+    if (!encontrada) {
+        for (const nombre of alias) {
+            encontrada = categoriasDisponibles.find(categoria =>
+                normalizarTexto(categoria).includes(normalizarTexto(nombre))
+            );
+            if (encontrada) break;
+        }
+    }
+    estadoCatalogo.categoria = encontrada || "todos";
+}
+
+function actualizarEnlaceCategoria() {
+    const url = new URL(window.location.href);
+    url.searchParams.delete("coleccion");
+    if (estadoCatalogo.categoria === "todos") url.searchParams.delete("categoria");
+    else url.searchParams.set("categoria", estadoCatalogo.categoria);
+    window.history.replaceState(window.history.state, "", url.pathname + url.search + url.hash);
+}
+
+function mostrarColeccionSeleccionada() {
+    const aviso = document.getElementById("pbCurrentCollection");
+    const nombre = document.getElementById("pbCurrentCollectionName");
+    if (!aviso || !nombre) return;
+    const hayFiltro = estadoCatalogo.categoria !== "todos";
+    aviso.hidden = !hayFiltro;
+    nombre.textContent = hayFiltro ? estadoCatalogo.categoria : "";
+}
+
 window.addEventListener("DOMContentLoaded", iniciarCatalogo);
 
 async function iniciarCatalogo() {
@@ -89,6 +150,7 @@ async function cargarProductosCatalogo() {
         estadoCatalogo.primeraPagina = primeraPagina;
         estadoCatalogo.usandoPrecarga = false;
         configurarRangoPrecio();
+        seleccionarCategoriaDesdeURL();
         crearCategorias();
         // La primera página ya está descargada: no repetir exactamente la misma
         // consulta antes de mostrar el catálogo.
@@ -112,12 +174,14 @@ async function cargarProductosCatalogo() {
             estadoCatalogo.servidorPaginado = false;
             estadoCatalogo.productos = [...(Array.isArray(data) ? data : []), ...SERVICIOS_COTIZABLES];
             estadoCatalogo.usandoPrecarga = false;
-            configurarRangoPrecio(); crearCategorias(); aplicarFiltros(); mostrarEstado("");
+            configurarRangoPrecio(); seleccionarCategoriaDesdeURL();
+            crearCategorias(); aplicarFiltros(); mostrarEstado("");
         } catch (fallbackError) {
             estadoCatalogo.servidorPaginado = false;
             estadoCatalogo.productos = [...SERVICIOS_COTIZABLES];
             estadoCatalogo.usandoPrecarga = true;
-            configurarRangoPrecio(); crearCategorias(); aplicarFiltros();
+            configurarRangoPrecio(); seleccionarCategoriaDesdeURL();
+            crearCategorias(); aplicarFiltros();
             mostrarEstado("El catálogo no está disponible temporalmente.", true);
         }
     }
@@ -157,6 +221,7 @@ function configurarEventosCatalogo() {
 
     document.getElementById("btnAplicarFiltros")?.addEventListener("click", aplicarFiltros);
     document.getElementById("btnLimpiarFiltros")?.addEventListener("click", limpiarFiltros);
+    document.getElementById("pbSeeAllProducts")?.addEventListener("click", limpiarFiltros);
 
     document.querySelectorAll(".color-filtro").forEach(boton => {
         boton.addEventListener("click", () => {
@@ -246,6 +311,7 @@ function crearCategorias() {
     categorias.forEach(categoria => {
         elementosCatalogo.categorias.appendChild(crearBotonCategoria(categoria, categoria));
     });
+    mostrarColeccionSeleccionada();
 }
 
 function crearBotonCategoria(etiqueta, valor) {
@@ -254,16 +320,19 @@ function crearBotonCategoria(etiqueta, valor) {
     boton.className = "categoria-filtro";
     boton.textContent = etiqueta;
     boton.dataset.categoria = valor;
-
-    if (normalizarTexto(valor) === normalizarTexto(estadoCatalogo.categoria)) {
-        boton.classList.add("seleccionado");
-    }
+    const seleccionado = normalizarTexto(valor) === normalizarTexto(estadoCatalogo.categoria);
+    boton.classList.toggle("seleccionado", seleccionado);
+    boton.setAttribute("aria-pressed", String(seleccionado));
 
     boton.addEventListener("click", () => {
         estadoCatalogo.categoria = valor;
         document.querySelectorAll(".categoria-filtro").forEach(item => {
-            item.classList.toggle("seleccionado", item === boton);
+            const activo = item === boton;
+            item.classList.toggle("seleccionado", activo);
+            item.setAttribute("aria-pressed", String(activo));
         });
+        actualizarEnlaceCategoria();
+        mostrarColeccionSeleccionada();
         aplicarFiltros();
     });
 
@@ -548,8 +617,12 @@ function limpiarFiltros() {
     elementosCatalogo.soloStock.checked = false;
 
     document.querySelectorAll(".categoria-filtro").forEach(boton => {
-        boton.classList.toggle("seleccionado", boton.dataset.categoria === "todos");
+        const activo = boton.dataset.categoria === "todos";
+        boton.classList.toggle("seleccionado", activo);
+        boton.setAttribute("aria-pressed", String(activo));
     });
+    actualizarEnlaceCategoria();
+    mostrarColeccionSeleccionada();
     document.querySelectorAll(".color-filtro, .talla-filtro").forEach(boton => {
         boton.classList.remove("seleccionado");
         boton.setAttribute("aria-pressed", "false");
