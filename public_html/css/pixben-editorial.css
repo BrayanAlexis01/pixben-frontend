@@ -448,6 +448,112 @@ body.pb-catalog .paginacion button { border-radius:10px; }
 body.pb-catalog .paginacion button.activo { background:#643391; color:#fff; border-color:#643391; }
 body.pb-catalog .estado-catalogo { border-radius:14px; }
 
+/* Segunda pasada editorial: tarjetas legibles, tacto premium y estado de colección. */
+.pb-collection-card {
+  border:1px solid rgba(255,255,255,.15);
+  box-shadow:0 10px 32px rgba(31,17,43,.08);
+}
+.pb-collection-card::before {
+  background:
+    linear-gradient(90deg,rgba(12,7,21,.94) 0%,rgba(14,8,26,.68) 47%,rgba(14,8,26,.10) 96%),
+    linear-gradient(0deg,rgba(13,7,21,.65),transparent 77%);
+  transition:opacity .35s ease;
+}
+.pb-collection-card:hover::before { opacity:.91; }
+.pb-collection-card h3 {
+  max-width:100%;
+  font-size:clamp(30px,2.8vw,42px);
+  text-wrap:balance;
+  text-shadow:0 2px 18px rgba(0,0,0,.16);
+}
+.pb-collection-card p { max-width:360px; }
+.pb-collection-type { color:#f1dfff; }
+.pb-collection-link {
+  gap:15px;
+  min-height:43px;
+  margin-top:22px;
+  padding:10px 14px 10px 17px;
+  border:1px solid rgba(255,255,255,.42);
+  border-radius:999px;
+  background:rgba(255,255,255,.1);
+  color:#fff;
+  font-size:12px;
+  letter-spacing:.015em;
+  -webkit-backdrop-filter:blur(6px);
+  backdrop-filter:blur(6px);
+  transition:background .25s ease,color .25s ease,transform .25s ease;
+}
+.pb-collection-link::after { content:"↗"; font-size:18px; line-height:1; font-weight:500; }
+.pb-collection-card:hover .pb-collection-link {
+  background:#fff;
+  color:#321b47;
+  transform:translateX(3px);
+}
+.pb-collection-card:focus-visible {
+  outline:3px solid #b77dee;
+  outline-offset:4px;
+}
+.pb-collection-card:focus-visible .pb-collection-link {
+  background:#fff;
+  color:#321b47;
+}
+body.pb-catalog .categorias .categoria-filtro {
+  border-radius:10px;
+  transition:background .2s ease,color .2s ease;
+}
+body.pb-catalog .categorias .categoria-filtro:hover {
+  background:#f4edfc;
+  color:#5b258d;
+}
+body.pb-catalog .categorias .categoria-filtro.seleccionado {
+  background:#efe4f8;
+  color:#572188;
+  box-shadow:inset 3px 0 0 #7d36b5;
+  font-weight:800;
+}
+.pb-current-collection {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:12px;
+  width:100%;
+  margin:0 0 22px;
+  padding:13px 17px;
+  border:1px solid #e3d3f0;
+  border-radius:13px;
+  background:#f2eafa;
+  color:#512879;
+  font-size:13px;
+  font-weight:650;
+}
+.pb-current-collection[hidden] { display:none !important; }
+.pb-current-collection span { display:inline-flex; align-items:center; flex-wrap:wrap; gap:8px; }
+.pb-current-collection strong { font-weight:850; }
+.pb-current-collection button {
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  padding:8px 12px;
+  border:1px solid #d9c1ef;
+  border-radius:99px;
+  background:#fff;
+  color:#5d298c;
+  font-size:12px;
+  font-weight:800;
+  cursor:pointer;
+  transition:background .2s ease,border-color .2s ease;
+}
+.pb-current-collection button:hover { background:#e8d9f5; border-color:#b58ad8; }
+@media (max-width:640px) {
+  .pb-collection-card h3 { font-size:clamp(29px,8vw,40px); }
+  .pb-current-collection { align-items:flex-start; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .pb-collection-link,.pb-current-collection button { transition:none !important; }
+  .pb-collection-card:hover .pb-collection-link { transform:none !important; }
+}
+
 /* Pie y beneficios: armonía visual en las dos páginas intervenidas. */
 body.pb-editorial .beneficios,body.pb-catalog .beneficios { background:#17121c; gap:18px; padding:30px 5vw; }
 body.pb-editorial footer,body.pb-catalog footer { background:#110e15; }
