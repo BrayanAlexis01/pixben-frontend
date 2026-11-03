@@ -102,10 +102,37 @@ function actualizarEnlaceCategoria() {
 function mostrarColeccionSeleccionada() {
     const aviso = document.getElementById("pbCurrentCollection");
     const nombre = document.getElementById("pbCurrentCollectionName");
-    if (!aviso || !nombre) return;
+    const titulo = document.getElementById("pbCatalogTitle");
+    const etiqueta = document.getElementById("pbCatalogEyebrow");
+    const descripcion = document.getElementById("pbCatalogDescription");
     const hayFiltro = estadoCatalogo.categoria !== "todos";
-    aviso.hidden = !hayFiltro;
-    nombre.textContent = hayFiltro ? estadoCatalogo.categoria : "";
+
+    if (aviso) aviso.hidden = !hayFiltro;
+    if (nombre) nombre.textContent = hayFiltro ? estadoCatalogo.categoria : "";
+    if (!titulo || !etiqueta || !descripcion) return;
+
+    if (!hayFiltro) {
+        etiqueta.textContent = "COLECCIÓN PIXBEN";
+        titulo.innerHTML = "Explora. Elige.<br>Personaliza.";
+        descripcion.textContent = "Encuentra prendas, accesorios y opciones de estampado para tus próximas ideas. Filtra por categoría, color y precio.";
+        document.title = "Productos personalizados | PixBen";
+        return;
+    }
+
+    const categoria = estadoCatalogo.categoria;
+    const normalizada = normalizarTexto(categoria);
+    etiqueta.textContent = "EXPLORA PIXBEN / COLECCIONES";
+    titulo.textContent = categoria.replace(/\\s*\\/\\s*/g, " y ");
+    descripcion.textContent = normalizada.includes("dtf")
+        ? "Dale vida a tus diseños con Film DTF. Consulta metraje, formatos y cotizaciones para tus proyectos."
+        : normalizada.includes("bolso") || normalizada.includes("tote")
+            ? "Bolsos y totebags para llevar tus ideas a todas partes. Descubre modelos y opciones para personalizar."
+            : normalizada.includes("polera") || normalizada.includes("hoodie")
+                ? "Encuentra poleras y hoodies para crear looks que te representen. Elige tu favorito y hazlo tuyo."
+                : normalizada.includes("polo")
+                    ? "Polos con personalidad para todos tus planes. Explora diseños y encuentra tu próximo favorito."
+                    : "Descubre los productos de esta colección y encuentra la inspiración para tu próximo diseño.";
+    document.title = categoria + " | PixBen";
 }
 
 window.addEventListener("DOMContentLoaded", iniciarCatalogo);
