@@ -3,51 +3,60 @@
 (() => {
     const formulario = document.getElementById("formContacto");
     const estado = document.getElementById("estadoContacto");
-    const usuario = obtenerUsuarioSesion();
-    if (!formulario) return;
+    if (!formulario || !estado) return;
 
-    if (usuario) {
-        document.getElementById("contactoNombre").value = [usuario.nombre, usuario.apellido].filter(Boolean).join(" ");
-        document.getElementById("contactoCorreo").value = usuario.correo || "";
-    }
+    const boton = formulario.querySelector('button[type="submit"]');
+    const etiqueta = boton?.querySelector(".pb-contact-send__label");
+    if (!boton) return;
+
+    // Los campos inician vacíos. El navegador puede sugerir datos con autocomplete.
+    // El envío sigue utilizando POST /contactos y la bandeja de administración actual.
+    const actualizarEnvio = (enviando) => {
+        boton.disabled = enviando;
+        boton.classList.toggle("is-loading", enviando);
+        formulario.setAttribute("aria-busy", enviando ? "true" : "false");
+        if (etiqueta) etiqueta.textContent = enviando ? "Enviando..." : "Enviar mensaje";
+        else boton.textContent = enviando ? "Enviando..." : "Enviar mensaje";
+    };
 
     formulario.addEventListener("submit", async evento => {
         evento.preventDefault();
-        const boton = formulario.querySelector('button[type="submit"]');
-        boton.disabled = true;
-        boton.textContent = "Enviando...";
+        if (boton.disabled || !formulario.reportValidity()) return;
+
         estado.textContent = "";
         estado.className = "estado-contacto";
+        actualizarEnvio(true);
+
+        const datos = {
+            nombre: document.getElementById("contactoNombre").value.trim(),
+            correo: document.getElementById("contactoCorreo").value.trim(),
+            asunto: document.getElementById("contactoAsunto").value.trim(),
+            mensaje: document.getElementById("contactoMensaje").value.trim()
+        };
 
         try {
             const respuesta = await fetch(`${API_URL}/contactos`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({
-                    nombre: document.getElementById("contactoNombre").value.trim(),
-                    correo: document.getElementById("contactoCorreo").value.trim(),
-                    asunto: document.getElementById("contactoAsunto").value.trim(),
-                    mensaje: document.getElementById("contactoMensaje").value.trim()
-                })
+                body: JSON.stringify(datos)
             });
             if (!respuesta.ok) {
-                let mensaje = "No se pudo enviar el mensaje";
-                try { mensaje = (await respuesta.json()).message || mensaje; } catch {}
+                let mensaje = "No pudimos enviar tu mensaje. Inténtalo nuevamente.";
+                try {
+                    const detalle = await respuesta.json();
+                    mensaje = detalle.message || detalle.mensaje || mensaje;
+                } catch (_) { /* No todos los errores devuelven JSON. */ }
                 throw new Error(mensaje);
             }
+
             formulario.reset();
-            if (usuario) {
-                document.getElementById("contactoNombre").value = [usuario.nombre, usuario.apellido].filter(Boolean).join(" ");
-                document.getElementById("contactoCorreo").value = usuario.correo || "";
-            }
-            estado.textContent = "Mensaje enviado. El administrador lo verá en el panel de PixBen.";
+            estado.textContent = "¡Mensaje enviado! Recibimos tu consulta en PixBen y podremos responderte por correo.";
             estado.classList.add("ok");
         } catch (error) {
-            estado.textContent = error.message;
+            estado.textContent = error?.message || "No fue posible conectar con PixBen. Inténtalo nuevamente.";
             estado.classList.add("error");
         } finally {
-            boton.disabled = false;
-            boton.textContent = "Enviar mensaje";
+            actualizarEnvio(false);
         }
     });
 })();
