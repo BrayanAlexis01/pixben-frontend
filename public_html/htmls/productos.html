@@ -34,7 +34,7 @@
     <script src="../js/pwa-premium.js?v=2" defer></script>
     <link href="../css/header-global.css?v=2" rel="stylesheet">
     <link rel="stylesheet" href="../css/accessibility.css?v=6">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="../css/pixben-editorial.css?v=1"><script src="../js/pixben-motion.js?v=1" defer></script></head>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="../css/pixben-editorial.css?v=2"><script src="../js/pixben-motion.js?v=1" defer></script></head>
     <body class="pb-catalog">
 
         <div class="pb-announcement">TU IDEA, TU ESTILO <span>✦</span> EXPLORA NUESTRAS COLECCIONES <span>✦</span> <a href="personaliza.html">PERSONALIZA</a></div><!-- HEADER -->
@@ -148,6 +148,10 @@
 
                 <div class="encabezado-productos">
                     <h1>PRODUCTOS</h1>
+                    <div class="pb-current-collection" id="pbCurrentCollection" hidden>
+                        <span><i class="fa-solid fa-layer-group" aria-hidden="true"></i> Colección: <strong id="pbCurrentCollectionName"></strong></span>
+                        <button id="pbSeeAllProducts" type="button">Ver todo <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                    </div>
 
                     <div class="controles-productos">
                         <label class="busqueda-catalogo" aria-label="Buscar productos">
@@ -279,7 +283,7 @@
 <script src="../js/config.js?v=20"></script>
 <script src="../js/header-global.js?v=2"></script>
 <script src="../js/analitica.js?v=3"></script>
-<script src="../js/productos.js?v=12" type="text/javascript"></script>
+<script src="../js/productos.js?v=13" type="text/javascript"></script>
 
                 
         
