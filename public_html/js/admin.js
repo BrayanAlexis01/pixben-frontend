@@ -216,13 +216,20 @@ function configurarMonitorRender() {
     comprobarEstadoRender();
 }
 
+function categoriaPublicaAdmin(nombre) {
+    const valor = String(nombre || "").trim();
+    const normalizada = normalizarTexto(valor).replace(/\s*\/\s*/g, " / ");
+    return normalizada === "bolsos / totebags" || normalizada === "bolsos de tocuyo"
+            ? "Bolsos de Tocuyo" : valor;
+}
+
 async function cargarCategorias() {
-    const respaldo = ["Polos", "Hoodies / Poleras", "Gorras", "Tazas", "Mousepads", "Bolsos / Totebags", "Bolsos de Tocuyo", "Film DTF Premium", "Accesorios"];
+    const respaldo = ["Polos", "Hoodies / Poleras", "Gorras", "Tazas", "Mousepads", "Bolsos de Tocuyo", "Film DTF Premium", "Accesorios"];
     try {
         const respuesta = await fetchConSesion(`${API_URL}/categorias`);
         if (!respuesta.ok) throw new Error();
         const categorias = await respuesta.json();
-        categoriasDisponibles = [...new Set([...(categorias || []).map(c => c.nombre).filter(Boolean), ...respaldo])];
+        categoriasDisponibles = [...new Set([...(categorias || []).map(c => c.nombre).filter(Boolean), ...respaldo].map(categoriaPublicaAdmin).filter(Boolean))];
     } catch {
         categoriasDisponibles = respaldo;
     }
@@ -560,7 +567,7 @@ function actualizarFiltroCategoriasAdmin() {
     const select = document.getElementById("filtroCategoriaProductoAdmin");
     if (!select) return;
     const actual = select.value;
-    const categorias = [...new Set(productosAdmin.map(p => String(p.categoria || "").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
+    const categorias = [...new Set(productosAdmin.map(p => categoriaPublicaAdmin(p.categoria)).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
     select.innerHTML = '<option value="">Todas las categorías</option>' + categorias.map(c => `<option value="${escaparAtributo(c)}">${escaparHtml(c)}</option>`).join("");
     if (categorias.includes(actual)) select.value = actual;
 }
@@ -573,7 +580,7 @@ function obtenerProductosFiltradosAdmin() {
     const lista = productosAdmin.filter(p => {
         const valores = {
             nombre: normalizarTexto(p.nombre),
-            categoria: normalizarTexto(p.categoria),
+            categoria: normalizarTexto(categoriaPublicaAdmin(p.categoria)),
             sku: normalizarTexto(p.sku),
             id: String(p.id ?? "")
         };
@@ -734,11 +741,12 @@ async function editarProducto(id) {
         document.getElementById("precio").value = p.precio ?? "";
         document.getElementById("stock").value = p.stock ?? "";
         cargarColoresAdmin(p.colores || []);
-        if (p.categoria && !categoriasDisponibles.includes(p.categoria)) {
-            categoriasDisponibles.push(p.categoria);
+        const categoriaEdicion = categoriaPublicaAdmin(p.categoria);
+        if (categoriaEdicion && !categoriasDisponibles.includes(categoriaEdicion)) {
+            categoriasDisponibles.push(categoriaEdicion);
             completarSelectCategorias(categoriasDisponibles);
         }
-        document.getElementById("categoria").value = p.categoria || categoriasDisponibles[0];
+        document.getElementById("categoria").value = categoriaEdicion || categoriasDisponibles[0];
         marcarTallasDisponibles(obtenerTallasProducto(p));
         actualizarAyudaCategoria();
         document.getElementById("destacado").checked = Boolean(p.destacado);
@@ -1233,7 +1241,7 @@ function renderizarStockBajo(items) {
     tbody.innerHTML = items.length
         ? items.slice(0, 12).map(({producto, stock}) => `<tr>
             <td>${escaparHtml(producto.nombre || "Producto")}</td>
-            <td>${escaparHtml(producto.categoria || "Sin categoría")}</td>
+            <td>${escaparHtml(categoriaPublicaAdmin(producto.categoria) || "Sin categoría")}</td>
             <td><strong>${stock}</strong></td>
         </tr>`).join("")
         : '<tr><td colspan="3">No hay productos con stock bajo.</td></tr>';
