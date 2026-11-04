@@ -262,7 +262,7 @@
                 selectedCategory=category;
                 visibleTemplateCount=8;
                 renderTemplateCategories();
-                renderTemplateCards();
+                renderTemplateCards({resetScroll:true});
             });
             categoryList.append(button);
         });
@@ -307,12 +307,12 @@
         return card;
     }
 
-    function renderTemplateCards() {
+    function renderTemplateCards({resetScroll=false} = {}) {
         if (!templateGallery || !window.PixBenTemplateLibrary) return;
         const pack=window.PixBenTemplateLibrary;
         const list=getFilteredTemplates();
         const subset=list.slice(0,visibleTemplateCount);
-        const oldScroll=templateGallery.scrollTop;
+        const oldScroll=resetScroll?0:templateGallery.scrollTop;
         templateGallery.replaceChildren();
         subset.forEach(template=>templateGallery.append(makeTemplateCard(template,pack)));
         templateGallery.scrollTop=oldScroll;
@@ -357,7 +357,7 @@
     templateSearch?.addEventListener("input",event=>{
         templateSearchTerm=event.target.value.slice(0,80);
         visibleTemplateCount=8;
-        renderTemplateCards();
+        renderTemplateCards({resetScroll:true});
     });
     showMore?.addEventListener("click",()=>{
         visibleTemplateCount+=8;
