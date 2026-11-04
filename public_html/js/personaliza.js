@@ -1416,7 +1416,7 @@
             if (ctrl && evento.key.toLowerCase() === "c") { evento.preventDefault(); copiarSeleccionado(); return; }
             if (ctrl && evento.key.toLowerCase() === "v") { evento.preventDefault(); pegarSeleccionado(); return; }
             if (["Delete", "Backspace"].includes(evento.key)) { evento.preventDefault(); eliminarSeleccionado(); return; }
-            if (evento.key === "Escape") { canvas.discardActiveObject(); canvas.requestRenderAll(); return; }
+            if (evento.key === "Escape") { canvas.discardActiveObject(); canvas.requestRenderAll(); programarActualizacionAccionesSeleccion(); return; }
             if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(evento.key)) {
                 const objeto = obtenerObjetoActivo();
                 if (!objeto || objeto.dataTipo === "producto-base" || objeto.dataBloqueado) return;
@@ -1430,6 +1430,7 @@
                 canvas.requestRenderAll();
                 programarHistorial();
                 actualizarAvisoZona();
+                programarActualizacionAccionesSeleccion();
             }
         });
     }
