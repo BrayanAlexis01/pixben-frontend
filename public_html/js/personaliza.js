@@ -1895,7 +1895,8 @@
 
     function ajustarGuiasMagneticas(evento) {
         const objeto = evento.target;
-        if (!guiasMagneticasActivas || !objeto ||
+        if (!window.matchMedia("(min-width: 1321px)").matches ||
+            !guiasMagneticasActivas || !objeto ||
             objeto.dataTipo === "producto-base" || objeto.dataBloqueado) {
             ocultarGuiasMagneticas();
             return;
