@@ -1818,7 +1818,7 @@
         }));
     }
 
-    function capturarProductoActual() {
+    async function capturarProductoActual() {
         // No generamos una prenda ficticia: mostramos la fotografía que ya eligió el usuario,
         // con sus capas encima, sin los cuadros de selección de Fabric.
         if (!productoActual || !obtenerProductoBase()) return null;
@@ -1826,7 +1826,7 @@
         try {
             canvas.discardActiveObject();
             canvas.renderAll();
-            return canvas.toDataURL({format: "png", multiplier: 1.3});
+            return await protegerPreviewDataUrl(canvas.toDataURL({format: "png", multiplier: 1.3}));
         } finally {
             if (activo) canvas.setActiveObject(activo);
             canvas.requestRenderAll();
