@@ -214,6 +214,7 @@
   }
   body.pb-studio-page .pb-template-library-overlay .pb-template-gallery {
     flex:1 1 auto;
+    min-height:0;
     grid-template-columns:repeat(4,minmax(0,1fr));
     gap:14px;
     overflow-y:auto;
