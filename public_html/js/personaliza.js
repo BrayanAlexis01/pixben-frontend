@@ -100,6 +100,7 @@
     const baseImagenIndicePorLado = {frente: 0, espalda: 0};
     const vistaManualPorLado = {frente: false, espalda: false};
     let guiasMagneticasActivas = true;
+    let capturandoVista = false;
 
     // API de alcance limitado para la interfaz profesional. El editor Fabric,
     // el borrador, el historial y las cotizaciones permanecen en este módulo.
@@ -163,7 +164,9 @@
         });
         ["selection:created","selection:updated","selection:cleared",
          "object:added","object:modified","object:removed","text:changed"].forEach(evento =>
-            canvas.on(evento, () => requestAnimationFrame(notificarStudio))
+            canvas.on(evento, () => {
+                if (!capturandoVista) requestAnimationFrame(notificarStudio);
+            })
         );
     }
 
@@ -1823,14 +1826,18 @@
         // con sus capas encima, sin los cuadros de selección de Fabric.
         if (!productoActual || !obtenerProductoBase()) return null;
         const activo = obtenerObjetoActivo();
+        let captura;
+        capturandoVista = true;
         try {
             canvas.discardActiveObject();
             canvas.renderAll();
-            return await protegerPreviewDataUrl(canvas.toDataURL({format: "png", multiplier: 1.3}));
+            captura = canvas.toDataURL({format: "png", multiplier: 1.3});
         } finally {
             if (activo) canvas.setActiveObject(activo);
             canvas.requestRenderAll();
+            capturandoVista = false;
         }
+        return protegerPreviewDataUrl(captura);
     }
 
     async function aplicarPlantillaEstudio(clave) {
