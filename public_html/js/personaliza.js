@@ -868,6 +868,10 @@
                 Math.min(Math.max(8, marco.height - altoBarra - 8), abajo + 12);
         accionesSeleccion.style.left = x + "px";
         accionesSeleccion.style.top = Math.max(8, Math.min(marco.height - altoBarra - 8, y)) + "px";
+        // En móvil se coloca junto al borde de la zona real del lienzo,
+        // incluso cuando el canvas está centrado y es más estrecho que su contenedor.
+        accionesSeleccion.style.setProperty("--pb-selection-mobile-right",
+            Math.max(8, marco.right - canvasDOM.right + 9) + "px");
     }
 
     function obtenerObjetoActivo() { return canvas.getActiveObject(); }
