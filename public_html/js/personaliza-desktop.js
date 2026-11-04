@@ -21,6 +21,7 @@
     let stageMode = "design";
     let lastSelected = "ninguno";
     let lastSide = "";
+    let ultimaCaptura = 0;
     if (!studio || !tools || details.length !== 7 || !templates || !printPanel || !stage || !image) return;
 
     const sections = {
@@ -54,14 +55,17 @@
 
     function showDesign() {
         stageMode="design";
+        ultimaCaptura++;
         stage.hidden=true;
         canvasShell.removeAttribute("aria-hidden");
         stageButtons.forEach(b => b.setAttribute("aria-pressed",String(b.dataset.pbStageMode==="design")));
     }
-    function refreshProductStage() {
+    async function refreshProductStage() {
         if (!mq.matches || stageMode!=="product") return;
+        const captura = ++ultimaCaptura;
         try {
-            const imageData = studio.capturarProductoActual();
+            const imageData = await studio.capturarProductoActual();
+            if (captura !== ultimaCaptura || !mq.matches || stageMode!=="product") return;
             if (imageData) {
                 image.src=imageData;
                 image.hidden=false;
@@ -140,6 +144,10 @@
     });
     previewButtons.forEach(button=>button.addEventListener("click",()=>{
         const isProduct=button.dataset.pbPreviewMode==="product";
+        if (isProduct && !studio.getState().tieneProducto) {
+            alert("Selecciona un producto base para ver una presentación realista de la prenda.");
+            return;
+        }
         document.getElementById("modalPreview")?.classList.toggle("pb-pro-modal-product",isProduct);
         previewButtons.forEach(b=>b.setAttribute("aria-pressed",String(b===button)));
     }));
