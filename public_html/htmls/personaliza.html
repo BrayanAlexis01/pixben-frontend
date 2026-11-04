@@ -41,6 +41,7 @@
     <link href="../css/header-global.css?v=2" rel="stylesheet">
     <link rel="stylesheet" href="../css/accessibility.css?v=6">
     <link rel="stylesheet" href="../css/personaliza-studio-premium.css?v=1">
+    <link rel="stylesheet" href="../css/personaliza-desktop-pro.css?v=1">
 </head>
 <body class="pb-studio-page">
 <header class="site-header-pixben">
@@ -90,7 +91,27 @@
         </div>
     </section>
 
+    <section class="pb-pro-workbar" aria-label="Barra de trabajo de PixBen Studio">
+        <div class="pb-pro-workbar__identity"><span class="pb-pro-workbar__mark">P<span>✦</span></span><div><strong>PixBen Studio</strong><small>Tu espacio creativo</small></div></div>
+        <div class="pb-pro-workbar__actions">
+            <span id="pbProLiveState" class="pb-pro-live-state"><i class="fa-solid fa-circle" aria-hidden="true"></i> Editor listo</span>
+            <button type="button" data-pb-proxy="btnDeshacer" title="Deshacer" aria-label="Deshacer"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i></button>
+            <button type="button" data-pb-proxy="btnRehacer" title="Rehacer" aria-label="Rehacer"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i></button>
+            <button type="button" data-pb-proxy="btnGuias" title="Mostrar u ocultar área recomendada" aria-label="Alternar área recomendada"><i class="fa-solid fa-border-all" aria-hidden="true"></i></button>
+            <button type="button" data-pb-proxy="btnVistaPrevia" class="pb-pro-workbar__preview"><i class="fa-regular fa-eye" aria-hidden="true"></i> Vista previa</button>
+            <button type="button" data-pb-proxy="btnSolicitar" class="pb-pro-workbar__quote"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Solicitar cotización</button>
+        </div>
+    </section>
     <section class="editor-layout" id="pbStudioEditor" aria-label="Editor de personalización">
+        <nav class="pb-pro-toolrail" aria-label="Herramientas del editor de escritorio">
+            <button type="button" data-pb-desktop-tool="producto" aria-pressed="true" title="Producto base"><i class="fa-solid fa-shirt" aria-hidden="true"></i><span>Producto</span></button>
+            <button type="button" data-pb-desktop-tool="plantillas" aria-pressed="false" title="Plantillas editables"><i class="fa-solid fa-swatchbook" aria-hidden="true"></i><span>Plantillas</span></button>
+            <button type="button" data-pb-desktop-tool="texto" aria-pressed="false" title="Texto y tipografías"><i class="fa-solid fa-font" aria-hidden="true"></i><span>Texto</span></button>
+            <button type="button" data-pb-desktop-tool="imagen" aria-pressed="false" title="Imágenes y filtros"><i class="fa-regular fa-image" aria-hidden="true"></i><span>Imagen</span></button>
+            <button type="button" data-pb-desktop-tool="elementos" aria-pressed="false" title="Formas y transformaciones"><i class="fa-solid fa-shapes" aria-hidden="true"></i><span>Formas</span></button>
+            <button type="button" data-pb-desktop-tool="capas" aria-pressed="false" title="Orden y capas"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span>Capas</span></button>
+            <button type="button" data-pb-desktop-tool="calidad" aria-pressed="false" title="Comprobar impresión"><i class="fa-solid fa-ruler-combined" aria-hidden="true"></i><span>Calidad</span></button>
+        </nav>
         <aside class="panel-editor panel-configuracion" id="pbStudioTools" aria-label="Herramientas del personalizador">
             <div class="pb-mobile-sheet-heading">
                 <div><span class="pb-mobile-kicker">HERRAMIENTAS</span><h2 id="pbMobileToolsTitle">Personaliza tu diseño</h2></div>
@@ -114,6 +135,27 @@
                 </div>
             </div>
 
+            <section class="pb-pro-templates" id="pbProTemplates" hidden aria-labelledby="pbProTemplatesTitle">
+                <span class="panel-kicker">EMPIEZA CON UNA IDEA</span>
+                <h3 id="pbProTemplatesTitle">Plantillas editables</h3>
+                <p>Elige un estilo y después cambia textos, colores, tamaño y posición. Las plantillas se añaden al diseño actual.</p>
+                <div class="pb-pro-template-grid">
+                    <button type="button" data-pb-template="urbano"><span class="pb-template-art pb-template-art--urban"><b>STREET</b><small>YOUR WAY / 2026</small></span><strong>Urbano</strong><small>Tipografía potente</small></button>
+                    <button type="button" data-pb-template="minimal"><span class="pb-template-art pb-template-art--minimal"><b>LESS</b><i>is more</i></span><strong>Minimalista</strong><small>Simple y elegante</small></button>
+                    <button type="button" data-pb-template="negocio"><span class="pb-template-art pb-template-art--business"><b>TU MARCA</b><small>IDEAS · IMPACTO</small></span><strong>Mi negocio</strong><small>Logo tipográfico</small></button>
+                    <button type="button" data-pb-template="celebracion"><span class="pb-template-art pb-template-art--party"><b>HOY</b><i>es tu día ✦</i></span><strong>Celebración</strong><small>Diseño para regalar</small></button>
+                </div>
+                <p id="pbProTemplateFeedback" class="pb-pro-template-feedback" role="status" aria-live="polite"></p>
+            </section>
+            <section class="pb-pro-print-panel" id="pbProPrintPanel" hidden aria-labelledby="pbProPrintTitle">
+                <span class="panel-kicker">CONTROL DE ESTAMPADO</span>
+                <h3 id="pbProPrintTitle">Guías inteligentes</h3>
+                <p>Te ayudamos a alinear los objetos y detectar elementos fuera de la zona recomendada.</p>
+                <label class="pb-pro-snap-control"><input type="checkbox" id="pbProSnapEnabled" checked> <span><strong>Imanes de alineación</strong><small>Ajusta al centro y a los bordes al arrastrar.</small></span></label>
+                <div class="pb-pro-quality-box" id="pbProQualityBox" role="status" aria-live="polite"><strong>Sin elementos seleccionados</strong><span>Selecciona una imagen o texto para comprobar su tamaño.</span></div>
+                <p class="pb-pro-print-disclaimer">La resolución se estima para un área de referencia de 28 cm de ancho. La medida real y la técnica de impresión las confirma PixBen al cotizar.</p>
+                <button type="button" data-pb-proxy="btnEncajarZona" class="pb-pro-fit-button"><i class="fa-solid fa-arrows-to-circle" aria-hidden="true"></i> Ajustar selección al área</button>
+            </section>
             <details class="grupo-editor" open>
                 <summary><span><i class="fa-solid fa-shirt"></i> Producto base</span><i class="fa-solid fa-chevron-down"></i></summary>
                 <div class="grupo-editor-contenido">
@@ -323,6 +365,12 @@
                 </div>
             </div>
 
+            <div class="pb-pro-stage-switch" role="group" aria-label="Modo de visualización de escritorio">
+                <button type="button" data-pb-stage-mode="design" aria-pressed="true"><i class="fa-solid fa-pen-ruler" aria-hidden="true"></i> Diseñar</button>
+                <button type="button" data-pb-stage-mode="product" aria-pressed="false"><i class="fa-solid fa-shirt" aria-hidden="true"></i> Ver producto</button>
+                <span id="pbProStageSide">Vista del frente</span>
+            </div>
+            <div class="pb-pro-stage-holder">
             <div class="canvas-shell" id="canvasShell">
                 <canvas id="editorCanvas" width="560" height="640"></canvas>
                 <div class="marca-agua-editor" aria-hidden="true">
@@ -334,6 +382,23 @@
                 <div class="canvas-empty-hint" id="canvasEmptyHint"><i class="fa-solid fa-wand-magic-sparkles"></i><b>Empieza a crear</b><span>Agrega una imagen, texto o forma</span></div>
                 <div class="drop-overlay" id="dropOverlay" hidden><i class="fa-solid fa-cloud-arrow-up"></i><b>Suelta tu imagen aquí</b><span>PNG, JPG o WEBP</span></div>
             </div>
+            <div class="pb-pro-product-stage" id="pbProProductStage" hidden aria-label="Simulación visual del producto">
+                <div class="pb-pro-mockup-frame">
+                    <div class="pb-pro-product-light"></div>
+                    <img id="pbProProductImage" alt="Composición del estampado sobre la foto del producto seleccionado" hidden>
+                    <div class="pb-pro-product-empty" id="pbProProductEmpty">
+                        <i class="fa-solid fa-shirt" aria-hidden="true"></i>
+                        <strong>Selecciona una prenda para ver el mockup</strong>
+                        <span>El lienzo libre no tiene una fotografía de producto. Elige una prenda base desde Producto.</span>
+                        <button type="button" id="pbProChooseProduct">Elegir producto</button>
+                    </div>
+                    <div class="pb-pro-mockup-stamp">SIMULACIÓN PIXBEN · NO ES FOTO DEL PRODUCTO FINAL</div>
+                </div>
+            </div>
+            <div class="pb-pro-guide pb-pro-guide--x" id="pbProGuideX" hidden aria-hidden="true"></div>
+            <div class="pb-pro-guide pb-pro-guide--y" id="pbProGuideY" hidden aria-hidden="true"></div>
+            </div>
+            <div class="pb-pro-inline-quality" id="pbProInlineQuality" aria-live="polite"><i class="fa-solid fa-circle-info" aria-hidden="true"></i><span>Selecciona un elemento para revisar los límites de impresión.</span></div>
             <div id="avisoFueraZona" class="aviso-fuera-zona" hidden><i class="fa-solid fa-triangle-exclamation"></i> Parte del elemento seleccionado está fuera del área recomendada.</div>
             <p class="instruccion-lienzo">Arrastra, escala y gira tus elementos. Usa <kbd>Supr</kbd> para eliminar, <kbd>Ctrl</kbd> + <kbd>Z</kbd> para deshacer, <kbd>Ctrl</kbd> + <kbd>C/V</kbd> para copiar y pegar, y las flechas para mover con precisión.</p>
             <div class="acciones-lienzo-inferiores">
@@ -421,6 +486,7 @@
             <div><span class="panel-kicker">VISTA PREVIA</span><h2 id="tituloPreview">Revisa tu diseño antes de enviarlo</h2></div>
             <button type="button" class="cerrar-preview" data-cerrar-preview aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
         </div>
+        <div class="pb-pro-preview-mode" role="group" aria-label="Presentación de la vista previa"><button type="button" data-pb-preview-mode="design" aria-pressed="true">Vista de diseño</button><button type="button" data-pb-preview-mode="product" aria-pressed="false">Presentación de producto</button></div>
         <p class="preview-explicacion">Esta vista es una referencia para la cotización. Por seguridad, las previsualizaciones incluyen marca de agua y no se habilita la descarga del archivo final.</p>
         <div class="preview-grid">
             <article>
@@ -492,6 +558,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
 <script src="../js/personaliza.js?v=16"></script>
 <script src="../js/personaliza-mobile.js?v=1"></script>
+<script src="../js/personaliza-desktop.js?v=1"></script>
 <script src="../js/eventos-html.js?v=3"></script>
 <script src="../js/responsive-menu.js?v=4"></script>
 <script src="../js/accessibility.js?v=1"></script>
