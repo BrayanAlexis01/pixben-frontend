@@ -269,6 +269,13 @@
             if (selector && !selector.hidden) ubicarGaleriaFuentes();
         }, {passive: true});
         document.getElementById("muestraTextoFuente").addEventListener("input", actualizarMuestrasFuentes);
+        document.getElementById("selectorFuentes").addEventListener("keydown", evento => {
+            if (evento.key === "Escape") {
+                evento.stopPropagation();
+                cerrarSelectorFuentes();
+                document.getElementById("btnAbrirFuentes").focus({preventScroll:true});
+            }
+        });
         document.addEventListener("click", evento => {
             const selector = document.getElementById("selectorFuentes");
             const boton = document.getElementById("btnAbrirFuentes");
@@ -1153,7 +1160,11 @@
                     return rostros.length > 0;
                 } catch { return false; }
             });
-            solicitudesFuente.set(familia, cargarEstilo);
+            solicitudesFuente.set(familia, cargarEstilo.then(resultado => {
+                // Una falla de red no debe bloquear futuros intentos de cargar la fuente.
+                if (!resultado) solicitudesFuente.delete(familia);
+                return resultado;
+            }));
         }
         return solicitudesFuente.get(familia);
     }
