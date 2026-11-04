@@ -53,6 +53,10 @@
       define("mi-marca","Mi Marca","Negocios","Logo inicial para emprendedores",blue,[R(150,174,257,243,{stroke:"accent",sw:1}),T("TU",124,53,"Archivo Black"),T("MARCA",183,49,"Montserrat",{spacing:45}),L(238,{x1:64,x2:236,sw:3}),T("CREA ALGO ÚNICO",278,14,"Montserrat",{spacing:65})]),
       define("creative-co","Creative Co.","Negocios","Sello para proyectos creativos",slate,[C(150,174,109,{stroke:"accent",sw:2}),T("CREATIVE",139,39,"Bebas Neue",{spacing:65}),T("CO.",191,66,"Anton"),T("DESIGN & PRINT",268,14,"Montserrat",{spacing:75})]),
       define("hecho-pasion","Hecho con pasión","Negocios","Tipografía artesanal para negocios",warm,[T("HECHO",117,49,"Oswald",{spacing:45}),T("con pasión",184,37,"Great Vibes",{weight:"normal"}),L(231,{x1:80,x2:220,sw:2}),T("DE TU IDEA AL MUNDO",268,12,"Montserrat",{spacing:75})]),
+      define("urbano","Urbano clásico","Urbanos","Diseño original de la primera colección",night,[T("STREET",140,52,"Bebas Neue"),T("OWN YOUR WAY",210,19,"Montserrat",{spacing:85}),L(254,{x1:95,x2:205,sw:5})]),
+      define("minimal","Minimal clásico","Minimalistas","El diseño esencial de PixBen",cream,[T("LESS",149,56,"Montserrat",{spacing:95}),T("IS MORE",216,23,"Montserrat",{spacing:155}),L(260,{x1:97,x2:203,sw:4})]),
+      define("negocio","Tu marca clásico","Negocios","Tu nombre como protagonista",night,[T("TU MARCA",145,45,"Montserrat"),T("IDEAS · IMPACTO",211,18,"Montserrat",{spacing:110}),L(256,{x1:88,x2:212,sw:5})]),
+      define("celebracion","Celebración clásica","Lettering","Un regalo con mensaje original",rose,[T("HOY",143,63,"Playfair Display"),T("ES TU DÍA",206,21,"Montserrat",{spacing:95}),S(150,259,19)]),
     ];
     const categories=["Todos","Urbanos","Cristianos","Minimalistas","Retro","Deportivos","Lettering","Negocios"];
     const lookup=new Map(templates.map(x=>[x.id,x]));
