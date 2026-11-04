@@ -93,13 +93,14 @@
         if (!mq.matches) {
             tools.classList.remove("pb-pro-rail-active");
             details.forEach(group=>group.classList.remove("pb-pro-group-active"));
-            if(!document.body.classList.contains("pb-studio-mobile-on")) {
-                details.forEach(group=>group.open=true);
+            const tablet = window.innerWidth > 820;
+            if(tablet) details.forEach(group=>group.open=true);
+            // En tablet las herramientas siguen en su layout tradicional, pero
+            // plantillas y ayudas quedan accesibles. En móvil las controla su barra inferior.
+            if(tablet) {
+                templates.hidden=false;
+                printPanel.hidden=false;
             }
-            // El modo móvil decide cuándo mostrar la galería; no se tocan los grupos
-            // de .pb-mobile-group-visible que usa el editor inferior.
-            templates.hidden=true;
-            printPanel.hidden=true;
             showDesign();
             return;
         }
