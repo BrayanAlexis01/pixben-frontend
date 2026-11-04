@@ -61,6 +61,13 @@
         {nombre: "VT323", familia: "VT323", categoria: "Gamer"},
         {nombre: "Impact", familia: "Impact", categoria: "Impacto"}
     ];
+    // Tipografías comerciales para estampados. Se cargan al explorar, sin agregar imágenes de terceros.
+    const fuentesEspeciales = [{"nombre":"Pirata One","familia":"Pirata One","categoria":"Góticas","muestra":"TATTOO","etiquetas":"blackletter tatuajes","destacada":true,"dinamica":true},{"nombre":"UnifrakturMaguntia","familia":"UnifrakturMaguntia","categoria":"Góticas","muestra":"ORIGINAL","etiquetas":"old english blackletter","destacada":true,"dinamica":true},{"nombre":"Metal Mania","familia":"Metal Mania","categoria":"Góticas","muestra":"DARK SIDE","etiquetas":"metal rock","destacada":true,"dinamica":true},{"nombre":"New Rocker","familia":"New Rocker","categoria":"Góticas","muestra":"WILD HEART","etiquetas":"rock gothic","destacada":false,"dinamica":true},{"nombre":"Creepster","familia":"Creepster","categoria":"Góticas","muestra":"NIGHTMARE","etiquetas":"terror horror","destacada":false,"dinamica":true},{"nombre":"Sedgwick Ave Display","familia":"Sedgwick Ave Display","categoria":"Graffiti","muestra":"STREET ART","etiquetas":"graffiti urbano callejero","destacada":true,"dinamica":true},{"nombre":"Rubik Wet Paint","familia":"Rubik Wet Paint","categoria":"Graffiti","muestra":"HUSTLE","etiquetas":"graffiti brocha spray","destacada":true,"dinamica":true},{"nombre":"Rock Salt","familia":"Rock Salt","categoria":"Graffiti","muestra":"BE FREE","etiquetas":"marker tiza calle","destacada":true,"dinamica":true},{"nombre":"Rubik Glitch","familia":"Rubik Glitch","categoria":"Graffiti","muestra":"NO LIMITS","etiquetas":"glitch distorsion urbano","destacada":false,"dinamica":true},{"nombre":"Rubik Dirt","familia":"Rubik Dirt","categoria":"Graffiti","muestra":"RAW STYLE","etiquetas":"rugoso desgastado","destacada":false,"dinamica":true},{"nombre":"Yellowtail","familia":"Yellowtail","categoria":"Lettering","muestra":"Original","etiquetas":"caligrafia firma","destacada":true,"dinamica":true},{"nombre":"Berkshire Swash","familia":"Berkshire Swash","categoria":"Lettering","muestra":"Paradise","etiquetas":"decorativo elegante","destacada":true,"dinamica":true},{"nombre":"Damion","familia":"Damion","categoria":"Lettering","muestra":"Good Vibes","etiquetas":"firma brush","destacada":true,"dinamica":true},{"nombre":"Grand Hotel","familia":"Grand Hotel","categoria":"Lettering","muestra":"Dream Big","etiquetas":"script rotulacion","destacada":false,"dinamica":true},{"nombre":"Leckerli One","familia":"Leckerli One","categoria":"Lettering","muestra":"Sweet Life","etiquetas":"hand lettering","destacada":false,"dinamica":true},{"nombre":"Monoton","familia":"Monoton","categoria":"Retro","muestra":"NEON","etiquetas":"contorno vintage disco","destacada":true,"dinamica":true},{"nombre":"Bowlby One SC","familia":"Bowlby One SC","categoria":"Retro","muestra":"CLASSIC","etiquetas":"gruesa vintage","destacada":true,"dinamica":true},{"nombre":"Rye","familia":"Rye","categoria":"Retro","muestra":"WANTED","etiquetas":"western antiguo","destacada":false,"dinamica":true},{"nombre":"Shrikhand","familia":"Shrikhand","categoria":"Retro","muestra":"SUNSHINE","etiquetas":"curvas retro","destacada":false,"dinamica":true},{"nombre":"Bungee Shade","familia":"Bungee Shade","categoria":"Retro","muestra":"CITY VIBES","etiquetas":"sombra volumen","destacada":false,"dinamica":true},{"nombre":"Teko","familia":"Teko","categoria":"Deportivas","muestra":"ATHLETIC","etiquetas":"jersey sport condensado","destacada":true,"dinamica":true},{"nombre":"Staatliches","familia":"Staatliches","categoria":"Deportivas","muestra":"NO EXCUSES","etiquetas":"deporte","destacada":true,"dinamica":true},{"nombre":"Racing Sans One","familia":"Racing Sans One","categoria":"Deportivas","muestra":"FULL SPEED","etiquetas":"racing automovilismo","destacada":true,"dinamica":true},{"nombre":"Fugaz One","familia":"Fugaz One","categoria":"Deportivas","muestra":"VAMOS","etiquetas":"velocidad italica","destacada":false,"dinamica":true},{"nombre":"Russo One","familia":"Russo One","categoria":"Deportivas","muestra":"CHAMPION","etiquetas":"fuerte deportivo","destacada":false,"dinamica":true},{"nombre":"Michroma","familia":"Michroma","categoria":"Futuristas","muestra":"FUTURE","etiquetas":"techwear futurista","destacada":true,"dinamica":true},{"nombre":"Space Grotesk","familia":"Space Grotesk","categoria":"Futuristas","muestra":"BE ORIGINAL","etiquetas":"minimal moderno","destacada":false,"dinamica":true},{"nombre":"Urbanist","familia":"Urbanist","categoria":"Futuristas","muestra":"YOUR BRAND","etiquetas":"limpio marca minimal","destacada":false,"dinamica":true},{"nombre":"Bungee Inline","familia":"Bungee Inline","categoria":"Retro","muestra":"GOOD TIMES","etiquetas":"contorno interior","destacada":false,"dinamica":true},{"nombre":"Faster One","familia":"Faster One","categoria":"Deportivas","muestra":"RACE DAY","etiquetas":"velocidad rayas","destacada":false,"dinamica":true}];
+    fuentes.unshift(...fuentesEspeciales);
+    const fuentesDinamicas = new Set(fuentesEspeciales.map(f => f.familia));
+    const solicitudesFuente = new Map();
+    let observadorFuentes = null;
+    let secuenciaSeleccionFuente = 0;
 
     const coloresReferencia = [
         {nombre: "Blanco", hex: "#ffffff"},
@@ -95,7 +102,7 @@
     let cargandoEstado = false;
     let temporizadorHistorial = null;
     let temporizadorBorrador = null;
-    let categoriaFuenteActiva = "Todas";
+    let categoriaFuenteActiva = "Destacadas";
     let previewActual = {frente: null, espalda: null};
     let portapapelesObjeto = null;
     const estados = {frente: null, espalda: null};
@@ -223,7 +230,10 @@
         document.getElementById("btnAgregarTexto").addEventListener("click", agregarTexto);
         document.querySelectorAll("[data-forma]").forEach(boton => boton.addEventListener("click", () => agregarForma(boton.dataset.forma)));
 
-        document.getElementById("textoEditor").addEventListener("input", actualizarTextoSeleccionado);
+        document.getElementById("textoEditor").addEventListener("input", () => {
+            actualizarTextoSeleccionado();
+            actualizarMuestrasFuentes();
+        });
         document.getElementById("tamanoTexto").addEventListener("input", actualizarTextoSeleccionado);
         document.getElementById("colorTexto").addEventListener("input", () => {
             document.getElementById("valorColorTexto").textContent = document.getElementById("colorTexto").value.toUpperCase();
@@ -254,6 +264,7 @@
 
         document.getElementById("btnAbrirFuentes").addEventListener("click", alternarSelectorFuentes);
         document.getElementById("buscarFuente").addEventListener("input", renderizarListaFuentes);
+        document.getElementById("muestraTextoFuente").addEventListener("input", actualizarMuestrasFuentes);
         document.addEventListener("click", evento => {
             const selector = document.getElementById("selectorFuentes");
             const boton = document.getElementById("btnAbrirFuentes");
@@ -619,7 +630,10 @@
     async function cargarLado(lado, inicial = false) {
         cargandoEstado = true;
         const estado = estados[lado];
-        if (estado) await new Promise(resolve => canvas.loadFromJSON(estado, resolve));
+        if (estado) {
+            await prepararFuentesGuardadas(estado);
+            await new Promise(resolve => canvas.loadFromJSON(estado, resolve));
+        }
         else canvas.clear();
         await asegurarProductoBase();
         canvas.getObjects().forEach(objeto => aplicarEstadoBloqueo(objeto));
