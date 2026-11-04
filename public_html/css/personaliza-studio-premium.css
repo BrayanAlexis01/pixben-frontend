@@ -492,6 +492,18 @@ body.pb-studio-page {
   body.pb-studio-mobile-on .resumen-pedido .producto-resumen {margin-top:7px;}
   body.pb-studio-mobile-on .resumen-pedido .resumen-linea {font-size:12px;}
   body.pb-studio-mobile-on .resumen-pedido textarea {font-size:14px;min-height:95px;}
+  /* Los controles globales flotantes no deben tapar Producto ni Cotizar. */
+  body.pb-studio-mobile-on .a11y-flotante {
+    bottom:calc(var(--pb-studio-keyboard-inset) + var(--pb-studio-bar-height) + 13px + env(safe-area-inset-bottom,0px));
+    left:11px;width:43px;height:43px;font-size:19px;
+  }
+  body.pb-studio-mobile-on .pixben-pwa-layer {
+    bottom:calc(var(--pb-studio-keyboard-inset) + var(--pb-studio-bar-height) + 12px + env(safe-area-inset-bottom,0px));
+  }
+  body.pb-studio-mobile-on.pb-studio-sheet-open .a11y-flotante,
+  body.pb-studio-mobile-on.pb-studio-sheet-open .pixben-pwa-layer {
+    visibility:hidden;pointer-events:none;
+  }
   body.pb-studio-mobile-on.pb-studio-keyboard-open .pb-mobile-studio-nav {display:none;}
   body.pb-studio-mobile-on.pb-studio-keyboard-open .panel-configuracion,
   body.pb-studio-mobile-on.pb-studio-keyboard-open .resumen-pedido {
