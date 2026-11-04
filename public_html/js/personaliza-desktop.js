@@ -22,6 +22,12 @@
     let lastSelected = "ninguno";
     let lastSide = "";
     let ultimaCaptura = 0;
+    let temporizadorVista = null;
+    function programarVistaProducto() {
+        if (!mq.matches || stageMode !== "product") return;
+        clearTimeout(temporizadorVista);
+        temporizadorVista = setTimeout(refreshProductStage, 280);
+    }
     if (!studio || !tools || details.length !== 7 || !templates || !printPanel || !stage || !image) return;
 
     const sections = {
@@ -156,6 +162,7 @@
         if(sideLabel) sideLabel.textContent=state.lado==="frente"?"Vista del frente":"Vista de la espalda";
         if(liveState) liveState.innerHTML='<i class="fa-solid fa-circle" aria-hidden="true"></i> '+(state.elementos ? state.elementos+" elementos en "+state.lado : "Editor listo");
         if(mq.matches) {
+            if (stageMode === "product") programarVistaProducto();
             const picked=state.seleccionado;
             if(picked!==lastSelected && picked!=="ninguno" && picked!=="producto") {
                 chooseTool(picked==="forma"?"elementos":picked);
@@ -168,6 +175,10 @@
             lastSelected=picked;
         }
     });
+    // Los cambios en color, tamaño, cantidad o textos también actualizan la
+    // simulación, sin capturar cada pulsación ni ralentizar el editor.
+    tools.addEventListener("input", programarVistaProducto);
+    tools.addEventListener("change", programarVistaProducto);
     mq.addEventListener?.("change",syncMode);
     syncMode();
 })();
