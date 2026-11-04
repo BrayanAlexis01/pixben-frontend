@@ -81,7 +81,7 @@
     /* Arriba del lienzo para no impedir arrastrar sus objetos en un teléfono. */
     left:auto!important;
     top:9px!important;
-    right:9px!important;
+    right:var(--pb-selection-mobile-right,9px)!important;
     transform:none!important;
     gap:3px;
     min-height:43px;
