@@ -9,6 +9,7 @@
     const backdrop = document.getElementById("pbMobileSheetBackdrop");
     const tabs = [...document.querySelectorAll("[data-pb-studio-tab]")];
     const groups = [...(tools?.querySelectorAll(":scope > details.grupo-editor") || [])];
+    const templates = document.getElementById("pbProTemplates");
     const quick = document.getElementById("pbMobileQuickActions");
     const tip = document.getElementById("pbMobileToolTip");
     const heading = document.getElementById("pbMobileToolsTitle");
@@ -87,6 +88,7 @@
             // Se preserva el atributo hidden del editor para los ajustes contextuales.
             if (visible && !group.hidden) group.open = true;
         });
+        if (templates) templates.hidden = selected !== "producto";
         heading.textContent = titles[selected] || "Herramientas";
         if (quick) {
             quick.hidden = !["texto", "imagen"].includes(selected);
