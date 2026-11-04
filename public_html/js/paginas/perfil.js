@@ -34,13 +34,15 @@ function renderizarUsuario(usuario) {
     const foto = obtenerFotoPerfil(usuario);
     document.getElementById("saludoUsuario").textContent = `Hola, ${visible} 👋`;
     document.getElementById("nombreUsuario").textContent = visible;
-    document.getElementById("aliasSidebar").textContent = usuario.alias ? `@${usuario.alias}` : "Cliente PixBen";
+    const rol = String(usuario.rol || "cliente").trim().toLowerCase();
+    const etiquetaRol = rol === "admin" || rol === "administrador" ? "Administrador" : "Cliente";
+    document.getElementById("aliasSidebar").textContent = usuario.alias ? `@${usuario.alias}` : "Mi espacio PixBen";
+    document.getElementById("rolSidebar").textContent = etiquetaRol;
     document.getElementById("nombreCompleto").textContent = `${usuario.nombre || ""} ${usuario.apellido || ""}`.trim() || visible;
     document.getElementById("aliasUsuario").textContent = usuario.alias || "Aún no configurado";
     document.getElementById("correoUsuario").textContent = usuario.correo || "—";
-    document.getElementById("rolUsuario").textContent = usuario.rol || "cliente";
+    document.getElementById("rolUsuario").textContent = etiquetaRol;
     document.getElementById("fotoPerfil").src = foto;
-    document.getElementById("fotoBienvenida").src = foto;
     document.getElementById("editarNombre").value = usuario.nombre || "";
     document.getElementById("editarApellido").value = usuario.apellido || "";
     document.getElementById("editarAlias").value = usuario.alias || "";
