@@ -1799,6 +1799,188 @@
         return true;
     }
 
+    /* PIXBEN STUDIO PRO · controles de escritorio, sin alterar datos del pedido */
+    function obtenerTipoSeleccion() {
+        const objeto = obtenerObjetoActivo();
+        if (!objeto) return "ninguno";
+        if (objeto.dataTipo === "producto-base") return "producto";
+        if (esTexto(objeto)) return "texto";
+        if (esImagenUsuario(objeto)) return "imagen";
+        if (esForma(objeto)) return "forma";
+        return "elementos";
+    }
+
+    function notificarStudio() {
+        actualizarPanelImpresion();
+        document.dispatchEvent(new CustomEvent("pixben:studio-update", {
+            detail: {lado: ladoActual, seleccionado: obtenerTipoSeleccion(),
+                tieneProducto: Boolean(productoActual && obtenerProductoBase())}
+        }));
+    }
+
+    function capturarProductoActual() {
+        // No generamos una prenda ficticia: mostramos la fotografía que ya eligió el usuario,
+        // con sus capas encima, sin los cuadros de selección de Fabric.
+        if (!productoActual || !obtenerProductoBase()) return null;
+        const activo = obtenerObjetoActivo();
+        try {
+            canvas.discardActiveObject();
+            canvas.renderAll();
+            return canvas.toDataURL({format: "png", multiplier: 1.3});
+        } finally {
+            if (activo) canvas.setActiveObject(activo);
+            canvas.requestRenderAll();
+        }
+    }
+
+    async function aplicarPlantillaEstudio(clave) {
+        const diseños = {
+            urbano: {principal:"STREET", secundario:"OWN YOUR WAY", letra:"Bebas Neue",
+                tinta:"#242029", detalle:"#9a46cb", tamano:52},
+            minimal: {principal:"LESS", secundario:"IS MORE", letra:"Montserrat",
+                tinta:"#2c2930", detalle:"#84758c", tamano:47},
+            negocio: {principal:"TU MARCA", secundario:"IDEAS · IMPACTO", letra:"Montserrat",
+                tinta:"#241933", detalle:"#8644a9", tamano:38},
+            celebracion: {principal:"HOY BRILLAS", secundario:"CELEBRA A TU MANERA", letra:"Playfair Display",
+                tinta:"#3a213f", detalle:"#a45192", tamano:34}
+        };
+        if (!Object.prototype.hasOwnProperty.call(diseños, clave)) return false;
+        const actual = canvas.getObjects().filter(o => o.dataTipo !== "producto-base");
+        if (actual.length && !confirm("Añadir la plantilla sobre tu diseño actual? Podrás editar sus elementos por separado y deshacer el cambio.")) return false;
+        const diseño = diseños[clave];
+        try { await cargarFuente(diseño.letra); } catch (_) { /* fuente de respaldo del navegador */ }
+
+        const centroX = ZONA_IMPRESION.left + ZONA_IMPRESION.width/2;
+        const centroY = ZONA_IMPRESION.top + ZONA_IMPRESION.height/2;
+        const ancho = ZONA_IMPRESION.width * .84;
+        const colorFondo = String(colorProducto.value || "").toLowerCase();
+        const colorTexto = colorFondo.includes("negro") || colorFondo.includes("azul") ?
+            "#ffffff" : diseño.tinta;
+        const principal = new fabric.Textbox(diseño.principal, {
+            originX:"center",originY:"center",left:centroX,top:centroY-36,
+            width:ancho,fontFamily:diseño.letra,fontSize:diseño.tamano,
+            textAlign:"center",fontWeight:"bold",fill:colorTexto,
+            dataTipo:"texto-usuario",dataNombre:"Título plantilla: " + diseño.principal
+        });
+        const secundario = new fabric.Textbox(diseño.secundario, {
+            originX:"center",originY:"center",left:centroX,top:centroY+26,
+            width:ancho,fontFamily:"Montserrat",fontSize:15,
+            charSpacing:160,textAlign:"center",fontWeight:"bold",fill:colorTexto,
+            dataTipo:"texto-usuario",dataNombre:"Subtítulo plantilla: " + diseño.secundario
+        });
+        const adorno = new fabric.Rect({
+            originX:"center",originY:"center",left:centroX,top:centroY+58,
+            width:95,height:4,rx:2,ry:2,fill:diseño.detalle,
+            dataTipo:"forma-usuario",dataNombre:"Detalle decorativo"
+        });
+        [principal,secundario,adorno].forEach(objeto => {
+            objeto.setCoords();
+            canvas.add(objeto);
+        });
+        canvas.setActiveObject(principal);
+        canvas.requestRenderAll();
+        sincronizarControlesObjeto();
+        registrarHistorialAhora();
+        programarBorrador();
+        notificarStudio();
+        return true;
+    }
+
+    function ocultarGuiasMagneticas() {
+        const vertical = document.getElementById("pbProGuideX");
+        const horizontal = document.getElementById("pbProGuideY");
+        if (vertical) vertical.hidden = true;
+        if (horizontal) horizontal.hidden = true;
+    }
+
+    function ajustarGuiasMagneticas(evento) {
+        const objeto = evento.target;
+        if (!guiasMagneticasActivas || !objeto ||
+            objeto.dataTipo === "producto-base" || objeto.dataBloqueado) {
+            ocultarGuiasMagneticas();
+            return;
+        }
+        objeto.setCoords();
+        const r = objeto.getBoundingRect(true,true);
+        const z = ZONA_IMPRESION;
+        const candidatosX = [
+            [r.left+r.width/2,z.left+z.width/2],
+            [r.left,z.left],[r.left+r.width,z.left+z.width]
+        ];
+        const candidatosY = [
+            [r.top+r.height/2,z.top+z.height/2],
+            [r.top,z.top],[r.top+r.height,z.top+z.height]
+        ];
+        const buscar = pares => pares
+            .map(([desde,hasta]) => ({delta:hasta-desde,pos:hasta}))
+            .filter(item => Math.abs(item.delta) <= 7)
+            .sort((a,b)=>Math.abs(a.delta)-Math.abs(b.delta))[0];
+        const sx = buscar(candidatosX);
+        const sy = buscar(candidatosY);
+        if (sx) objeto.left += sx.delta;
+        if (sy) objeto.top += sy.delta;
+        if (sx || sy) objeto.setCoords();
+        const gx = document.getElementById("pbProGuideX");
+        const gy = document.getElementById("pbProGuideY");
+        if (gx) {
+            gx.hidden = !sx;
+            if (sx) gx.style.left = (sx.pos / ANCHO_CANVAS * 100).toFixed(3)+"%";
+        }
+        if (gy) {
+            gy.hidden = !sy;
+            if (sy) gy.style.top = (sy.pos / ALTO_CANVAS * 100).toFixed(3)+"%";
+        }
+    }
+
+    function actualizarPanelImpresion() {
+        const caja = document.getElementById("pbProQualityBox");
+        const aviso = document.getElementById("pbProInlineQuality");
+        const objeto = obtenerObjetoActivo();
+        let nivel = "neutral";
+        let titulo = "Selecciona un elemento";
+        let detalle = "Comprueba su tamaño y ubicación en el área recomendada.";
+        if (objeto && objeto.dataTipo !== "producto-base") {
+            const r = objeto.getBoundingRect(true,true);
+            const z = ZONA_IMPRESION;
+            const fuera = r.left < z.left-1 || r.top < z.top-1 ||
+                r.left+r.width > z.left+z.width+1 ||
+                r.top+r.height > z.top+z.height+1;
+            if (fuera) {
+                nivel = "alerta";
+                titulo = "Fuera del área recomendada";
+                detalle = "Mueve o reduce el elemento. El estampado podría quedar recortado.";
+            } else {
+                nivel = "ok";
+                titulo = "Dentro del área de diseño";
+                detalle = "Los límites son orientativos y dependen del producto.";
+            }
+            if (esImagenUsuario(objeto)) {
+                const original = objeto.dataDimensionesOriginales || {};
+                if (original.width && r.width > 0 && z.width > 0) {
+                    const estimado = Math.round(original.width /
+                        ((r.width/z.width) * (28/2.54)));
+                    if (estimado < 120) nivel = "alerta";
+                    else if (estimado < 180 && nivel !== "alerta") nivel = "aviso";
+                    titulo = estimado < 120 ? "Imagen con resolución limitada" :
+                        estimado < 180 ? "Conviene revisar la resolución" : titulo;
+                    detalle = "Densidad estimada: " + estimado +
+                        " ppp para un área de referencia de 28 cm; " +
+                        (fuera ? "también sale del área recomendada. " : "") +
+                        "la impresión final depende del tamaño real.";
+                }
+            }
+        }
+        if (caja) {
+            caja.dataset.nivel = nivel;
+            caja.querySelector("strong").textContent = titulo;
+            caja.querySelector("span").textContent = detalle;
+        }
+        if (aviso) {
+            aviso.dataset.nivel = nivel;
+            aviso.querySelector("span").textContent = titulo+" · "+detalle;
+        }
+    }
+
     function configurarAtajosEstadoBotones() {
         /* reservado para futuras combinaciones de teclado */
     }
