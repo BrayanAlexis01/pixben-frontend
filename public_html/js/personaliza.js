@@ -99,6 +99,23 @@
     const indicesHistorial = {frente: -1, espalda: -1};
     const baseImagenIndicePorLado = {frente: 0, espalda: 0};
     const vistaManualPorLado = {frente: false, espalda: false};
+    let guiasMagneticasActivas = true;
+
+    // API de alcance limitado para la interfaz profesional. El editor Fabric,
+    // el borrador, el historial y las cotizaciones permanecen en este módulo.
+    window.PixBenStudioEditor = Object.freeze({
+        getState: () => ({
+            lado: ladoActual,
+            tieneProducto: Boolean(productoActual && obtenerProductoBase()),
+            nombreProducto: productoActual?.nombre || "Lienzo libre",
+            seleccionado: obtenerTipoSeleccion(),
+            elementos: canvas.getObjects().filter(o => o.dataTipo !== "producto-base").length
+        }),
+        capturarProductoActual,
+        aplicarPlantillaEstudio,
+        activarGuiasMagneticas: valor => { guiasMagneticasActivas = Boolean(valor); ocultarGuiasMagneticas(); },
+        avisarCambio: notificarStudio
+    });
 
     configurarCanvas();
     renderizarSelectorFuentes();
@@ -126,6 +143,8 @@
             actualizarAvisoZona();
             renderizarCapas();
         });
+        canvas.on("object:moving", ajustarGuiasMagneticas);
+        canvas.on("object:modified", ocultarGuiasMagneticas);
         ["object:moving", "object:scaling", "object:rotating"].forEach(evento => canvas.on(evento, () => {
             sincronizarTransformacionSeleccionado();
             actualizarAvisoZona();
@@ -142,6 +161,10 @@
             if (esTexto(objeto)) document.getElementById("textoEditor").value = objeto.text || "";
             programarHistorial();
         });
+        ["selection:created","selection:updated","selection:cleared",
+         "object:added","object:modified","object:removed","text:changed"].forEach(evento =>
+            canvas.on(evento, () => requestAnimationFrame(notificarStudio))
+        );
     }
 
     function conectarEventos() {
@@ -584,6 +607,7 @@
         actualizarResumenDiseno();
         renderizarVistasProducto();
         sincronizarControlesObjeto();
+        notificarStudio();
     }
 
     async function cambiarLado(nuevoLado) {
@@ -593,6 +617,7 @@
         actualizarBotonesLado();
         await cargarLado(nuevoLado);
         programarBorrador();
+        notificarStudio();
     }
 
     function actualizarBotonesLado() {
@@ -1112,9 +1137,11 @@
             const nombre = objeto.dataNombre || (esTexto(objeto) ? (objeto.text || "Texto") : tipo);
             const icono = esTexto(objeto) ? "fa-font" : esImagenUsuario(objeto) ? "fa-image" : "fa-shapes";
             return `<div class="capa-item${activo === objeto ? " activa" : ""}" data-indice="${indiceReal}">
-                <button type="button" class="capa-seleccionar" data-accion="seleccionar"><i class="fa-solid ${icono}"></i><span><b>${escapar(String(nombre).slice(0, 26))}</b><small>${tipo}</small></span></button>
-                <button type="button" data-accion="visibilidad" title="Mostrar u ocultar"><i class="fa-solid ${objeto.visible === false ? "fa-eye-slash" : "fa-eye"}"></i></button>
-                <button type="button" data-accion="bloqueo" title="Bloquear o desbloquear"><i class="fa-solid ${objeto.dataBloqueado ? "fa-lock" : "fa-lock-open"}"></i></button>
+                <button type="button" class="capa-seleccionar" data-accion="seleccionar"><i class="fa-solid ${icono}" aria-hidden="true"></i><span><b>${escapar(String(nombre).slice(0, 26))}</b><small>${tipo}</small></span></button>
+                <button type="button" data-accion="subir" title="Traer capa al frente" aria-label="Subir capa ${escapar(String(nombre).slice(0, 26))}"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button>
+                <button type="button" data-accion="bajar" title="Enviar capa atrás" aria-label="Bajar capa ${escapar(String(nombre).slice(0, 26))}"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i></button>
+                <button type="button" data-accion="visibilidad" title="Mostrar u ocultar" aria-label="${objeto.visible === false ? "Mostrar" : "Ocultar"} capa"><i class="fa-solid ${objeto.visible === false ? "fa-eye-slash" : "fa-eye"}" aria-hidden="true"></i></button>
+                <button type="button" data-accion="bloqueo" title="Bloquear o desbloquear" aria-label="${objeto.dataBloqueado ? "Desbloquear" : "Bloquear"} capa"><i class="fa-solid ${objeto.dataBloqueado ? "fa-lock" : "fa-lock-open"}" aria-hidden="true"></i></button>
             </div>`;
         }).join("");
     }
@@ -1135,11 +1162,17 @@
         } else if (accion === "bloqueo") {
             objeto.dataBloqueado = !objeto.dataBloqueado;
             aplicarEstadoBloqueo(objeto);
+        } else if (accion === "subir" || accion === "bajar") {
+            if (accion === "subir") canvas.bringForward(objeto);
+            else canvas.sendBackwards(objeto);
+            const base = obtenerProductoBase();
+            if (base) canvas.sendToBack(base);
         }
         canvas.requestRenderAll();
         renderizarCapas();
         sincronizarControlesObjeto();
         registrarHistorialAhora();
+        notificarStudio();
     }
 
     function actualizarAvisoZona() {
