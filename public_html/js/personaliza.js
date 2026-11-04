@@ -2146,7 +2146,120 @@
         return protegerPreviewDataUrl(captura);
     }
 
+    async function aplicarPlantillaBiblioteca(diseno) {
+        const existentes = canvas.getObjects().filter(o => o.dataTipo !== "producto-base");
+        if (existentes.length && !confirm("¿Añadir «" + diseno.name +
+                "» al diseño que ya tienes? Sus textos y adornos serán editables y podrás deshacer el cambio.")) return false;
+
+        const fuentesNecesarias = [...new Set(diseno.parts.filter(p => p.type === "text").map(p => p.font))];
+        const cargadas = await Promise.all(fuentesNecesarias.map(cargarFuente));
+        if (cargadas.some(ok => ok === false)) throw new Error("No se pudo cargar alguna tipografía de la plantilla.");
+
+        const fx = ZONA_IMPRESION.width / 300;
+        const fy = ZONA_IMPRESION.height / 340;
+        const X = x => ZONA_IMPRESION.left + x * fx;
+        const Y = y => ZONA_IMPRESION.top + y * fy;
+        const colorPrenda = [colorProducto.value,colorFondoLienzo.value].join(" ").toLowerCase();
+        const fondoOscuro = /negro|black|dark|navy|azul marino|#111|#000|#2424/.test(colorPrenda);
+        function colorPlantilla(token) {
+            if (!token || token === "none") return "transparent";
+            if (token === "ink") return fondoOscuro ? "#f9f7fc" : "#24202b";
+            if (token === "accent" || token === "muted") return diseno.theme[3];
+            if (token === "bg") return diseno.theme[0];
+            return token;
+        }
+        const objetos = [];
+        const factory = p => {
+            const color = colorPlantilla(p.color);
+            const contorno = p.stroke && p.stroke !== "none" ? colorPlantilla(p.stroke) : null;
+            const nombre = p.type === "text" ? p.text : "Detalle de " + diseno.name;
+            const comunes = {
+                dataTipo:p.type === "text" ? "texto-usuario" : "forma-usuario",
+                dataNombre:String(nombre).slice(0,40),
+                opacity:1
+            };
+            if (p.type === "text") {
+                const w = Math.min(ZONA_IMPRESION.width * .98, Number(p.width || 270)*fx);
+                return new fabric.Textbox(p.text,{
+                    ...comunes,
+                    originX:"center",originY:"center",
+                    left:X(p.x),top:Y(p.y),width:w,
+                    fontFamily:p.font||"Montserrat",
+                    fontSize:Math.max(9,p.size*fx),
+                    fontWeight:p.weight==="normal"?"normal":"bold",
+                    fontStyle:p.italic?"italic":"normal",
+                    charSpacing:p.spacing||0,
+                    textAlign:p.align||"center",
+                    fill:color,angle:p.angle||0,
+                    stroke:contorno,
+                    strokeWidth:p.strokeWidth||0,
+                    breakWords:false
+                });
+            }
+            if (p.type === "line") {
+                return new fabric.Line([X(p.x1),Y(p.y1),X(p.x2),Y(p.y2)],{
+                    ...comunes,
+                    stroke:color,strokeWidth:Math.max(1,(p.sw||2)*fx),
+                    strokeLineCap:"round"
+                });
+            }
+            if (p.type === "rect") {
+                return new fabric.Rect({
+                    ...comunes,
+                    originX:"center",originY:"center",
+                    left:X(p.x),top:Y(p.y),
+                    width:p.w*fx,height:p.h*fy,
+                    rx:(p.r||0)*fx,ry:(p.r||0)*fy,
+                    fill:color,stroke:contorno,strokeWidth:contorno?(p.sw||1)*fx:0
+                });
+            }
+            if (p.type === "circle") {
+                return new fabric.Ellipse({
+                    ...comunes,
+                    originX:"center",originY:"center",
+                    left:X(p.x),top:Y(p.y),
+                    rx:p.r*fx,ry:p.r*fy,
+                    fill:color,stroke:contorno,strokeWidth:contorno?(p.sw||1)*fx:0
+                });
+            }
+            if (p.type === "star") {
+                const pts = Array.from({length:10},(_,i)=>{
+                    const ang = -Math.PI/2+i*Math.PI/5;
+                    const rad = (i%2 ? .42 : 1)*p.r;
+                    return {x:Math.cos(ang)*rad*fx,y:Math.sin(ang)*rad*fy};
+                });
+                return new fabric.Polygon(pts,{
+                    ...comunes,
+                    originX:"center",originY:"center",
+                    left:X(p.x),top:Y(p.y),
+                    fill:color,stroke:contorno,strokeWidth:contorno?(p.sw||1)*fx:0
+                });
+            }
+            return null;
+        };
+
+        // Preparamos todo antes de tocar el lienzo; cualquier excepción deja el diseño intacto.
+        diseno.parts.forEach(parte => {
+            const objeto = factory(parte);
+            if (objeto) objetos.push(objeto);
+        });
+        objetos.forEach(objeto => {
+            objeto.setCoords();
+            canvas.add(objeto);
+        });
+        const titulo = objetos.find(o => esTexto(o)) || objetos[0];
+        if (titulo) canvas.setActiveObject(titulo);
+        canvas.requestRenderAll();
+        sincronizarControlesObjeto();
+        registrarHistorialAhora();
+        programarBorrador();
+        notificarStudio();
+        return true;
+    }
+
     async function aplicarPlantillaEstudio(clave) {
+        const nuevo = window.PixBenTemplateLibrary?.get(clave);
+        if (nuevo) return aplicarPlantillaBiblioteca(nuevo);
         const diseños = {
             urbano: {principal:"STREET", secundario:"OWN YOUR WAY", letra:"Bebas Neue",
                 tinta:"#242029", detalle:"#9a46cb", tamano:52},
