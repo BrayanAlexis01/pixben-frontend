@@ -962,35 +962,106 @@
         }
     }
 
+
     function renderizarSelectorFuentes() {
-        const categorias = ["Todas", ...new Set(fuentes.map(f => f.categoria))];
-        document.getElementById("categoriasFuentes").innerHTML = categorias.map(c => `<button type="button" data-categoria="${c}" class="${c === categoriaFuenteActiva ? "activo" : ""}">${c}</button>`).join("");
-        document.getElementById("categoriasFuentes").querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
-            categoriaFuenteActiva = b.dataset.categoria;
+        const gruposNuevos = ["Graffiti", "Góticas", "Lettering", "Retro", "Deportivas", "Futuristas"];
+        const categorias = ["Destacadas", "Todas", ...gruposNuevos,
+            ...new Set(fuentes.map(f => f.categoria).filter(c => !gruposNuevos.includes(c)))];
+        const contenedor = document.getElementById("categoriasFuentes");
+        contenedor.innerHTML = categorias.map(c =>
+            '<button type="button" data-categoria="' + escapar(c) +
+            '" class="' + (c === categoriaFuenteActiva ? "activo" : "") +
+            '" aria-pressed="' + String(c === categoriaFuenteActiva) + '">' + escapar(c) + '</button>'
+        ).join("");
+        contenedor.querySelectorAll("button").forEach(boton => boton.addEventListener("click", () => {
+            categoriaFuenteActiva = boton.dataset.categoria;
             renderizarSelectorFuentes();
-            renderizarListaFuentes();
         }));
         renderizarListaFuentes();
+    }
+
+    function obtenerTextoMuestraFuente(fuente) {
+        const propio = document.getElementById("muestraTextoFuente")?.value.trim();
+        const escrito = document.getElementById("textoEditor")?.value.trim().replace(/\s+/g," ");
+        return (propio || escrito || fuente.muestra || "PixBen Style").slice(0, 36);
+    }
+
+    function actualizarMuestrasFuentes() {
+        document.querySelectorAll("#listaFuentes .opcion-fuente").forEach(boton => {
+            const fuente = fuentes.find(f => f.familia === boton.dataset.fuente);
+            const muestra = boton.querySelector(".preview-fuente");
+            if (fuente && muestra) muestra.textContent = obtenerTextoMuestraFuente(fuente);
+        });
+    }
+
+    function prepararMuestrasFuentes() {
+        observadorFuentes?.disconnect();
+        const lista = document.getElementById("listaFuentes");
+        const opciones = [...lista.querySelectorAll(".opcion-fuente")];
+        const preparar = async opcion => {
+            if (opcion.dataset.cargada === "1") return;
+            opcion.dataset.cargada = "1";
+            const ok = await cargarFuente(opcion.dataset.fuente);
+            if (opcion.isConnected && !ok) {
+                opcion.classList.add("fuente-no-disponible");
+                opcion.title = "No se pudo cargar la fuente; comprueba tu conexión";
+            }
+        };
+        if (typeof IntersectionObserver !== "undefined") {
+            observadorFuentes = new IntersectionObserver(entradas => {
+                entradas.forEach(entrada => {
+                    if (!entrada.isIntersecting) return;
+                    observadorFuentes?.unobserve(entrada.target);
+                    preparar(entrada.target);
+                });
+            }, {root:lista, rootMargin:"90px 0px"});
+            opciones.forEach(opcion => observadorFuentes.observe(opcion));
+        } else {
+            opciones.slice(0, 10).forEach(preparar);
+        }
     }
 
     function renderizarListaFuentes() {
         const busqueda = normalizarTexto(document.getElementById("buscarFuente")?.value || "");
         const seleccionada = document.getElementById("fuenteTexto").value || "Montserrat";
-        const filtradas = fuentes.filter(f => (categoriaFuenteActiva === "Todas" || f.categoria === categoriaFuenteActiva) && (!busqueda || normalizarTexto(f.nombre).includes(busqueda)));
-        document.getElementById("listaFuentes").innerHTML = filtradas.length ? filtradas.map(f => `
-            <button type="button" class="opcion-fuente${f.familia === seleccionada ? " activa" : ""}" data-fuente="${escapar(f.familia)}" role="option" aria-selected="${f.familia === seleccionada}">
-                <span class="preview-fuente" style="font-family:'${escapar(f.familia)}',sans-serif">PixBen Aa</span>
-                <span class="meta-fuente"><b>${escapar(f.nombre)}</b><small>${escapar(f.categoria)}</small></span>
-                ${f.familia === seleccionada ? '<i class="fa-solid fa-check"></i>' : ""}
-            </button>`).join("") : '<p class="sin-fuentes">No encontramos fuentes con ese nombre.</p>';
-        document.getElementById("listaFuentes").querySelectorAll("[data-fuente]").forEach(b => b.addEventListener("click", () => seleccionarFuente(b.dataset.fuente)));
+        const filtradas = fuentes.filter(f =>
+            (categoriaFuenteActiva === "Destacadas" ? f.destacada :
+             categoriaFuenteActiva === "Todas" || f.categoria === categoriaFuenteActiva) &&
+            (!busqueda || normalizarTexto([f.nombre, f.categoria, f.etiquetas || ""].join(" ")).includes(busqueda)));
+        const contador = document.getElementById("contadorFuentes");
+        if (contador) contador.textContent = filtradas.length + " " +
+            (filtradas.length === 1 ? "tipografía" : "tipografías");
+        const lista = document.getElementById("listaFuentes");
+        lista.innerHTML = filtradas.length ? filtradas.map(f =>
+            '<button type="button" class="opcion-fuente' + (f.familia === seleccionada ? " activa" : "") +
+            '" data-fuente="' + escapar(f.familia) +
+            '" role="option" aria-selected="' + (f.familia === seleccionada) +
+            '" aria-label="' + escapar(f.nombre + ", estilo " + f.categoria) + '">' +
+            '<span class="pb-font-card__sample"><span class="preview-fuente" style="font-family:' +
+            String.fromCharCode(39) + escapar(f.familia) + String.fromCharCode(39) +
+            ',sans-serif">' + escapar(obtenerTextoMuestraFuente(f)) + '</span></span>' +
+            '<span class="pb-font-card__bottom"><span class="meta-fuente"><b>' + escapar(f.nombre) +
+            '</b><small>' + escapar(f.categoria) + '</small></span>' +
+            '<span class="pb-font-card__badge" aria-hidden="true"><i class="fa-solid ' +
+            (f.familia === seleccionada ? "fa-check" : "fa-plus") + '"></i></span></span></button>'
+        ).join("") : '<p class="sin-fuentes">No encontramos tipografías. Prueba otra palabra o categoría.</p>';
+        lista.querySelectorAll("[data-fuente]").forEach(b =>
+            b.addEventListener("click", () => seleccionarFuente(b.dataset.fuente)));
+        if (!document.getElementById("selectorFuentes").hidden) prepararMuestrasFuentes();
     }
 
     async function seleccionarFuente(familia) {
+        if (!fuentes.some(f => f.familia === familia)) return;
+        const intento = ++secuenciaSeleccionFuente;
+        const ok = await cargarFuente(familia);
+        if (intento !== secuenciaSeleccionFuente) return;
+        if (!ok) {
+            alert("No se pudo cargar la tipografía. Comprueba tu conexión e inténtalo nuevamente.");
+            return;
+        }
         document.getElementById("fuenteTexto").value = familia;
         document.getElementById("nombreFuenteActual").textContent = familia;
-        document.getElementById("muestraFuenteActual").style.fontFamily = `'${familia}', sans-serif`;
-        await cargarFuente(familia);
+        document.getElementById("muestraFuenteActual").style.fontFamily = "'" + familia + "', sans-serif";
         renderizarListaFuentes();
         await actualizarTextoSeleccionado();
         cerrarSelectorFuentes();
@@ -1000,17 +1071,61 @@
         const selector = document.getElementById("selectorFuentes");
         selector.hidden = !selector.hidden;
         document.getElementById("btnAbrirFuentes").setAttribute("aria-expanded", String(!selector.hidden));
-        if (!selector.hidden) setTimeout(() => document.getElementById("buscarFuente").focus(), 30);
+        if (!selector.hidden) {
+            renderizarListaFuentes();
+            setTimeout(() => document.getElementById("muestraTextoFuente").focus(), 30);
+        } else observadorFuentes?.disconnect();
     }
 
     function cerrarSelectorFuentes() {
         document.getElementById("selectorFuentes").hidden = true;
         document.getElementById("btnAbrirFuentes").setAttribute("aria-expanded", "false");
+        observadorFuentes?.disconnect();
     }
 
     async function cargarFuente(familia) {
-        if (!document.fonts?.load) return;
-        try { await document.fonts.load(`32px "${familia}"`); } catch { /* fallback del navegador */ }
+        if (!fuentesDinamicas.has(familia)) {
+            if (!document.fonts?.load) return true;
+            try { await document.fonts.load('32px "' + familia + '"'); return true; }
+            catch { return false; }
+        }
+        if (!solicitudesFuente.has(familia)) {
+            const cargarEstilo = new Promise(resolve => {
+                const link = document.createElement("link");
+                link.rel = "stylesheet";
+                link.href = "https://fonts.googleapis.com/css2?family=" +
+                    encodeURIComponent(familia).replace(/%20/g, "+") + "&display=swap";
+                let resuelto = false;
+                const terminar = estado => {
+                    if (resuelto) return;
+                    resuelto = true;
+                    resolve(estado);
+                };
+                const limite = setTimeout(() => terminar(false), 8000);
+                link.onload = () => { clearTimeout(limite); terminar(true); };
+                link.onerror = () => { clearTimeout(limite); terminar(false); };
+                document.head.appendChild(link);
+            }).then(async disponible => {
+                if (!disponible) return false;
+                if (!document.fonts?.load) return true;
+                try {
+                    const rostros = await document.fonts.load('32px "' + familia + '"');
+                    return rostros.length > 0;
+                } catch { return false; }
+            });
+            solicitudesFuente.set(familia, cargarEstilo);
+        }
+        return solicitudesFuente.get(familia);
+    }
+
+    async function prepararFuentesGuardadas(estado) {
+        if (!estado) return;
+        try {
+            const json = JSON.parse(estado);
+            const familias = [...new Set((json.objects || []).filter(obj =>
+                ["textbox", "text", "i-text"].includes(obj.type)).map(obj => obj.fontFamily).filter(Boolean))];
+            await Promise.all(familias.map(cargarFuente));
+        } catch { /* El cargador original controla estados inválidos. */ }
     }
 
     function sincronizarControlesObjeto() {
