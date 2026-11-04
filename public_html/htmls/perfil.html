@@ -23,8 +23,12 @@
     <script src="../js/pwa-premium.js?v=2" defer></script>
     <link href="../css/header-global.css?v=2" rel="stylesheet">
     <link rel="stylesheet" href="../css/accessibility.css?v=6">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/perfil-premium.css?v=1">
 </head>
-<body>
+<body class="pb-profile-page">
 <header class="site-header-pixben">
     <div class="logo">
         <a href="../index.html"><img src="../imagensponsor/logopixben.webp" alt="PixBen"></a>
@@ -59,56 +63,80 @@
 </header>
 
 <main class="perfil-shell">
-    <aside class="perfil-sidebar">
-        <div class="avatar-perfil-wrap">
-            <img id="fotoPerfil" class="foto-perfil" alt="Foto de perfil">
-            <label for="inputFotoPerfil" class="boton-cambiar-foto" title="Cambiar foto">
-                <i class="fa-solid fa-camera"></i>
-            </label>
-            <input id="inputFotoPerfil" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+    <aside class="perfil-sidebar" aria-label="Panel de navegación de tu cuenta">
+        <div class="pb-profile-sidebar-heading"><span class="pb-profile-brand-dot" aria-hidden="true"></span><span>MI ESPACIO PIXBEN</span></div>
+        <div class="pb-profile-identity">
+            <div class="avatar-perfil-wrap">
+                <img id="fotoPerfil" class="foto-perfil" alt="Foto de perfil">
+                <label for="inputFotoPerfil" class="boton-cambiar-foto" title="Cambiar foto" aria-label="Cambiar mi foto de perfil">
+                    <i class="fa-solid fa-camera" aria-hidden="true"></i>
+                </label>
+                <input id="inputFotoPerfil" type="file" accept="image/png,image/jpeg,image/webp" hidden aria-label="Seleccionar foto de perfil">
+            </div>
+            <h2 id="nombreUsuario">Usuario</h2>
+            <p id="aliasSidebar">Mi cuenta PixBen</p>
+            <span class="pb-profile-role" id="rolSidebar">Cliente</span>
         </div>
-        <h2 id="nombreUsuario">Usuario</h2>
-        <p id="aliasSidebar">Cliente PixBen</p>
+        <div class="pb-profile-nav-title">TU CUENTA</div>
         <nav class="menu-perfil" aria-label="Menú de la cuenta">
-            <a href="mis-pedidos.html"><i class="fa-solid fa-box"></i> Mis pedidos</a>
-            <a href="favoritos.html"><i class="fa-solid fa-heart"></i> Favoritos</a>
-            <a href="historial.html"><i class="fa-solid fa-clock-rotate-left"></i> Historial</a>
-            <button type="button" data-open-accessibility aria-haspopup="dialog"><i class="fa-solid fa-universal-access"></i> Accesibilidad y preferencias</button>
-            <button type="button" id="btnCerrarSesionPerfil"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
+            <a class="pb-profile-nav-active" href="#resumen" aria-current="page"><i class="fa-regular fa-id-card" aria-hidden="true"></i><span>Mi perfil</span></a>
+            <a href="mis-pedidos.html"><i class="fa-solid fa-box" aria-hidden="true"></i><span>Mis pedidos</span></a>
+            <a href="favoritos.html"><i class="fa-regular fa-heart" aria-hidden="true"></i><span>Favoritos</span></a>
+            <a href="historial.html"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i><span>Historial</span></a>
+            <a href="#configuracion"><i class="fa-solid fa-sliders" aria-hidden="true"></i><span>Mis datos</span></a>
+            <button type="button" data-open-accessibility aria-haspopup="dialog"><i class="fa-solid fa-universal-access" aria-hidden="true"></i><span>Accesibilidad</span></button>
+            <div class="pb-profile-nav-divider" aria-hidden="true"></div>
+            <button type="button" id="btnCerrarSesionPerfil" class="pb-profile-logout"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i><span>Cerrar sesión</span></button>
         </nav>
+        <div class="pb-profile-sidebar-bottom">
+            <span>✦ <strong>Hazlo a tu manera</strong></span>
+            <p>Descubre nuevas ideas para personalizar.</p>
+            <a href="personaliza.html">Comenzar a diseñar <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+        </div>
     </aside>
 
     <section class="contenido-perfil">
-        <section class="bienvenida">
-            <div>
-                <span class="eyebrow">TU CUENTA</span>
+        <section class="bienvenida" id="resumen" aria-labelledby="saludoUsuario">
+            <div class="pb-profile-hero-content">
+                <span class="eyebrow"><span class="pb-profile-star" aria-hidden="true">✳</span> TU ESPACIO PERSONAL</span>
                 <h1 id="saludoUsuario">Hola 👋</h1>
-                <p>Administra tus datos, preferencias y actividad en PixBen.</p>
+                <p>Tu estilo, tus pedidos y tus preferencias, todo en un mismo lugar.</p>
+                <div class="pb-profile-hero-actions">
+                    <a href="#configuracion" class="pb-profile-hero-btn pb-profile-hero-btn--main">Editar mi perfil <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                    <a href="mis-pedidos.html" class="pb-profile-hero-btn pb-profile-hero-btn--subtle">Mis pedidos</a>
+                </div>
             </div>
-            <img id="fotoBienvenida" class="avatar-bienvenida" alt="Avatar del usuario">
+            <div class="pb-profile-hero-art" aria-hidden="true">
+                <span class="pb-profile-hero-ring pb-profile-hero-ring--one"></span>
+                <span class="pb-profile-hero-ring pb-profile-hero-ring--two"></span>
+                <span class="pb-profile-hero-art-mark">P<span>✦</span></span>
+                <span class="pb-profile-hero-art-caption">BE YOUR OWN DESIGN</span>
+            </div>
         </section>
 
+        <div class="pb-profile-section-label"><span>01 / ACTIVIDAD DE TU CUENTA</span><h2>Todo lo tuyo, a un vistazo</h2></div>
         <section class="resumen-cards" aria-label="Resumen de la cuenta">
-            <a class="card-resumen" href="mis-pedidos.html"><i class="fa-solid fa-box"></i><span>Pedidos</span><strong id="totalPedidos">0</strong></a>
-            <a class="card-resumen" href="favoritos.html"><i class="fa-solid fa-heart"></i><span>Favoritos</span><strong id="totalFavoritos">0</strong></a>
-            <a class="card-resumen" href="historial.html"><i class="fa-solid fa-clock-rotate-left"></i><span>Historial</span><strong id="totalHistorial">0</strong></a>
+            <a class="card-resumen" href="mis-pedidos.html"><span class="pb-profile-stat-icon pb-profile-stat-icon--orders"><i class="fa-solid fa-box" aria-hidden="true"></i></span><span class="pb-profile-stat-copy"><span class="pb-profile-stat-title">Mis pedidos</span><strong id="totalPedidos">0</strong><small>Ver mis compras</small></span><i class="fa-solid fa-arrow-up-right-from-square pb-profile-stat-arrow" aria-hidden="true"></i></a>
+            <a class="card-resumen" href="favoritos.html"><span class="pb-profile-stat-icon pb-profile-stat-icon--favorites"><i class="fa-regular fa-heart" aria-hidden="true"></i></span><span class="pb-profile-stat-copy"><span class="pb-profile-stat-title">Mis favoritos</span><strong id="totalFavoritos">0</strong><small>Mis productos guardados</small></span><i class="fa-solid fa-arrow-up-right-from-square pb-profile-stat-arrow" aria-hidden="true"></i></a>
+            <a class="card-resumen" href="historial.html"><span class="pb-profile-stat-icon pb-profile-stat-icon--history"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i></span><span class="pb-profile-stat-copy"><span class="pb-profile-stat-title">Mi historial</span><strong id="totalHistorial">0</strong><small>Explorar lo que vi</small></span><i class="fa-solid fa-arrow-up-right-from-square pb-profile-stat-arrow" aria-hidden="true"></i></a>
         </section>
 
         <section class="tarjeta-info">
             <div class="encabezado-tarjeta">
-                <div><span class="eyebrow">PERFIL</span><h2>Información personal</h2></div>
+                <div><span class="eyebrow">02 / MIS DATOS</span><h2>Información personal</h2><p class="pb-profile-card-help">Revisa la información asociada a tu cuenta.</p></div>
                 <span class="chip-rol" id="rolUsuario">Cliente</span>
             </div>
             <dl class="datos-perfil">
-                <div><dt>Nombre</dt><dd id="nombreCompleto">—</dd></div>
-                <div><dt>Alias público</dt><dd id="aliasUsuario">—</dd></div>
-                <div><dt>Correo</dt><dd id="correoUsuario">—</dd></div>
+                <div><dt><i class="fa-regular fa-user" aria-hidden="true"></i> Nombre</dt><dd id="nombreCompleto">—</dd></div>
+                <div><dt><i class="fa-solid fa-at" aria-hidden="true"></i> Alias público</dt><dd id="aliasUsuario">—</dd></div>
+                <div><dt><i class="fa-regular fa-envelope" aria-hidden="true"></i> Correo</dt><dd id="correoUsuario">—</dd></div>
             </dl>
         </section>
 
+        <div class="pb-profile-section-label pb-profile-section-label--settings"><span>03 / PREFERENCIAS Y SEGURIDAD</span><h2>Personaliza tu cuenta</h2></div>
         <section id="configuracion" class="configuracion-grid">
-            <form id="formPerfil" class="tarjeta-configuracion">
-                <div class="encabezado-tarjeta"><div><span class="eyebrow">CONFIGURACIÓN</span><h2>Datos públicos</h2></div><i class="fa-solid fa-user-pen icono-tarjeta"></i></div>
+            <form id="formPerfil" class="tarjeta-configuracion" autocomplete="on">
+                <div class="encabezado-tarjeta"><div><span class="eyebrow">PERSONALIZACIÓN</span><h2>Tus datos públicos</h2></div><span class="pb-profile-form-icon"><i class="fa-solid fa-user-pen icono-tarjeta" aria-hidden="true"></i></span></div>
                 <p class="texto-ayuda">El alias y la foto se mostrarán en tus reseñas. Si no eliges una foto, aparecerá el avatar gris.</p>
                 <div class="grid-campos">
                     <label>Nombre<input id="editarNombre" type="text" maxlength="80" required></label>
@@ -116,18 +144,25 @@
                     <label class="campo-completo">Alias o apodo<input id="editarAlias" type="text" maxlength="60" placeholder="Ej. SebasDesign"></label>
                 </div>
                 <button class="btn-principal" type="submit"><i class="fa-solid fa-floppy-disk"></i> Guardar cambios</button>
-                <p id="estadoPerfil" class="estado-formulario" aria-live="polite"></p>
+                <p id="estadoPerfil" class="estado-formulario" role="status" aria-live="polite"></p>
             </form>
 
             <form id="formPassword" class="tarjeta-configuracion">
-                <div class="encabezado-tarjeta"><div><span class="eyebrow">SEGURIDAD</span><h2>Cambiar contraseña</h2></div><i class="fa-solid fa-shield-halved icono-tarjeta"></i></div>
-                <p class="texto-ayuda">Usa al menos 8 caracteres y evita repetir una contraseña anterior.</p>
+                <div class="encabezado-tarjeta"><div><span class="eyebrow">PROTECCIÓN DE CUENTA</span><h2>Tu seguridad</h2></div><span class="pb-profile-form-icon"><i class="fa-solid fa-shield-halved icono-tarjeta" aria-hidden="true"></i></span></div>
+                <p class="texto-ayuda">Actualiza tu contraseña cuando lo necesites. Usa al menos 8 caracteres.</p>
                 <label>Contraseña actual<input id="passwordActual" type="password" autocomplete="current-password" required></label>
                 <label>Nueva contraseña<input id="passwordNueva" type="password" autocomplete="new-password" minlength="8" required></label>
                 <label>Confirmar nueva contraseña<input id="confirmarPassword" type="password" autocomplete="new-password" minlength="8" required></label>
                 <button class="btn-secundario-perfil" type="submit"><i class="fa-solid fa-key"></i> Actualizar contraseña</button>
-                <p id="estadoPassword" class="estado-formulario" aria-live="polite"></p>
+                <p id="estadoPassword" class="estado-formulario" role="status" aria-live="polite"></p>
             </form>
+        </section>
+        <section class="pb-profile-next" aria-labelledby="profileNextTitle">
+            <div class="pb-profile-next-heading"><span class="eyebrow">SIGUE EXPLORANDO</span><h2 id="profileNextTitle">Tu próxima idea comienza aquí.</h2><p>Descubre prendas, guarda tus favoritos o crea tu propio diseño.</p></div>
+            <div class="pb-profile-next-actions">
+                <a href="productos.html"><i class="fa-solid fa-shirt" aria-hidden="true"></i> Explorar catálogo <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                <a href="personaliza.html"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Personalizar <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
         </section>
     </section>
 </main>
@@ -135,7 +170,7 @@
 <script src="../js/config.js?v=19"></script>
 <script src="../js/header-global.js?v=2"></script>
 <script src="../js/analitica.js?v=3"></script>
-<script src="../js/paginas/perfil.js?v=5"></script>
+<script src="../js/paginas/perfil.js?v=6"></script>
 <script src="../js/eventos-html.js?v=3"></script>
 <script src="../js/responsive-menu.js?v=4"></script>
 <script src="../js/accessibility.js?v=3"></script>
