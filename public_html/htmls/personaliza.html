@@ -32,14 +32,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Alfa+Slab+One&family=Anton&family=Archivo+Black&family=Bangers&family=Bebas+Neue&family=Black+Ops+One&family=Bungee&family=Caveat:wght@400;700&family=Chakra+Petch:wght@400;700&family=Cinzel:wght@400;700&family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:wght@400;700&family=Dancing+Script:wght@400;700&family=Exo+2:wght@400;700&family=Great+Vibes&family=Kaushan+Script&family=Lobster&family=Luckiest+Guy&family=Montserrat:wght@400;600;700;800&family=Orbitron:wght@400;700&family=Oswald:wght@400;600;700&family=Pacifico&family=Permanent+Marker&family=Playfair+Display:wght@400;700&family=Poppins:wght@400;600;700&family=Press+Start+2P&family=Righteous&family=Roboto+Slab:wght@400;700&family=Rubik+Mono+One&family=Sacramento&family=Satisfy&family=VT323&display=swap" rel="stylesheet">
     <link href="../css/css personaliza.css?v=11" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="../css/responsive-global.css?v=3" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
     <link rel="stylesheet" href="../css/pwa-premium.css?v=2">
     <script src="../js/pwa-premium.js?v=2" defer></script>
     <link href="../css/header-global.css?v=2" rel="stylesheet">
     <link rel="stylesheet" href="../css/accessibility.css?v=6">
+    <link rel="stylesheet" href="../css/personaliza-studio-premium.css?v=1">
 </head>
-<body>
+<body class="pb-studio-page">
 <header class="site-header-pixben">
     <div class="logo">
         <a href="../index.html"><img src="../imagensponsor/logopixben.webp" alt="PixBen"></a>
@@ -73,11 +76,12 @@
     </div>
 </header>
 
-<main class="personalizador-page">
+<main class="personalizador-page" id="pbStudioMain">
+    <div class="pb-studio-context"><span class="pb-studio-context__dot"></span> PIXBEN / ESTUDIO DE PERSONALIZACIÓN <span class="pb-studio-context__trailing">TU IDEA, A TU MANERA</span></div>
     <section class="personalizador-hero">
-        <span class="eyebrow">ESTUDIO PIXBEN</span>
-        <h1>Convierte tu idea en un estampado</h1>
-        <p>Diseña el frente y la espalda, combina tipografías, imágenes y formas, y envía una vista previa lista para que PixBen la cotice.</p>
+        <span class="eyebrow">DISEÑA ALGO ÚNICO</span>
+        <h1>Tu creatividad, <em>sin límites.</em></h1>
+        <p>Elige tu prenda, agrega imágenes o frases y crea un diseño único. Nosotros nos encargamos de cotizarlo.</p>
         <div class="hero-beneficios" aria-label="Funciones del editor">
             <span><i class="fa-solid fa-cloud-arrow-up"></i> Borrador automático</span>
             <span><i class="fa-solid fa-font"></i> Tipografías visuales</span>
@@ -86,8 +90,20 @@
         </div>
     </section>
 
-    <section class="editor-layout">
-        <aside class="panel-editor panel-configuracion" aria-label="Herramientas del personalizador">
+    <section class="editor-layout" id="pbStudioEditor" aria-label="Editor de personalización">
+        <aside class="panel-editor panel-configuracion" id="pbStudioTools" aria-label="Herramientas del personalizador">
+            <div class="pb-mobile-sheet-heading">
+                <div><span class="pb-mobile-kicker">HERRAMIENTAS</span><h2 id="pbMobileToolsTitle">Personaliza tu diseño</h2></div>
+                <div class="pb-mobile-sheet-heading__actions">
+                    <button type="button" id="pbMobileToolsExpand" class="pb-mobile-sheet-expand" aria-label="Ampliar panel de herramientas" aria-pressed="false"><i class="fa-solid fa-up-right-and-down-left-from-center" aria-hidden="true"></i></button>
+                    <button type="button" class="pb-mobile-sheet-close" data-pb-mobile-close aria-label="Cerrar herramientas"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+                </div>
+            </div>
+            <div class="pb-mobile-quick-actions" id="pbMobileQuickActions" hidden>
+                <button type="button" id="pbMobileAddText"><i class="fa-solid fa-plus" aria-hidden="true"></i> Añadir texto</button>
+                <button type="button" id="pbMobileAddImage"><i class="fa-solid fa-upload" aria-hidden="true"></i> Subir imagen</button>
+            </div>
+            <p id="pbMobileToolTip" class="pb-mobile-tool-tip" hidden></p>
             <div class="cabecera-panel-editor">
                 <div>
                     <span class="panel-kicker">HERRAMIENTAS</span>
@@ -291,7 +307,8 @@
             </details>
         </aside>
 
-        <section class="lienzo-seccion" id="lienzoSeccion">
+        <section class="lienzo-seccion" id="lienzoSeccion" aria-label="Vista en vivo de tu diseño">
+            <div class="pb-studio-canvas-heading"><span><i class="fa-solid fa-circle" aria-hidden="true"></i> VISTA EN VIVO</span><span>Arrastra para diseñar</span></div>
             <div class="barra-lienzo">
                 <div class="selector-lado" role="tablist" aria-label="Lado del producto">
                     <button type="button" class="lado-activo" id="btnFrente"><span>Frente</span><small id="contadorFrente">0</small></button>
@@ -325,7 +342,11 @@
             </div>
         </section>
 
-        <aside class="panel-editor resumen-pedido">
+        <aside class="panel-editor resumen-pedido" id="pbStudioOrder" aria-label="Resumen y cotización">
+            <div class="pb-mobile-sheet-heading">
+                <div><span class="pb-mobile-kicker">TU SOLICITUD</span><h2>Revisa y cotiza</h2></div>
+                <button type="button" class="pb-mobile-sheet-close" data-pb-mobile-close aria-label="Cerrar resumen"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </div>
             <div class="resumen-titulo">
                 <div><span class="panel-kicker">PEDIDO</span><h2>Resumen de solicitud</h2></div>
                 <span class="badge-cotizacion">Cotización</span>
@@ -369,11 +390,21 @@
             <div class="ayuda-whatsapp">
                 <i class="fa-brands fa-whatsapp"></i>
                 <div><strong>¿Tienes una duda rápida?</strong><p>Consulta tallas, materiales o el proceso por WhatsApp. Si necesitas que preparemos el diseño por ti, usa “Solicitar diseñador” para reservar el trabajo.</p></div>
-                <a href="https://wa.me/51933626970?text=Hola%20PixBen%2C%20vengo%20de%20la%20web.%20Tengo%20una%20consulta%20sobre%20el%20proceso%20de%20personalizacion." target="_blank" rel="noopener noreferrer">Consultar</a>
+                <a href="https://wa.me/51947565664?text=Hola%20PixBen%2C%20vengo%20de%20la%20web.%20Tengo%20una%20consulta%20sobre%20el%20proceso%20de%20personalizacion." target="_blank" rel="noopener noreferrer">Consultar</a>
             </div>
             <p id="estadoSolicitud" class="estado-solicitud" aria-live="polite"></p>
         </aside>
     </section>
+
+    <div id="pbMobileSheetBackdrop" class="pb-mobile-sheet-backdrop" hidden></div>
+    <nav class="pb-mobile-studio-nav" aria-label="Herramientas rápidas del estudio">
+        <button type="button" data-pb-studio-tab="producto" aria-controls="pbStudioTools" aria-expanded="false"><i class="fa-solid fa-shirt" aria-hidden="true"></i><span>Producto</span></button>
+        <button type="button" data-pb-studio-tab="texto" aria-controls="pbStudioTools" aria-expanded="false"><i class="fa-solid fa-font" aria-hidden="true"></i><span>Texto</span></button>
+        <button type="button" data-pb-studio-tab="imagen" aria-controls="pbStudioTools" aria-expanded="false"><i class="fa-regular fa-image" aria-hidden="true"></i><span>Imagen</span></button>
+        <button type="button" data-pb-studio-tab="capas" aria-controls="pbStudioTools" aria-expanded="false"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span>Capas</span></button>
+        <button type="button" data-pb-studio-tab="pedido" aria-controls="pbStudioOrder" aria-expanded="false"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i><span>Cotizar</span></button>
+    </nav>
+    <div class="pb-studio-mobile-note"><i class="fa-solid fa-hand-pointer" aria-hidden="true"></i> Edita desde la barra inferior sin salir del lienzo.</div>
 
     <section class="como-funciona">
         <article><span>1</span><h3>Diseña</h3><p>Combina imágenes, textos, tipografías y formas.</p></article>
@@ -460,6 +491,7 @@
 <script src="../js/analitica.js?v=3"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
 <script src="../js/personaliza.js?v=16"></script>
+<script src="../js/personaliza-mobile.js?v=1"></script>
 <script src="../js/eventos-html.js?v=3"></script>
 <script src="../js/responsive-menu.js?v=4"></script>
 <script src="../js/accessibility.js?v=1"></script>
