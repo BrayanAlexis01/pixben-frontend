@@ -355,7 +355,7 @@
                 const targetTop=firstNewCard.offsetTop-firstCard.offsetTop;
                 templateGallery.scrollTo({
                     top:Math.max(0,targetTop-8),
-                    behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"instant":"smooth"
+                    behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"
                 });
             }
         }
