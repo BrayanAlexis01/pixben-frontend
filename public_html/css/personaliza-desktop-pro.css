@@ -368,6 +368,10 @@ body.pb-studio-page {
     color:#8d7c95;
     white-space:nowrap;
   }
+  /* El lienzo aprovecha el escritorio sin quedar cortado por monitores bajos. */
+  .pb-pro-stage-holder {
+    width:min(100%,680px,max(280px,calc(87.5dvh - 275px)));
+  }
   body.pb-studio-page .canvas-shell {border-radius:16px;}
   .pb-pro-product-stage {
     display:block;
