@@ -152,7 +152,12 @@
                         <button type="button" id="pbLoadTemplateLibrary" aria-controls="pbTemplateLibraryBody" aria-expanded="false"><i class="fa-solid fa-swatchbook" aria-hidden="true"></i> Explorar 39 plantillas</button>
                     </div>
                 </div>
-                <div id="pbTemplateLibraryBody" class="pb-template-library-body" hidden>
+                <div id="pbTemplateLibraryBackdrop" class="pb-template-library-backdrop" hidden></div>
+                <div id="pbTemplateLibraryBody" class="pb-template-library-body" hidden aria-label="Biblioteca de plantillas PixBen">
+                    <div class="pb-template-library-header">
+                        <div><span class="panel-kicker">EXPLORA TU ESTILO</span><strong>Biblioteca de estampados</strong><small>39 diseños originales · Se cargan solo cuando los necesitas</small></div>
+                        <button type="button" id="pbCloseTemplateLibrary" class="pb-template-library-close" aria-label="Cerrar biblioteca"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+                    </div>
                     <div class="pb-template-library-search">
                         <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
                         <input id="pbTemplateSearch" type="search" autocomplete="off" placeholder="Buscar: cristianos, urbano, minimal..." aria-label="Buscar plantillas"/>
