@@ -144,11 +144,22 @@
     let selectedCategory = "Todos";
     let visibleTemplateCount = 8;
     let templateSearchTerm = "";
+    const originalTemplateParent = libraryBody?.parentElement;
+    const originalBackdropParent = libraryBackdrop?.parentElement;
+    function restoreTemplateLocation() {
+        if(originalBackdropParent && libraryBackdrop?.parentElement !== originalBackdropParent) {
+            originalBackdropParent.append(libraryBackdrop);
+        }
+        if(originalTemplateParent && libraryBody?.parentElement !== originalTemplateParent) {
+            originalTemplateParent.append(libraryBody);
+        }
+    }
 
     function closeTemplateGallery() {
         if (!libraryBody || libraryBody.hidden) return;
         libraryBody.hidden=true;
         libraryBody.classList.remove("pb-template-library-overlay");
+        restoreTemplateLocation();
         libraryBody.removeAttribute("role");
         libraryBody.removeAttribute("aria-modal");
         if(libraryBackdrop)libraryBackdrop.hidden=true;
@@ -162,6 +173,12 @@
         libraryBody.hidden=false;
         if(libraryIntro)libraryIntro.hidden=true;
         const wide=window.innerWidth>820;
+        // Los paneles laterales tienen overflow; movemos el overlay al body
+        // solo mientras está abierto para que el lienzo no lo recorte.
+        if(wide){
+            if(libraryBackdrop)document.body.append(libraryBackdrop);
+            document.body.append(libraryBody);
+        } else restoreTemplateLocation();
         libraryBody.classList.toggle("pb-template-library-overlay",wide);
         if(libraryBackdrop)libraryBackdrop.hidden=!wide;
         if(wide) {
@@ -295,8 +312,10 @@
         const pack=window.PixBenTemplateLibrary;
         const list=getFilteredTemplates();
         const subset=list.slice(0,visibleTemplateCount);
+        const oldScroll=templateGallery.scrollTop;
         templateGallery.replaceChildren();
         subset.forEach(template=>templateGallery.append(makeTemplateCard(template,pack)));
+        templateGallery.scrollTop=oldScroll;
         if (!subset.length) {
             const note=document.createElement("p");
             note.className="pb-template-gallery-empty";
