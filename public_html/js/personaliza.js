@@ -82,6 +82,10 @@
     const editarProductoBase = document.getElementById("editarProductoBase");
     const listaCapas = document.getElementById("listaCapas");
     const estadoBorrador = document.getElementById("estadoBorrador");
+    const accionesSeleccion = document.getElementById("pbSelectionActions");
+    const soporteAccionesSeleccion = document.getElementById("canvasShell");
+    let actualizacionAccionesSeleccion = 0;
+    let interaccionLienzoActiva = false;
 
     let productos = [];
     let productoActual = null;
@@ -121,6 +125,7 @@
     configurarCanvas();
     renderizarSelectorFuentes();
     conectarEventos();
+    configurarAccionesSeleccion();
     cargarProductos();
 
     function configurarCanvas() {
@@ -168,6 +173,22 @@
                 if (!capturandoVista) requestAnimationFrame(notificarStudio);
             })
         );
+        canvas.on("mouse:down", () => {
+            interaccionLienzoActiva = true;
+            if (accionesSeleccion) accionesSeleccion.hidden = true;
+        });
+        canvas.on("mouse:up", () => {
+            interaccionLienzoActiva = false;
+            programarActualizacionAccionesSeleccion();
+        });
+        ["selection:created","selection:updated","selection:cleared",
+         "object:added","object:modified","object:removed","text:changed"].forEach(evento =>
+            canvas.on(evento, programarActualizacionAccionesSeleccion)
+        );
+        canvas.on("text:editing:entered", () => {
+            if (accionesSeleccion) accionesSeleccion.hidden = true;
+        });
+        canvas.on("text:editing:exited", programarActualizacionAccionesSeleccion);
     }
 
     function conectarEventos() {
@@ -749,6 +770,110 @@
         return puntos;
     }
 
+    /* Acciones contextuales: el usuario edita sin abrir Capas ni recorrer el panel. */
+    function configurarAccionesSeleccion() {
+        if (!accionesSeleccion || !soporteAccionesSeleccion) return;
+        accionesSeleccion.addEventListener("pointerdown", evento => evento.stopPropagation());
+        accionesSeleccion.addEventListener("click", evento => {
+            const boton = evento.target.closest("[data-pb-selection-action]");
+            if (!boton) return;
+            evento.preventDefault();
+            evento.stopPropagation();
+            const seleccionados = canvas.getActiveObjects().filter(o => o.dataTipo !== "producto-base");
+            if (!seleccionados.length) return;
+            const accion = boton.dataset.pbSelectionAction;
+            if (accion === "delete") {
+                eliminarSeleccionado();
+            } else if (accion === "duplicate" && seleccionados.length === 1) {
+                duplicarSeleccionado();
+            } else if (accion === "edit" && seleccionados.length === 1) {
+                abrirHerramientaDelSeleccionado(seleccionados[0]);
+            }
+            programarActualizacionAccionesSeleccion();
+        });
+        window.addEventListener("resize", programarActualizacionAccionesSeleccion, {passive: true});
+        if (typeof ResizeObserver !== "undefined") {
+            new ResizeObserver(programarActualizacionAccionesSeleccion).observe(soporteAccionesSeleccion);
+        }
+        programarActualizacionAccionesSeleccion();
+    }
+
+    function abrirHerramientaDelSeleccionado(objeto) {
+        const tipo = esTexto(objeto) ? "texto" : esImagenUsuario(objeto) ? "imagen" : "elementos";
+        if (window.matchMedia("(max-width: 820px)").matches) {
+            const pestaña = tipo === "elementos" ? "capas" : tipo;
+            document.querySelector('[data-pb-studio-tab="' + pestaña + '"]')?.click();
+        } else if (window.matchMedia("(min-width: 1321px)").matches) {
+            document.querySelector('[data-pb-desktop-tool="' + tipo + '"]')?.click();
+        } else {
+            const grupos = [...document.querySelectorAll("#pbStudioTools > details.grupo-editor")];
+            const indice = tipo === "texto" ? 2 : tipo === "imagen" ? 3 : 5;
+            const grupo = grupos[indice];
+            if (grupo) {
+                grupo.open = true;
+                grupo.scrollIntoView({block:"nearest", behavior:"smooth"});
+            }
+        }
+    }
+
+    function programarActualizacionAccionesSeleccion() {
+        if (!accionesSeleccion) return;
+        if (actualizacionAccionesSeleccion) cancelAnimationFrame(actualizacionAccionesSeleccion);
+        actualizacionAccionesSeleccion = requestAnimationFrame(() => {
+            actualizacionAccionesSeleccion = 0;
+            actualizarAccionesSeleccion();
+        });
+    }
+
+    function actualizarAccionesSeleccion() {
+        if (!accionesSeleccion || !soporteAccionesSeleccion) return;
+        const elegidos = canvas.getActiveObjects().filter(o => o.dataTipo !== "producto-base");
+        const objeto = canvas.getActiveObject();
+        const viendoProducto = !document.getElementById("pbProProductStage")?.hidden;
+        if (!elegidos.length || !objeto || interaccionLienzoActiva || cargandoEstado ||
+                capturandoVista || viendoProducto || (esTexto(objeto) && objeto.isEditing)) {
+            accionesSeleccion.hidden = true;
+            return;
+        }
+        const varios = elegidos.length > 1;
+        const editar = accionesSeleccion.querySelector('[data-pb-selection-action="edit"]');
+        const duplicar = accionesSeleccion.querySelector('[data-pb-selection-action="duplicate"]');
+        const eliminar = accionesSeleccion.querySelector('[data-pb-selection-action="delete"]');
+        if (editar) editar.hidden = varios;
+        if (duplicar) duplicar.hidden = varios;
+        if (eliminar) eliminar.setAttribute("aria-label", varios
+                ? "Eliminar los " + elegidos.length + " elementos seleccionados"
+                : "Eliminar elemento seleccionado");
+        accionesSeleccion.hidden = false;
+
+        const canvasDOM = canvas.upperCanvasEl?.getBoundingClientRect();
+        const marco = soporteAccionesSeleccion.getBoundingClientRect();
+        if (!canvasDOM || !marco.width || !canvasDOM.width) {
+            accionesSeleccion.hidden = true;
+            return;
+        }
+        objeto.setCoords();
+        const rect = objeto.getBoundingRect(true, true);
+        const escalaX = canvasDOM.width / ANCHO_CANVAS;
+        const escalaY = canvasDOM.height / ALTO_CANVAS;
+        const anchoBarra = accionesSeleccion.offsetWidth || 168;
+        const altoBarra = accionesSeleccion.offsetHeight || 44;
+        const centro = canvasDOM.left - marco.left + (rect.left + rect.width/2) * escalaX;
+        const arriba = canvasDOM.top - marco.top + rect.top * escalaY;
+        const abajo = canvasDOM.top - marco.top + (rect.top + rect.height) * escalaY;
+        const margen = 8;
+        const maxX = Math.max(anchoBarra/2 + margen, marco.width - anchoBarra/2 - margen);
+        const x = Math.max(anchoBarra/2 + margen, Math.min(maxX, centro));
+        const y = arriba >= altoBarra + 15 ? arriba - altoBarra - 12 :
+                Math.min(Math.max(8, marco.height - altoBarra - 8), abajo + 12);
+        accionesSeleccion.style.left = x + "px";
+        accionesSeleccion.style.top = Math.max(8, Math.min(marco.height - altoBarra - 8, y)) + "px";
+        // En móvil se coloca junto al borde de la zona real del lienzo,
+        // incluso cuando el canvas está centrado y es más estrecho que su contenedor.
+        accionesSeleccion.style.setProperty("--pb-selection-mobile-right",
+            Math.max(8, marco.right - canvasDOM.right + 9) + "px");
+    }
+
     function obtenerObjetoActivo() { return canvas.getActiveObject(); }
     function esTexto(objeto) { return Boolean(objeto && ["i-text", "text", "textbox"].includes(objeto.type)); }
     function esImagenUsuario(objeto) { return Boolean(objeto && objeto.type === "image" && objeto.dataTipo === "imagen-usuario"); }
@@ -1291,7 +1416,7 @@
             if (ctrl && evento.key.toLowerCase() === "c") { evento.preventDefault(); copiarSeleccionado(); return; }
             if (ctrl && evento.key.toLowerCase() === "v") { evento.preventDefault(); pegarSeleccionado(); return; }
             if (["Delete", "Backspace"].includes(evento.key)) { evento.preventDefault(); eliminarSeleccionado(); return; }
-            if (evento.key === "Escape") { canvas.discardActiveObject(); canvas.requestRenderAll(); return; }
+            if (evento.key === "Escape") { canvas.discardActiveObject(); canvas.requestRenderAll(); programarActualizacionAccionesSeleccion(); return; }
             if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(evento.key)) {
                 const objeto = obtenerObjetoActivo();
                 if (!objeto || objeto.dataTipo === "producto-base" || objeto.dataBloqueado) return;
@@ -1305,6 +1430,7 @@
                 canvas.requestRenderAll();
                 programarHistorial();
                 actualizarAvisoZona();
+                programarActualizacionAccionesSeleccion();
             }
         });
     }

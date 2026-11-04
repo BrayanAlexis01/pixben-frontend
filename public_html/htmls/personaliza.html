@@ -42,6 +42,7 @@
     <link rel="stylesheet" href="../css/accessibility.css?v=6">
     <link rel="stylesheet" href="../css/personaliza-studio-premium.css?v=1">
     <link rel="stylesheet" href="../css/personaliza-desktop-pro.css?v=1">
+    <link rel="stylesheet" href="../css/personaliza-selection-actions.css?v=1">
 </head>
 <body class="pb-studio-page">
 <header class="site-header-pixben">
@@ -397,6 +398,12 @@
             </div>
             <div class="pb-pro-guide pb-pro-guide--x" id="pbProGuideX" hidden aria-hidden="true"></div>
             <div class="pb-pro-guide pb-pro-guide--y" id="pbProGuideY" hidden aria-hidden="true"></div>
+            <div class="pb-selection-actions" id="pbSelectionActions" role="toolbar" aria-label="Acciones del elemento seleccionado" hidden>
+                <button type="button" data-pb-selection-action="edit" title="Editar elemento" aria-label="Editar elemento seleccionado"><i class="fa-solid fa-pen" aria-hidden="true"></i><span>Editar</span></button>
+                <button type="button" data-pb-selection-action="duplicate" title="Duplicar elemento" aria-label="Duplicar elemento seleccionado"><i class="fa-regular fa-copy" aria-hidden="true"></i><span>Duplicar</span></button>
+                <span class="pb-selection-actions__divider" aria-hidden="true"></span>
+                <button type="button" data-pb-selection-action="delete" class="pb-selection-actions__delete" title="Eliminar elemento" aria-label="Eliminar elemento seleccionado"><i class="fa-regular fa-trash-can" aria-hidden="true"></i><span>Eliminar</span></button>
+            </div>
             </div>
             <div class="pb-pro-inline-quality" id="pbProInlineQuality" aria-live="polite"><i class="fa-solid fa-circle-info" aria-hidden="true"></i><span>Selecciona un elemento para revisar los límites de impresión.</span></div>
             <div id="avisoFueraZona" class="aviso-fuera-zona" hidden><i class="fa-solid fa-triangle-exclamation"></i> Parte del elemento seleccionado está fuera del área recomendada.</div>
@@ -556,7 +563,7 @@
 <script src="../js/header-global.js?v=2"></script>
 <script src="../js/analitica.js?v=3"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
-<script src="../js/personaliza.js?v=16"></script>
+<script src="../js/personaliza.js?v=17"></script>
 <script src="../js/personaliza-mobile.js?v=1"></script>
 <script src="../js/personaliza-desktop.js?v=1"></script>
 <script src="../js/eventos-html.js?v=3"></script>
