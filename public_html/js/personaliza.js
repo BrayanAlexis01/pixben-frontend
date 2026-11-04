@@ -264,6 +264,10 @@
 
         document.getElementById("btnAbrirFuentes").addEventListener("click", alternarSelectorFuentes);
         document.getElementById("buscarFuente").addEventListener("input", renderizarListaFuentes);
+        window.addEventListener("resize", () => {
+            const selector = document.getElementById("selectorFuentes");
+            if (selector && !selector.hidden) ubicarGaleriaFuentes();
+        }, {passive: true});
         document.getElementById("muestraTextoFuente").addEventListener("input", actualizarMuestrasFuentes);
         document.addEventListener("click", evento => {
             const selector = document.getElementById("selectorFuentes");
@@ -963,6 +967,34 @@
     }
 
 
+    let padreSelectorFuentes = null;
+
+    function ubicarGaleriaFuentes() {
+        const selector = document.getElementById("selectorFuentes");
+        const activador = document.getElementById("btnAbrirFuentes");
+        if (!selector || !activador || selector.hidden) return;
+        if (!padreSelectorFuentes) padreSelectorFuentes = selector.parentElement;
+        if (!window.matchMedia("(min-width: 1321px)").matches) {
+            selector.classList.remove("pb-font-gallery--floating");
+            padreSelectorFuentes?.appendChild(selector);
+            return;
+        }
+        const rect = activador.getBoundingClientRect();
+        const width = Math.min(560, window.innerWidth - 28);
+        const left = Math.max(14, Math.min(window.innerWidth - width - 14, rect.right + 14));
+        document.body.appendChild(selector);
+        selector.classList.add("pb-font-gallery--floating");
+        selector.style.setProperty("--pb-font-gallery-left", left + "px");
+    }
+
+    function devolverGaleriaFuentes() {
+        const selector = document.getElementById("selectorFuentes");
+        if (!selector) return;
+        selector.classList.remove("pb-font-gallery--floating");
+        selector.style.removeProperty("--pb-font-gallery-left");
+        padreSelectorFuentes?.appendChild(selector);
+    }
+
     function renderizarSelectorFuentes() {
         const gruposNuevos = ["Graffiti", "Góticas", "Lettering", "Retro", "Deportivas", "Futuristas"];
         const categorias = ["Destacadas", "Todas", ...gruposNuevos,
@@ -1025,8 +1057,8 @@
         const busqueda = normalizarTexto(document.getElementById("buscarFuente")?.value || "");
         const seleccionada = document.getElementById("fuenteTexto").value || "Montserrat";
         const filtradas = fuentes.filter(f =>
-            (categoriaFuenteActiva === "Destacadas" ? f.destacada :
-             categoriaFuenteActiva === "Todas" || f.categoria === categoriaFuenteActiva) &&
+            (busqueda || (categoriaFuenteActiva === "Destacadas" ? f.destacada :
+             categoriaFuenteActiva === "Todas" || f.categoria === categoriaFuenteActiva)) &&
             (!busqueda || normalizarTexto([f.nombre, f.categoria, f.etiquetas || ""].join(" ")).includes(busqueda)));
         const contador = document.getElementById("contadorFuentes");
         if (contador) contador.textContent = filtradas.length + " " +
@@ -1047,7 +1079,10 @@
         ).join("") : '<p class="sin-fuentes">No encontramos tipografías. Prueba otra palabra o categoría.</p>';
         lista.querySelectorAll("[data-fuente]").forEach(b =>
             b.addEventListener("click", () => seleccionarFuente(b.dataset.fuente)));
-        if (!document.getElementById("selectorFuentes").hidden) prepararMuestrasFuentes();
+        if (!document.getElementById("selectorFuentes").hidden) {
+            ubicarGaleriaFuentes();
+            prepararMuestrasFuentes();
+        }
     }
 
     async function seleccionarFuente(familia) {
@@ -1073,14 +1108,19 @@
         document.getElementById("btnAbrirFuentes").setAttribute("aria-expanded", String(!selector.hidden));
         if (!selector.hidden) {
             renderizarListaFuentes();
+            ubicarGaleriaFuentes();
             setTimeout(() => document.getElementById("muestraTextoFuente").focus(), 30);
-        } else observadorFuentes?.disconnect();
+        } else {
+            observadorFuentes?.disconnect();
+            devolverGaleriaFuentes();
+        }
     }
 
     function cerrarSelectorFuentes() {
         document.getElementById("selectorFuentes").hidden = true;
         document.getElementById("btnAbrirFuentes").setAttribute("aria-expanded", "false");
         observadorFuentes?.disconnect();
+        devolverGaleriaFuentes();
     }
 
     async function cargarFuente(familia) {
