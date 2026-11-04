@@ -496,3 +496,10 @@
 @media(prefers-reduced-motion:reduce) {
   .pb-template-gallery .pb-template-card__zoom {transition:none!important;transform:none!important;}
 }
+
+/* Keep floating widgets out of the expanded template preview. */
+body.pb-template-preview-open .pixben-pwa-layer,
+body.pb-template-preview-open .a11y-flotante {
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
