@@ -464,6 +464,13 @@ body.pb-studio-page {
     border:1px solid #eadcf2;border-radius:10px;
     background:#faf7fd;color:#786687;font-size:11px;line-height:1.6;
   }
+  body.pb-studio-mobile-on .panel-configuracion > .cabecera-panel-editor {
+    display:flex;justify-content:flex-end;
+    min-height:0;margin:0 0 8px;
+    padding:0;border:0;
+  }
+  body.pb-studio-mobile-on .panel-configuracion > .cabecera-panel-editor > div:first-child {display:none;}
+  body.pb-studio-mobile-on .panel-configuracion .estado-borrador {margin-left:auto;}
   body.pb-studio-mobile-on .panel-configuracion > details.grupo-editor:not(.pb-mobile-group-visible) {display:none!important;}
   body.pb-studio-mobile-on .panel-configuracion > details.grupo-editor.pb-mobile-group-visible {margin:10px 0 12px;}
   body.pb-studio-mobile-on .panel-configuracion > details.grupo-editor.pb-mobile-group-visible[hidden] {display:none!important;}
