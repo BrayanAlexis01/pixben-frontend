@@ -110,6 +110,11 @@
             if(tablet) {
                 templates.hidden=false;
                 printPanel.hidden=false;
+            } else {
+                // Al entrar al editor móvil el panel Calidad no debe interrumpir
+                // ninguna pestaña; Producto habilita sus plantillas al abrirse.
+                templates.hidden=true;
+                printPanel.hidden=true;
             }
             showDesign();
             return;
