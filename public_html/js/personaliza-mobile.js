@@ -67,6 +67,10 @@
         order.classList.remove("pb-mobile-sheet-open");
         setExpanded(false);
         updateTabs();
+        [tools, order].forEach(sheet => {
+            sheet.removeAttribute("role");
+            sheet.removeAttribute("aria-modal");
+        });
         if (mobile()) {
             tools.inert = true;
             order.inert = true;
@@ -113,10 +117,14 @@
         order.inert = !isOrder;
         setExpanded(false);
         if (!isOrder) showGroups(name);
+        const sheet = isOrder ? order : tools;
+        sheet.setAttribute("role", "dialog");
+        sheet.setAttribute("aria-modal", "true");
+        const other = isOrder ? tools : order;
+        other.removeAttribute("role");
+        other.removeAttribute("aria-modal");
         updateTabs();
-
-        // El foco queda en el disparador para evitar abrir el teclado inesperadamente.
-        // El usuario puede tabular hacia los campos del panel abierto.
+        sheet.querySelector(".pb-mobile-sheet-close")?.focus({preventScroll:true});
     }
 
     const setMode = () => {
@@ -151,12 +159,48 @@
     );
 
     document.addEventListener("keydown", event => {
-        if (event.key === "Escape" && active && mobile()) {
-            const otherModal = document.querySelector(".modal-preview:not([hidden])");
-            if (otherModal) return;
+        if (!active || !mobile()) return;
+        const otherModal = document.querySelector(".modal-preview:not([hidden])");
+        if (otherModal) return;
+        if (event.key === "Escape") {
             event.preventDefault();
             closeSheet();
+            return;
         }
+        if (event.key !== "Tab") return;
+        const sheet = active === "pedido" ? order : tools;
+        const focusables = [...sheet.querySelectorAll("button:not([disabled]),a[href],input:not([type=hidden]):not([disabled]),select:not([disabled]),textarea:not([disabled]),summary")].filter(el =>
+            !el.closest("[hidden]") && el.getClientRects().length > 0
+        );
+        if (!focusables.length) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+        }
+    });
+
+    // Arrastrar hacia arriba expande el panel y hacia abajo lo contrae o cierra.
+    [tools, order].forEach(sheet => {
+        const handle = sheet.querySelector(".pb-mobile-sheet-heading");
+        let startY = null;
+        handle?.addEventListener("touchstart", event => {
+            startY = event.changedTouches[0]?.clientY ?? null;
+        }, {passive:true});
+        handle?.addEventListener("touchend", event => {
+            if (!mobile() || !active || startY === null) return;
+            const distance = (event.changedTouches[0]?.clientY ?? startY) - startY;
+            startY = null;
+            if (distance < -45 && sheet === tools) setExpanded(true);
+            else if (distance > 55) {
+                if (sheet === tools && tools.classList.contains("pb-mobile-sheet-expanded")) setExpanded(false);
+                else closeSheet();
+            }
+        }, {passive:true});
     });
     const viewport = window.visualViewport;
     const updateKeyboard = () => {
