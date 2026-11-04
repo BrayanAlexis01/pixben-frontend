@@ -44,6 +44,7 @@
     <link rel="stylesheet" href="../css/personaliza-desktop-pro.css?v=1">
     <link rel="stylesheet" href="../css/personaliza-selection-actions.css?v=1">
     <link rel="stylesheet" href="../css/personaliza-tipografias-pro.css?v=1">
+    <link rel="stylesheet" href="../css/personaliza-plantillas-library.css?v=1">
 </head>
 <body class="pb-studio-page">
 <header class="site-header-pixben">
@@ -138,14 +139,38 @@
             </div>
 
             <section class="pb-pro-templates" id="pbProTemplates" hidden aria-labelledby="pbProTemplatesTitle">
-                <span class="panel-kicker">EMPIEZA CON UNA IDEA</span>
-                <h3 id="pbProTemplatesTitle">Plantillas editables</h3>
-                <p>Elige un estilo y después cambia textos, colores, tamaño y posición. Las plantillas se añaden al diseño actual.</p>
-                <div class="pb-pro-template-grid">
-                    <button type="button" data-pb-template="urbano"><span class="pb-template-art pb-template-art--urban"><b>STREET</b><small>YOUR WAY / 2026</small></span><strong>Urbano</strong><small>Tipografía potente</small></button>
-                    <button type="button" data-pb-template="minimal"><span class="pb-template-art pb-template-art--minimal"><b>LESS</b><i>is more</i></span><strong>Minimalista</strong><small>Simple y elegante</small></button>
-                    <button type="button" data-pb-template="negocio"><span class="pb-template-art pb-template-art--business"><b>TU MARCA</b><small>IDEAS · IMPACTO</small></span><strong>Mi negocio</strong><small>Logo tipográfico</small></button>
-                    <button type="button" data-pb-template="celebracion"><span class="pb-template-art pb-template-art--party"><b>HOY</b><i>es tu día ✦</i></span><strong>Celebración</strong><small>Diseño para regalar</small></button>
+                <span class="panel-kicker">COLECCIONES PIXBEN</span>
+                <h3 id="pbProTemplatesTitle">Plantillas para tus estampados</h3>
+                <p>Diseños originales inspirados en streetwear, moda urbana, mensajes de fe y estampados tipográficos. Cada texto y forma se puede editar por separado.</p>
+                <div id="pbTemplateLibraryIntro" class="pb-template-library-intro">
+                    <div class="pb-template-intro-art" aria-hidden="true">
+                        <span>PIXBEN</span><strong>CREATE<br>YOUR<br>STYLE</strong><small>39 DISEÑOS • 7 ESTILOS</small>
+                    </div>
+                    <div class="pb-template-library-intro__content">
+                        <span><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> INSPÍRATE Y PERSONALIZA</span>
+                        <p>La biblioteca se carga solo cuando la necesitas. Sin descargar todas las plantillas al entrar al editor.</p>
+                        <button type="button" id="pbLoadTemplateLibrary" aria-controls="pbTemplateLibraryBody" aria-expanded="false"><i class="fa-solid fa-swatchbook" aria-hidden="true"></i> Explorar 39 plantillas</button>
+                    </div>
+                </div>
+                <div id="pbTemplateLibraryBackdrop" class="pb-template-library-backdrop" hidden></div>
+                <div id="pbTemplateLibraryBody" class="pb-template-library-body" hidden aria-label="Biblioteca de plantillas PixBen">
+                    <div class="pb-template-library-header">
+                        <div><span class="panel-kicker">EXPLORA TU ESTILO</span><strong>Biblioteca de estampados</strong><small>39 diseños originales · Se cargan solo cuando los necesitas</small></div>
+                        <button type="button" id="pbCloseTemplateLibrary" class="pb-template-library-close" aria-label="Cerrar biblioteca"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="pb-template-library-search">
+                        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                        <input id="pbTemplateSearch" type="search" autocomplete="off" placeholder="Buscar: cristianos, urbano, minimal..." aria-label="Buscar plantillas"/>
+                    </div>
+                    <div id="pbTemplateCategories" class="pb-template-category-list" aria-label="Categorías de plantillas"></div>
+                    <div class="pb-template-library-stats">
+                        <span id="pbTemplateCount" role="status" aria-live="polite">Elige un estilo</span>
+                        <span>Sin imágenes pesadas</span>
+                    </div>
+                    <div id="pbTemplateGallery" class="pb-template-gallery" aria-label="Plantillas originales disponibles"></div>
+                    <button type="button" id="pbTemplateMore" class="pb-template-more" hidden><i class="fa-solid fa-chevron-down" aria-hidden="true"></i> Mostrar más diseños</button>
+                    <p id="pbTemplateLibraryMessage" class="pb-template-library-message" role="status" aria-live="polite"></p>
+                    <p class="pb-template-library-disclaimer"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> «Usar» crea elementos editables en el lienzo. «Descargar muestra» guarda un SVG de referencia con marca PixBen, sin prenda ni archivo final de impresión. En otro editor pueden sustituirse las tipografías que no tengas instaladas.</p>
                 </div>
                 <p id="pbProTemplateFeedback" class="pb-pro-template-feedback" role="status" aria-live="polite"></p>
             </section>
@@ -573,9 +598,9 @@
 <script src="../js/header-global.js?v=2"></script>
 <script src="../js/analitica.js?v=3"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
-<script src="../js/personaliza.js?v=18"></script>
+<script src="../js/personaliza.js?v=19"></script>
 <script src="../js/personaliza-mobile.js?v=1"></script>
-<script src="../js/personaliza-desktop.js?v=1"></script>
+<script src="../js/personaliza-desktop.js?v=2"></script>
 <script src="../js/eventos-html.js?v=3"></script>
 <script src="../js/responsive-menu.js?v=4"></script>
 <script src="../js/accessibility.js?v=1"></script>
