@@ -302,7 +302,7 @@ body.pb-studio-page {
   body.pb-studio-mobile-on #btnPantallaCompleta {display:none;}
   body.pb-studio-mobile-on .canvas-shell {
     position:relative;
-    width:min(100%,520px,calc((100dvh - 300px) * .875));
+    width:min(100%,520px,max(220px,calc(87.5dvh - 262.5px)));
     min-width:0;
     height:auto;
     aspect-ratio:560/640;
@@ -500,7 +500,7 @@ body.pb-studio-page {
   body.pb-studio-mobile-on .pb-mobile-studio-nav button i {font-size:17px;}
   body.pb-studio-mobile-on .selector-lado button {padding:7px 6px;font-size:10px;}
   body.pb-studio-mobile-on .historial-editor button {width:32px;min-width:32px;}
-  body.pb-studio-mobile-on .canvas-shell {width:min(100%,calc((100dvh - 320px) * .875));}
+  body.pb-studio-mobile-on .canvas-shell {width:min(100%,max(200px,calc(87.5dvh - 280px)));}
 }
 @media(prefers-reduced-motion:reduce) {
   .pb-studio-page :is(.pb-mobile-studio-nav button,.panel-configuracion,.resumen-pedido,.grupo-editor,button) {
