@@ -131,6 +131,9 @@
     const libraryButton = document.getElementById("pbLoadTemplateLibrary");
     const libraryIntro = document.getElementById("pbTemplateLibraryIntro");
     const libraryBody = document.getElementById("pbTemplateLibraryBody");
+    const libraryBackdrop = document.getElementById("pbTemplateLibraryBackdrop");
+    const closeLibraryButton = document.getElementById("pbCloseTemplateLibrary");
+    const libraryMessage = document.getElementById("pbTemplateLibraryMessage");
     const categoryList = document.getElementById("pbTemplateCategories");
     const templateGallery = document.getElementById("pbTemplateGallery");
     const templateSearch = document.getElementById("pbTemplateSearch");
@@ -141,6 +144,54 @@
     let selectedCategory = "Todos";
     let visibleTemplateCount = 8;
     let templateSearchTerm = "";
+
+    function closeTemplateGallery() {
+        if (!libraryBody || libraryBody.hidden) return;
+        libraryBody.hidden=true;
+        libraryBody.classList.remove("pb-template-library-overlay");
+        libraryBody.removeAttribute("role");
+        libraryBody.removeAttribute("aria-modal");
+        if(libraryBackdrop)libraryBackdrop.hidden=true;
+        if(libraryIntro)libraryIntro.hidden=false;
+        libraryButton?.setAttribute("aria-expanded","false");
+        if(libraryMessage)libraryMessage.textContent="";
+        libraryButton?.focus({preventScroll:true});
+    }
+    function openTemplateGallery() {
+        if(!libraryBody)return;
+        libraryBody.hidden=false;
+        if(libraryIntro)libraryIntro.hidden=true;
+        const wide=window.innerWidth>820;
+        libraryBody.classList.toggle("pb-template-library-overlay",wide);
+        if(libraryBackdrop)libraryBackdrop.hidden=!wide;
+        if(wide) {
+            libraryBody.setAttribute("role","dialog");
+            libraryBody.setAttribute("aria-modal","true");
+        } else {
+            libraryBody.removeAttribute("role");
+            libraryBody.removeAttribute("aria-modal");
+        }
+        libraryButton?.setAttribute("aria-expanded","true");
+    }
+    closeLibraryButton?.addEventListener("click",closeTemplateGallery);
+    libraryBackdrop?.addEventListener("click",closeTemplateGallery);
+    document.addEventListener("keydown",event=>{
+        if(libraryBody?.hidden||!libraryBody?.classList.contains("pb-template-library-overlay"))return;
+        if(event.key==="Escape"){
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            closeTemplateGallery();
+        } else if(event.key==="Tab") {
+            const focusables=[...libraryBody.querySelectorAll("button:not([disabled]),input:not([disabled])")].filter(el=>!el.hidden&&el.getClientRects().length);
+            if(!focusables.length)return;
+            const first=focusables[0],last=focusables[focusables.length-1];
+            if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+            else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+        }
+    },true);
+    window.addEventListener("resize",()=>{
+        if(libraryBody&&!libraryBody.hidden)openTemplateGallery();
+    },{passive:true});
 
     function normalizeTemplateText(text) {
         return String(text || "").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
@@ -270,9 +321,7 @@
         if(templateFeedback)templateFeedback.textContent="";
         try {
             const pack=await requestTemplatePack();
-            if(libraryIntro)libraryIntro.hidden=true;
-            if(libraryBody)libraryBody.hidden=false;
-            libraryButton.setAttribute("aria-expanded","true");
+            openTemplateGallery();
             renderTemplateCategories();
             renderTemplateCards();
             if (templateFeedback) templateFeedback.textContent=
@@ -304,10 +353,10 @@
         if(button.dataset.templateAction==="download") {
             try {
                 pack.downloadTemplate(item);
-                if(templateFeedback)templateFeedback.textContent=
-                    "Se inició la descarga de la muestra SVG de «"+item.name+"».";
+                if(libraryMessage)libraryMessage.textContent=
+                    "Se solicitó la descarga de «"+item.name+"» en SVG de muestra.";
             }catch(err) {
-                if(templateFeedback)templateFeedback.textContent="No se pudo generar la muestra.";
+                if(libraryMessage)libraryMessage.textContent="No se pudo generar la muestra.";
             }
             return;
         }
@@ -319,6 +368,7 @@
             if(applied) {
                 if(templateFeedback)templateFeedback.textContent=
                     "Plantilla «"+item.name+"» añadida. Puedes editar cada texto y forma.";
+                closeTemplateGallery();
                 if(mq.matches)chooseTool("texto");
                 else if(window.matchMedia("(max-width:820px)").matches) {
                     document.querySelector("[data-pb-mobile-close]")?.click();
