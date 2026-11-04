@@ -1,0 +1,255 @@
+/* PixBen Studio · Galería de letras para estampados 2026.
+   Se emplean fuentes libres cargadas bajo demanda; ningún recurso gráfico se copia. */
+.pb-studio-page .pb-font-picker-label {
+  display:flex;justify-content:space-between;align-items:center;gap:8px;
+  margin:13px 0 7px;
+}
+.pb-studio-page .pb-font-picker-label label {margin:0;}
+.pb-studio-page .pb-font-picker-label>span {
+  display:inline-flex;align-items:center;gap:5px;white-space:nowrap;
+  color:#7a399d;background:#f3e8fa;border:1px solid #e5d1f1;
+  padding:5px 7px;border-radius:99px;
+  font-size:8px;font-weight:850;letter-spacing:.06em;
+}
+.pb-studio-page .selector-fuente-actual {
+  border-radius:15px;
+  border-color:#d9c4e7;
+  background:linear-gradient(120deg,#fff,#fbf5ff);
+  box-shadow:0 7px 19px rgba(53,25,65,.055);
+}
+.pb-studio-page .selector-fuente-actual:hover {border-color:#994dc1;}
+.pb-studio-page .selector-fuente-actual .muestra-fuente {
+  width:48px;height:44px;font-size:24px;
+  border:1px solid #ebd9f4;
+}
+.pb-studio-page .selector-fuentes.pb-font-gallery {
+  --pb-font-gallery-border:#e8dced;
+  display:flex;flex-direction:column;
+  padding:13px;
+  gap:9px;
+  background:#fff;
+  border:1px solid var(--pb-font-gallery-border);
+  border-radius:17px;
+  box-shadow:0 18px 44px rgba(33,16,51,.16);
+  z-index:1100;
+  min-width:0;
+}
+.pb-studio-page .selector-fuentes.pb-font-gallery[hidden] {display:none!important;}
+.pb-font-gallery__heading {padding:5px 4px 2px;}
+.pb-font-gallery__eyebrow {
+  display:block;color:#8a48b3;font-size:9px;letter-spacing:.19em;
+  line-height:1.4;font-weight:900;
+}
+.pb-font-gallery__heading strong {
+  display:block;margin:7px 0;
+  font:800 20px/1.13 'Outfit','DM Sans',sans-serif;
+  letter-spacing:-.04em;color:#301a40;
+}
+.pb-font-gallery__heading p {
+  max-width:510px;margin:0;
+  color:#776a7f;font-size:11px;line-height:1.6;
+}
+.pb-studio-page .pb-font-gallery .pb-font-gallery__preview-label {
+  margin:7px 2px 0;
+  font-size:11px;font-weight:850;color:#45324e;
+}
+.pb-studio-page .pb-font-gallery input.pb-font-gallery__sample,
+.pb-studio-page .pb-font-gallery input#buscarFuente {
+  min-height:44px;
+  width:100%;
+  margin:0;
+  padding:11px 13px;
+  border:1px solid #e5d8e9;
+  border-radius:11px;
+  background:#faf8fc;
+  font-size:12px;
+  color:#3d2d46;
+  box-shadow:none;
+}
+.pb-studio-page .pb-font-gallery input.pb-font-gallery__sample:focus,
+.pb-studio-page .pb-font-gallery input#buscarFuente:focus {
+  border-color:#9a5bc1;
+  box-shadow:0 0 0 3px rgba(140,70,183,.12);
+}
+.pb-studio-page .pb-font-gallery .busqueda-fuentes {margin-top:0;}
+.pb-studio-page .pb-font-gallery .busqueda-fuentes input#buscarFuente {padding-left:33px;}
+.pb-studio-page .pb-font-gallery .categorias-fuentes {
+  display:flex;flex:0 0 auto;gap:6px;padding:3px 0 7px;
+  max-width:100%;overflow-x:auto;
+  scrollbar-width:thin;
+}
+.pb-studio-page .pb-font-gallery .categorias-fuentes button {
+  flex:0 0 auto;
+  border-color:#e3d7e9;
+  border-radius:99px;
+  background:#fff;
+  color:#6e6077;
+  font-size:10px;
+  font-weight:800;
+  padding:9px 12px;
+}
+.pb-studio-page .pb-font-gallery .categorias-fuentes button:hover {
+  border-color:#af7bc9;background:#f5eafb;color:#652a8b;
+}
+.pb-studio-page .pb-font-gallery .categorias-fuentes button.activo {
+  border-color:#3d204f;background:#3d204f;color:#fff;
+}
+.pb-font-gallery__result {
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  padding:2px 2px 0;
+  color:#683b88;font-size:11px;font-weight:800;
+}
+.pb-font-gallery__result small {
+  font-size:9px;color:#9a8ca2;font-weight:500;text-align:right;
+}
+.pb-studio-page .pb-font-gallery .lista-fuentes {
+  display:grid;grid-template-columns:minmax(0,1fr);
+  gap:10px;
+  max-height:340px;
+  overflow-y:auto;
+  min-height:0;
+  padding:3px 4px 8px;
+  scrollbar-width:thin;
+}
+.pb-studio-page .pb-font-gallery .opcion-fuente {
+  display:flex;flex-direction:column;align-items:stretch;
+  min-width:0;min-height:165px;
+  padding:0;
+  overflow:hidden;
+  border:1px solid #e7dce9;border-radius:15px;
+  background:#fff;color:#32243c;
+  text-align:left;
+  box-shadow:0 6px 18px rgba(42,21,55,.045);
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
+}
+.pb-studio-page .pb-font-gallery .opcion-fuente:hover {
+  transform:translateY(-2px);border-color:#aa73c7;
+  background:#fff;box-shadow:0 15px 30px rgba(53,22,77,.12);
+}
+.pb-studio-page .pb-font-gallery .opcion-fuente.activa {
+  border-color:#7d36aa;
+  box-shadow:0 0 0 2px rgba(133,62,177,.17),0 13px 28px rgba(63,25,84,.11);
+}
+.pb-studio-page .pb-font-gallery .pb-font-card__sample {
+  display:flex;align-items:center;justify-content:center;
+  width:100%;min-width:0;
+  min-height:115px;flex:1 1 auto;
+  padding:18px 13px;
+  background:radial-gradient(circle at 50% 0%,#fff,#f7f3f9 83%);
+  border-bottom:1px solid #eee8ef;
+  overflow:hidden;
+}
+.pb-studio-page .pb-font-gallery .opcion-fuente:nth-child(4n + 2) .pb-font-card__sample {
+  background:linear-gradient(140deg,#23162d,#472354);
+  color:#fff;
+}
+.pb-studio-page .pb-font-gallery .opcion-fuente:nth-child(4n + 4) .pb-font-card__sample {
+  background:linear-gradient(145deg,#ede3d6,#f9f4e9);
+  color:#2b202e;
+}
+.pb-studio-page .pb-font-gallery .preview-fuente {
+  display:block;
+  width:100%;min-width:0;
+  font-size:clamp(22px,2.4vw,33px);
+  line-height:1.22;
+  text-align:center;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:normal;
+  text-overflow:clip;
+  color:inherit;
+  font-weight:400;
+}
+.pb-studio-page .pb-font-gallery .pb-font-card__bottom {
+  display:flex;align-items:center;justify-content:space-between;
+  gap:9px;
+  padding:12px 13px;
+}
+.pb-studio-page .pb-font-gallery .meta-fuente b {
+  display:block;font-size:12px;font-weight:800;line-height:1.35;
+}
+.pb-studio-page .pb-font-gallery .meta-fuente small {
+  display:block;margin-top:3px;
+  font-size:10px;color:#86788d;line-height:1.3;
+}
+.pb-studio-page .pb-font-gallery .pb-font-card__badge {
+  display:grid;place-items:center;flex:0 0 27px;
+  width:27px;height:27px;
+  border:1px solid #e7d7ef;border-radius:99px;
+  background:#f4eaf9;color:#793ba4;font-size:11px;
+}
+.pb-studio-page .pb-font-gallery .opcion-fuente.activa .pb-font-card__badge {
+  color:#fff;background:#7433a1;border-color:#7433a1;
+}
+.pb-studio-page .pb-font-gallery .opcion-fuente.fuente-no-disponible {
+  opacity:.6;border-style:dashed;
+}
+.pb-studio-page .pb-font-gallery .sin-fuentes {
+  grid-column:1/-1;padding:28px 14px;
+}
+.pb-font-gallery__note {
+  display:flex;align-items:flex-start;gap:8px;
+  flex:0 0 auto;
+  margin:2px 0 0;padding:11px 12px;
+  border:1px solid #efe6f1;border-radius:10px;
+  background:#faf8fc;color:#8b7d92;
+  font-size:10px;line-height:1.6;
+}
+.pb-font-gallery__note i {margin-top:2px;color:#874bab;}
+@media(min-width:1321px) {
+  body.pb-studio-page .selector-fuentes.pb-font-gallery--floating {
+    position:fixed;
+    left:var(--pb-font-gallery-left,350px);
+    top:94px;
+    width:min(560px,calc(100vw - 28px));
+    height:min(730px,calc(100dvh - 112px));
+    max-height:calc(100dvh - 112px);
+    margin:0;
+    padding:17px;
+    border-radius:22px;
+    z-index:1500;
+    box-shadow:0 25px 70px rgba(35,18,51,.32);
+  }
+  body.pb-studio-page .pb-font-gallery--floating .lista-fuentes {
+    flex:1 1 auto;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    max-height:none;
+    overflow-y:auto;
+  }
+  body.pb-studio-page .pb-font-gallery--floating .preview-fuente {font-size:clamp(23px,2.2vw,30px);}
+}
+@media(max-width:1320px) {
+  .pb-studio-page .pb-font-gallery .lista-fuentes {max-height:320px;}
+}
+@media(max-width:820px) {
+  body.pb-studio-mobile-on .selector-fuentes.pb-font-gallery {
+    position:relative;
+    margin-top:11px;
+    padding:10px;
+    border-radius:13px;
+    box-shadow:none;
+  }
+  body.pb-studio-mobile-on .pb-font-gallery .lista-fuentes {
+    max-height:none;
+    overflow:visible;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+  }
+  body.pb-studio-mobile-on .pb-font-gallery .opcion-fuente {min-height:143px;}
+  body.pb-studio-mobile-on .pb-font-gallery .pb-font-card__sample {
+    min-height:88px;padding:13px 6px;
+  }
+  body.pb-studio-mobile-on .pb-font-gallery .preview-fuente {
+    font-size:clamp(18px,5vw,25px);
+  }
+  body.pb-studio-mobile-on .pb-font-gallery .pb-font-card__bottom {padding:9px;}
+  body.pb-studio-mobile-on .pb-font-gallery .meta-fuente b {font-size:10px;}
+  body.pb-studio-mobile-on .pb-font-gallery .meta-fuente small {font-size:9px;}
+  body.pb-studio-mobile-on .pb-font-gallery .pb-font-gallery__heading strong {font-size:19px;}
+}
+@media(max-width:370px) {
+  body.pb-studio-mobile-on .pb-font-gallery .lista-fuentes {grid-template-columns:1fr;}
+}
+@media(prefers-reduced-motion:reduce) {
+  .pb-studio-page .pb-font-gallery .opcion-fuente {transition:none!important;transform:none!important;}
+}

@@ -43,6 +43,7 @@
     <link rel="stylesheet" href="../css/personaliza-studio-premium.css?v=1">
     <link rel="stylesheet" href="../css/personaliza-desktop-pro.css?v=1">
     <link rel="stylesheet" href="../css/personaliza-selection-actions.css?v=1">
+    <link rel="stylesheet" href="../css/personaliza-tipografias-pro.css?v=1">
 </head>
 <body class="pb-studio-page">
 <header class="site-header-pixben">
@@ -227,20 +228,29 @@
                     <label for="textoEditor">Contenido</label>
                     <textarea id="textoEditor" rows="2" maxlength="180" placeholder="Escribe tu frase"></textarea>
 
-                    <label>Tipografía</label>
+                    <div class="pb-font-picker-label"><label for="btnAbrirFuentes">Tipografía para estampado</label><span><i class="fa-solid fa-sparkles" aria-hidden="true"></i> NUEVOS ESTILOS</span></div>
                     <input id="fuenteTexto" type="hidden" value="Montserrat">
-                    <button type="button" id="btnAbrirFuentes" class="selector-fuente-actual" aria-expanded="false">
+                    <button type="button" id="btnAbrirFuentes" class="selector-fuente-actual" aria-expanded="false" aria-controls="selectorFuentes">
                         <span class="muestra-fuente" id="muestraFuenteActual">Aa</span>
                         <span><b id="nombreFuenteActual">Montserrat</b><small>Haz clic para explorar fuentes</small></span>
                         <i class="fa-solid fa-chevron-down"></i>
                     </button>
-                    <div id="selectorFuentes" class="selector-fuentes" hidden>
-                        <div class="busqueda-fuentes">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                            <input id="buscarFuente" type="search" placeholder="Buscar una fuente..." autocomplete="off">
+                    <div id="selectorFuentes" class="selector-fuentes pb-font-gallery" hidden>
+                        <div class="pb-font-gallery__heading">
+                            <span class="pb-font-gallery__eyebrow">ESTUDIO DE TIPOGRAFÍA</span>
+                            <strong>Elige una letra que hable por ti</strong>
+                            <p>Explora estilos de graffiti, lettering, góticas, retro y streetwear. Cada muestra usa una tipografía real y editable.</p>
                         </div>
-                        <div id="categoriasFuentes" class="categorias-fuentes"></div>
+                        <label class="pb-font-gallery__preview-label" for="muestraTextoFuente">Prueba una frase</label>
+                        <input id="muestraTextoFuente" class="pb-font-gallery__sample" type="text" maxlength="36" autocomplete="off" placeholder="Ej. ORIGINAL, MI ESTILO, TU MARCA...">
+                        <div class="busqueda-fuentes">
+                            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                            <input id="buscarFuente" type="search" placeholder="Buscar estilos o nombres..." autocomplete="off" aria-label="Buscar tipografías">
+                        </div>
+                        <div id="categoriasFuentes" class="categorias-fuentes" aria-label="Filtrar tipografías por estilo"></div>
+                        <div class="pb-font-gallery__result"><span id="contadorFuentes" aria-live="polite"></span><small>Selecciona una muestra para aplicarla al texto.</small></div>
                         <div id="listaFuentes" class="lista-fuentes" role="listbox" aria-label="Fuentes disponibles"></div>
+                        <p class="pb-font-gallery__note"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Las tipografías son editables. Los efectos de ilustración de algunos diseños no forman parte de la fuente; PixBen revisa la impresión en la cotización.</p>
                     </div>
 
                     <div class="dos-columnas compactas">
@@ -563,7 +573,7 @@
 <script src="../js/header-global.js?v=2"></script>
 <script src="../js/analitica.js?v=3"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
-<script src="../js/personaliza.js?v=17"></script>
+<script src="../js/personaliza.js?v=18"></script>
 <script src="../js/personaliza-mobile.js?v=1"></script>
 <script src="../js/personaliza-desktop.js?v=1"></script>
 <script src="../js/eventos-html.js?v=3"></script>
