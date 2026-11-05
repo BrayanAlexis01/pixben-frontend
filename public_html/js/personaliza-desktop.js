@@ -144,6 +144,12 @@
     let selectedCategory = "Todos";
     let visibleTemplateCount = 8;
     let templateSearchTerm = "";
+    let previewDialog=null;
+    let previewBackdrop=null;
+    let previewTrigger=null;
+    let previewItem=null;
+    let previewDialogFocus=null;
+    let lastTemplateCount=0;
     const originalTemplateParent = libraryBody?.parentElement;
     const originalBackdropParent = libraryBackdrop?.parentElement;
     function restoreTemplateLocation() {
@@ -156,6 +162,7 @@
     }
 
     function closeTemplateGallery() {
+        if (previewDialog && !previewDialog.hidden) closeTemplatePreview();
         if (!libraryBody || libraryBody.hidden) return;
         libraryBody.hidden=true;
         libraryBody.classList.remove("pb-template-library-overlay");
@@ -193,6 +200,7 @@
     closeLibraryButton?.addEventListener("click",closeTemplateGallery);
     libraryBackdrop?.addEventListener("click",closeTemplateGallery);
     document.addEventListener("keydown",event=>{
+        if (previewDialog && !previewDialog.hidden) return;
         if(libraryBody?.hidden||!libraryBody?.classList.contains("pb-template-library-overlay"))return;
         if(event.key==="Escape"){
             event.preventDefault();
@@ -271,11 +279,17 @@
     function makeTemplateCard(template,library) {
         const card=document.createElement("article");
         card.className="pb-template-card";
-        const picture=document.createElement("div");
+        const picture=document.createElement("button");
+        picture.type="button";
         picture.className="pb-template-card__art";
+        picture.dataset.templateId=template.id;
+        picture.dataset.templateAction="preview";
+        picture.setAttribute("aria-label","Ver en grande la plantilla "+template.name);
+        picture.title="Ver plantilla en grande";
         // Solo se inserta SVG generado desde definiciones originales del repositorio,
         // no desde nombres ni HTML introducidos por usuarios.
-        picture.innerHTML=library.renderSvg(template);
+        picture.innerHTML=library.renderSvg(template)+
+          '<span class="pb-template-card__zoom"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i> Ver grande</span>';
         const info=document.createElement("div");
         info.className="pb-template-card__info";
         const label=document.createElement("span");
@@ -307,29 +321,214 @@
         return card;
     }
 
-    function renderTemplateCards({resetScroll=false} = {}) {
+
+    function renderTemplateCards({resetScroll=false,revealNew=false} = {}) {
         if (!templateGallery || !window.PixBenTemplateLibrary) return;
         const pack=window.PixBenTemplateLibrary;
         const list=getFilteredTemplates();
         const subset=list.slice(0,visibleTemplateCount);
+        const current=[...templateGallery.querySelectorAll("article[data-template-id]")];
+        const canAppend=!resetScroll && current.length>0 &&
+            current.length<subset.length &&
+            current.every((card,index)=>card.dataset.templateId===subset[index].id);
+        const start=canAppend?current.length:0;
         const oldScroll=resetScroll?0:templateGallery.scrollTop;
-        templateGallery.replaceChildren();
-        subset.forEach(template=>templateGallery.append(makeTemplateCard(template,pack)));
-        templateGallery.scrollTop=oldScroll;
-        if (!subset.length) {
+        if(!canAppend) templateGallery.replaceChildren();
+        const fragment=document.createDocumentFragment();
+        subset.slice(start).forEach(template=>{
+            const card=makeTemplateCard(template,pack);
+            card.dataset.templateId=template.id;
+            fragment.appendChild(card);
+        });
+        const firstNewCard=fragment.firstElementChild;
+        templateGallery.appendChild(fragment);
+        if(!subset.length) {
             const note=document.createElement("p");
             note.className="pb-template-gallery-empty";
             note.textContent="No encontramos diseños con esos filtros. Prueba otra categoría o palabra.";
             templateGallery.append(note);
         }
-        if (templateCount) templateCount.textContent =
-            list.length+" "+(list.length===1?"diseño disponible":"diseños disponibles");
-        if (showMore) {
-            showMore.hidden=list.length<=visibleTemplateCount;
-            showMore.textContent=showMore.hidden?"": "Mostrar más diseños ("+
-                (list.length-visibleTemplateCount)+" restantes)";
+        templateGallery.scrollTop=oldScroll;
+        if(revealNew && firstNewCard && window.innerWidth>820) {
+            const firstCard=templateGallery.querySelector(".pb-template-card");
+            if(firstCard){
+                const targetTop=firstNewCard.offsetTop-firstCard.offsetTop;
+                templateGallery.scrollTo({
+                    top:Math.max(0,targetTop-8),
+                    behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"
+                });
+            }
+        }
+        const visible=subset.length;
+        lastTemplateCount=visible;
+        if(templateCount)templateCount.textContent="Mostrando "+visible+" de "+list.length+" diseños";
+        if(showMore){
+            const remain=list.length-visible;
+            showMore.hidden=remain===0;
+            showMore.innerHTML=remain===0?"":'<i class="fa-solid fa-chevron-down" aria-hidden="true"></i> Mostrar '+Math.min(remain,8)+' más ('+remain+' restantes)';
         }
         pack.ensureFonts(subset);
+    }
+
+    function createTemplatePreview(){
+        if(previewDialog)return;
+        previewBackdrop=document.createElement("div");
+        previewBackdrop.className="pb-template-preview-backdrop";
+        previewBackdrop.hidden=true;
+        previewDialog=document.createElement("section");
+        previewDialog.className="pb-template-preview";
+        previewDialog.hidden=true;
+        previewDialog.setAttribute("role","dialog");
+        previewDialog.setAttribute("aria-modal","true");
+        previewDialog.setAttribute("aria-labelledby","pbTemplatePreviewTitle");
+        previewDialog.innerHTML=[
+           '<div class="pb-template-preview__dialog">',
+           '  <div class="pb-template-preview__visual">',
+           '    <div class="pb-template-preview__design" id="pbTemplatePreviewArt"></div>',
+           '    <div class="pb-template-preview__navigation">',
+           '      <button type="button" data-pb-preview-nav="-1" aria-label="Plantilla anterior"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>',
+           '      <span id="pbTemplatePreviewPosition"></span>',
+           '      <button type="button" data-pb-preview-nav="1" aria-label="Siguiente plantilla"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>',
+           '    </div>',
+           '  </div>',
+           '  <div class="pb-template-preview__info">',
+           '    <button type="button" class="pb-template-preview__close" data-pb-preview-close aria-label="Cerrar vista previa"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>',
+           '    <span class="pb-template-preview__label" id="pbTemplatePreviewCategory"></span>',
+           '    <h3 class="pb-template-preview__title" id="pbTemplatePreviewTitle"></h3>',
+           '    <p class="pb-template-preview__description" id="pbTemplatePreviewDescription"></p>',
+           '    <p class="pb-template-preview__tip"><strong>Diseño ampliado:</strong> comprueba las letras, la composición y los detalles antes de elegir. Cada parte se puede editar en PixBen Studio.</p>',
+           '    <div class="pb-template-preview__actions">',
+           '      <button type="button" data-pb-preview-action="use"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Usar este diseño</button>',
+           '      <button type="button" data-pb-preview-action="download"><i class="fa-solid fa-download" aria-hidden="true"></i> Descargar muestra SVG</button>',
+           '    </div>',
+           '    <p class="pb-template-preview__smallprint">La descarga incluye una marca de muestra PixBen y no es el archivo final de impresión.</p>',
+           '    <p class="pb-template-preview__status" id="pbTemplatePreviewStatus" role="status" aria-live="polite"></p>',
+           '  </div>',
+           '</div>'
+        ].join("");
+        document.body.append(previewBackdrop,previewDialog);
+        previewBackdrop.addEventListener("click",closeTemplatePreview);
+        previewDialog.querySelector("[data-pb-preview-close]").addEventListener("click",closeTemplatePreview);
+        previewDialog.querySelectorAll("[data-pb-preview-nav]").forEach(button=>
+            button.addEventListener("click",()=>navigateTemplatePreview(Number(button.dataset.pbPreviewNav)))
+        );
+        previewDialog.querySelector('[data-pb-preview-action="use"]').addEventListener("click",async event=>{
+            if(!previewItem)return;
+            await applyLibraryTemplate(previewItem,event.currentTarget,true);
+        });
+        previewDialog.querySelector('[data-pb-preview-action="download"]').addEventListener("click",event=>{
+            if(previewItem)downloadLibraryTemplate(previewItem,true);
+        });
+    }
+    function fillTemplatePreview(item){
+        const pack=window.PixBenTemplateLibrary;
+        if(!item||!pack||!previewDialog)return;
+        previewItem=item;
+        previewDialog.querySelector("#pbTemplatePreviewArt").innerHTML=pack.renderSvg(item);
+        previewDialog.querySelector("#pbTemplatePreviewTitle").textContent=item.name;
+        previewDialog.querySelector("#pbTemplatePreviewCategory").textContent=item.category;
+        previewDialog.querySelector("#pbTemplatePreviewDescription").textContent=item.description;
+        const list=getFilteredTemplates();
+        const position=list.findIndex(t=>t.id===item.id);
+        previewDialog.querySelector("#pbTemplatePreviewPosition").textContent=position+1+" / "+list.length;
+        previewDialog.querySelector("#pbTemplatePreviewStatus").textContent="";
+        pack.ensureFonts([item]);
+    }
+    function openTemplatePreview(item,button){
+        createTemplatePreview();
+        previewTrigger=button;
+        previewDialogFocus=document.activeElement;
+        if(libraryBody) {
+            libraryBody.setAttribute("aria-hidden","true");
+            libraryBody.inert=true;
+        }
+        fillTemplatePreview(item);
+        previewBackdrop.hidden=false;
+        previewDialog.hidden=false;
+        document.body.classList.add("pb-template-preview-open");
+        previewDialog.querySelector("[data-pb-preview-close]")?.focus({preventScroll:true});
+    }
+    function closeTemplatePreview(){
+        if(!previewDialog||previewDialog.hidden)return;
+        previewDialog.hidden=true;
+        previewBackdrop.hidden=true;
+        document.body.classList.remove("pb-template-preview-open");
+        if(libraryBody){
+            libraryBody.removeAttribute("aria-hidden");
+            libraryBody.inert=false;
+        }
+        const previous=previewTrigger||previewDialogFocus;
+        previewItem=null;
+        if(previous?.isConnected)previous.focus({preventScroll:true});
+    }
+    function navigateTemplatePreview(offset){
+        const list=getFilteredTemplates();
+        if(!list.length||!previewItem)return;
+        const idx=list.findIndex(t=>t.id===previewItem.id);
+        const next=(idx+offset+list.length)%list.length;
+        fillTemplatePreview(list[next]);
+    }
+    document.addEventListener("keydown",event=>{
+        if(!previewDialog||previewDialog.hidden)return;
+        if(event.key==="Escape"){
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            closeTemplatePreview();
+        }else if(event.key==="ArrowLeft"||event.key==="ArrowRight"){
+            event.preventDefault();
+            navigateTemplatePreview(event.key==="ArrowRight"?1:-1);
+        }else if(event.key==="Tab"){
+            const focusables=[...previewDialog.querySelectorAll('button:not([disabled])')]
+               .filter(el=>el.getClientRects().length>0);
+            if(!focusables.length)return;
+            const first=focusables[0],last=focusables[focusables.length-1];
+            if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+            if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+        }
+    },true);
+
+    function downloadLibraryTemplate(item,inPreview=false){
+        const pack=window.PixBenTemplateLibrary;
+        try{
+            pack?.downloadTemplate(item);
+            const status="Se solicitó la descarga de «"+item.name+"» en SVG de muestra.";
+            if(libraryMessage)libraryMessage.textContent=status;
+            if(inPreview&&previewDialog)previewDialog.querySelector("#pbTemplatePreviewStatus").textContent=status;
+        }catch(err){
+            const status="No se pudo generar la muestra. Inténtalo nuevamente.";
+            if(libraryMessage)libraryMessage.textContent=status;
+            if(inPreview&&previewDialog)previewDialog.querySelector("#pbTemplatePreviewStatus").textContent=status;
+        }
+    }
+    async function applyLibraryTemplate(item,button,fromPreview=false){
+        if(button.disabled)return;
+        button.disabled=true;
+        const original=button.innerHTML;
+        button.innerHTML='<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Añadiendo...';
+        try{
+            const applied=await studio.aplicarPlantillaEstudio(item.id);
+            if(applied){
+                if(templateFeedback)templateFeedback.textContent=
+                  "Plantilla «"+item.name+"» añadida. Ya puedes editar sus textos y formas.";
+                if(fromPreview)closeTemplatePreview();
+                closeTemplateGallery();
+                if(mq.matches)chooseTool("texto");
+                else if(window.matchMedia("(max-width:820px)").matches){
+                    document.querySelector("[data-pb-mobile-close]")?.click();
+                }
+            }else{
+                const status="No se realizaron cambios en el diseño.";
+                if(templateFeedback)templateFeedback.textContent=status;
+                if(fromPreview&&previewDialog)previewDialog.querySelector("#pbTemplatePreviewStatus").textContent=status;
+            }
+        }catch(err){
+            const status=err.message||"No se pudo aplicar la plantilla.";
+            if(templateFeedback)templateFeedback.textContent=status;
+            if(fromPreview&&previewDialog)previewDialog.querySelector("#pbTemplatePreviewStatus").textContent=status;
+        }finally{
+            button.disabled=false;
+            button.innerHTML=original;
+        }
     }
 
     libraryButton?.addEventListener("click",async()=>{
@@ -361,46 +560,19 @@
     });
     showMore?.addEventListener("click",()=>{
         visibleTemplateCount+=8;
-        renderTemplateCards();
+        renderTemplateCards({revealNew:true});
     });
     templateGallery?.addEventListener("click",async event=>{
         const button=event.target.closest("button[data-template-action]");
         if(!button||button.disabled)return;
-        const pack=window.PixBenTemplateLibrary;
-        const item=pack?.get(button.dataset.templateId);
+        const item=window.PixBenTemplateLibrary?.get(button.dataset.templateId);
         if(!item)return;
-        if(button.dataset.templateAction==="download") {
-            try {
-                pack.downloadTemplate(item);
-                if(libraryMessage)libraryMessage.textContent=
-                    "Se solicitó la descarga de «"+item.name+"» en SVG de muestra.";
-            }catch(err) {
-                if(libraryMessage)libraryMessage.textContent="No se pudo generar la muestra.";
-            }
-            return;
-        }
-        button.disabled=true;
-        const original=button.innerHTML;
-        button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Añadiendo...';
-        try {
-            const applied=await studio.aplicarPlantillaEstudio(item.id);
-            if(applied) {
-                if(templateFeedback)templateFeedback.textContent=
-                    "Plantilla «"+item.name+"» añadida. Puedes editar cada texto y forma.";
-                closeTemplateGallery();
-                if(mq.matches)chooseTool("texto");
-                else if(window.matchMedia("(max-width:820px)").matches) {
-                    document.querySelector("[data-pb-mobile-close]")?.click();
-                }
-            } else if(templateFeedback) {
-                templateFeedback.textContent="No se realizaron cambios en el diseño.";
-            }
-        }catch(err) {
-            if(templateFeedback)templateFeedback.textContent=
-                err.message||"No se pudo aplicar la plantilla.";
-        }finally{
-            button.disabled=false;
-            button.innerHTML=original;
+        if(button.dataset.templateAction==="preview") {
+            openTemplatePreview(item,button);
+        } else if(button.dataset.templateAction==="download") {
+            downloadLibraryTemplate(item);
+        } else if(button.dataset.templateAction==="apply") {
+            await applyLibraryTemplate(item,button);
         }
     });
 
