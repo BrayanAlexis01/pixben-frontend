@@ -3,7 +3,7 @@
 "use strict";
 const base=window.PixBenTemplateLibrary;
 if(!base||base.jerseysPro)return;
-const T=(text,x,y,size,font="Anton",opts={})=>({type:"text",text,x,y,size,font,width:270,color:"ink",weight:"bold",...opts});
+const T=(text,y,size,font="Anton",opts={})=>({type:"text",text,x:150,y,size,font,width:270,color:"ink",weight:"bold",...opts});
 const R=(x,y,w,h,opts={})=>({type:"rect",x,y,w,h,color:"none",stroke:"accent",sw:2,...opts});
 const L=(x1,y1,x2,y2,opts={})=>({type:"line",x1,y1,x2,y2,color:"accent",sw:3,...opts});
 const C=(x,y,r,opts={})=>({type:"circle",x,y,r,color:"none",stroke:"accent",sw:2,...opts});
