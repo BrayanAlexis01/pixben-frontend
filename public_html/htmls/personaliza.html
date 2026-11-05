@@ -42,6 +42,7 @@
     <link rel="stylesheet" href="../css/accessibility.css?v=6">
     <link rel="stylesheet" href="../css/personaliza-studio-premium.css?v=1">
     <link rel="stylesheet" href="../css/personaliza-desktop-pro.css?v=1">
+    <link rel="stylesheet" href="../css/personaliza-bases-lisas.css?v=1">
     <link rel="stylesheet" href="../css/personaliza-selection-actions.css?v=1">
     <link rel="stylesheet" href="../css/personaliza-tipografias-pro.css?v=1">
     <link rel="stylesheet" href="../css/personaliza-plantillas-library.css?v=4">
@@ -186,9 +187,32 @@
             <details class="grupo-editor" open>
                 <summary><span><i class="fa-solid fa-shirt"></i> Producto base</span><i class="fa-solid fa-chevron-down"></i></summary>
                 <div class="grupo-editor-contenido">
-                    <label for="productoSelect">Producto</label>
-                    <select id="productoSelect"><option value="" selected>Lienzo libre (sin producto base)</option></select>
-                    <p class="ayuda-editor">Puedes trabajar en un lienzo libre o usar un producto personalizable como referencia.</p>
+                    <div class="pb-base-intro">
+                        <span>EMPIEZA CON UNA PRENDA LISA</span>
+                        <p>Elige el corte y el color. El estampado se coloca sobre una prenda sin diseño previo.</p>
+                    </div>
+                    <div id="selectorBasesLisas" class="pb-base-quick-list" role="group" aria-label="Elegir tipo de polo">
+                        <button type="button" data-base-prenda="clasico" aria-pressed="false" title="Polo clásico">
+                            <span class="pb-base-quick-image"><img data-preview-base="clasico" alt="" aria-hidden="true"></span>
+                            <strong>Clásico</strong><small>Regular</small>
+                        </button>
+                        <button type="button" data-base-prenda="boxy" aria-pressed="false" title="Polo boxy fit">
+                            <span class="pb-base-quick-image"><img data-preview-base="boxy" alt="" aria-hidden="true"></span>
+                            <strong>Boxy fit</strong><small>Ancho y corto</small>
+                        </button>
+                        <button type="button" data-base-prenda="oversize" aria-pressed="false" title="Polo oversize">
+                            <span class="pb-base-quick-image"><img data-preview-base="oversize" alt="" aria-hidden="true"></span>
+                            <strong>Oversize</strong><small>Hombro caído</small>
+                        </button>
+                    </div>
+                    <label for="productoSelect" class="pb-base-product-label">Prenda o producto habilitado</label>
+                    <select id="productoSelect"><option value="" selected>Lienzo libre (sin prenda)</option></select>
+                    <p id="notaBaseReferencia" class="pb-base-reference-note" hidden>
+                        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                        El mockup es una referencia de diseño, no un producto con stock confirmado.
+                        PixBen verificará disponibilidad, tallas y precio antes de producir.
+                    </p>
+                    <p class="ayuda-editor">Los productos del catálogo aparecen aquí únicamente si el administrador habilitó su personalización.</p>
 
                     <div id="grupoColoresProducto">
                         <label>Color</label>
@@ -598,7 +622,8 @@
 <script src="../js/header-global.js?v=2"></script>
 <script src="../js/analitica.js?v=3"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
-<script src="../js/personaliza.js?v=21"></script>
+<script src="../js/personaliza-bases-lisas.js?v=1"></script>
+<script src="../js/personaliza.js?v=22"></script>
 <script src="../js/personaliza-mobile.js?v=1"></script>
 <script src="../js/personaliza-desktop.js?v=5"></script>
 <script src="../js/eventos-html.js?v=3"></script>
