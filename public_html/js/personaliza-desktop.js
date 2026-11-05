@@ -144,6 +144,7 @@
     let selectedCategory = "Todos";
     let visibleTemplateCount = 8;
     let templateSearchTerm = "";
+    let selectedJerseyStyle = "Todos";
     let previewDialog=null;
     let previewBackdrop=null;
     let previewTrigger=null;
@@ -223,22 +224,26 @@
     }
 
     function requestTemplatePack() {
-        if (window.PixBenTemplateLibrary) return Promise.resolve(window.PixBenTemplateLibrary);
-        if (!templatePackRequest) {
-            templatePackRequest = new Promise((resolve,reject)=>{
+        if(window.PixBenTemplateLibrary?.jerseysPro) return Promise.resolve(window.PixBenTemplateLibrary);
+        if(!templatePackRequest) {
+            const loadScript=src=>new Promise((resolve,reject)=>{
                 const script=document.createElement("script");
-                script.src="../js/personaliza-template-library.js?v=2";
-                script.async=true;
-                script.onload=()=>{
-                    if (window.PixBenTemplateLibrary) resolve(window.PixBenTemplateLibrary);
-                    else reject(new Error("La biblioteca de plantillas no está disponible."));
-                };
-                script.onerror=()=>reject(new Error("No se pudo cargar la biblioteca. Revisa tu conexión."));
-                document.head.appendChild(script);
-            }).catch(err=>{
-                templatePackRequest=null;
-                throw err;
+                script.src=src;script.async=true;
+                script.onload=resolve;
+                script.onerror=()=>reject(new Error("No se pudieron cargar los estampados. Comprueba tu conexión."));
+                document.head.append(script);
             });
+            templatePackRequest=(async()=>{
+                if(!window.PixBenTemplateLibrary) {
+                    await loadScript("../js/personaliza-template-library.js?v=2");
+                }
+                if(!window.PixBenTemplateLibrary) throw new Error("La biblioteca principal no está disponible.");
+                if(!window.PixBenTemplateLibrary.jerseysPro){
+                    await loadScript("../js/personaliza-jerseys-pro.js?v=1");
+                }
+                if(!window.PixBenTemplateLibrary?.jerseysPro) throw new Error("No se pudieron preparar los diseños de números.");
+                return window.PixBenTemplateLibrary;
+            })().catch(error=>{templatePackRequest=null;throw error});
         }
         return templatePackRequest;
     }
@@ -248,7 +253,9 @@
         if (!pack) return [];
         const term=normalizeTemplateText(templateSearchTerm);
         return pack.items.filter(t=>{
-            const categoryMatch=selectedCategory==="Todos"||selectedCategory===t.category;
+            const categoryMatch=(selectedCategory==="Todos"||selectedCategory===t.category) &&
+                (selectedCategory!=="Números / Jerseys"||selectedJerseyStyle==="Todos"||
+                    selectedJerseyStyle===t.jerseyStyle);
             const textMatch=!term||normalizeTemplateText(
                 [t.name,t.category,t.description,t.id].join(" ")
             ).includes(term);
@@ -268,12 +275,34 @@
             button.className=category===selectedCategory?"pb-template-category-selected":"";
             button.addEventListener("click",()=>{
                 selectedCategory=category;
+                selectedJerseyStyle="Todos";
                 visibleTemplateCount=8;
                 renderTemplateCategories();
                 renderTemplateCards({resetScroll:true});
             });
             categoryList.append(button);
         });
+        const old=document.getElementById("pbJerseyStyles");
+        old?.remove();
+        if(selectedCategory==="Números / Jerseys" && pack.jerseyStyles) {
+            const bar=document.createElement("div");
+            bar.id="pbJerseyStyles";
+            bar.className="pb-jersey-substyles";
+            bar.setAttribute("aria-label","Estilos de números y camisetas");
+            ["Todos",...pack.jerseyStyles].forEach(style=>{
+                const option=document.createElement("button");
+                option.type="button";option.textContent=style;
+                option.setAttribute("aria-pressed",String(style===selectedJerseyStyle));
+                option.addEventListener("click",()=>{
+                    selectedJerseyStyle=style;
+                    visibleTemplateCount=8;
+                    bar.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b===option)));
+                    renderTemplateCards({resetScroll:true});
+                });
+                bar.append(option);
+            });
+            categoryList.insertAdjacentElement("afterend",bar);
+        }
     }
 
     function makeTemplateCard(template,library) {
@@ -406,9 +435,10 @@
            '      <strong><i class="fa-solid fa-shirt" aria-hidden="true"></i> Personaliza tu dorsal</strong>',
            '      <div class="pb-template-preview__fields">',
            '        <label for="pbTemplateJerseyNumber">Número (1 a 3 dígitos)<input type="text" id="pbTemplateJerseyNumber" inputmode="numeric" pattern="[0-9]{1,3}" maxlength="3" autocomplete="off" placeholder="23"></label>',
-           '        <label for="pbTemplateJerseyName">Nombre o equipo<input type="text" id="pbTemplateJerseyName" maxlength="18" autocomplete="off" placeholder="TU EQUIPO"></label>',
+           '        <label for="pbTemplateJerseyName">Ciudad o equipo<input type="text" id="pbTemplateJerseyName" maxlength="18" autocomplete="off" placeholder="TU EQUIPO"></label>',
+           '        <label for="pbTemplateJerseySubtitle" class="pb-jersey-subtitle-field">Lema o texto inferior<input type="text" id="pbTemplateJerseySubtitle" maxlength="24" autocomplete="off" placeholder="ATHLETIC DEPT."></label>',
            '      </div>',
-           '      <small>Visualiza el resultado al escribir. Después podrás editar cada texto en el lienzo.</small>',
+           '      <small>Prueba número, equipo y lema. El cuello y las mangas de esta vista son ilustrativos; el estampado real se adapta a la prenda elegida.</small>',
            '    </div>',
            '    <p class="pb-template-preview__tip"><strong>Diseño ampliado:</strong> comprueba las letras, la composición y los detalles antes de elegir. Cada parte se puede editar en PixBen Studio.</p>',
            '    <div class="pb-template-preview__actions">',
@@ -443,12 +473,18 @@
             nameInput.value=nameInput.value.replace(/[<>]/g,"").slice(0,18);
             updateTemplatePreviewArtwork();
         });
+        const subtitleInput=previewDialog.querySelector("#pbTemplateJerseySubtitle");
+        subtitleInput.addEventListener("input",()=>{
+            subtitleInput.value=subtitleInput.value.replace(/[<>]/g,"").slice(0,24);
+            updateTemplatePreviewArtwork();
+        });
     }
     function getTemplateOptions(item,fromPreview=false){
         if(!item?.parts.some(p=>p.slot==="number")||!fromPreview||!previewDialog)return {};
         return {
             number:previewDialog.querySelector("#pbTemplateJerseyNumber")?.value||undefined,
-            name:previewDialog.querySelector("#pbTemplateJerseyName")?.value||undefined
+            name:previewDialog.querySelector("#pbTemplateJerseyName")?.value||undefined,
+            subtitle:previewDialog.querySelector("#pbTemplateJerseySubtitle")?.value||undefined
         };
     }
     function updateTemplatePreviewArtwork(){
@@ -469,10 +505,13 @@
                 item.parts.find(p=>p.slot==="number")?.text||"23";
             previewDialog.querySelector("#pbTemplateJerseyName").value=
                 item.parts.find(p=>p.slot==="name")?.text||"TU EQUIPO";
+            previewDialog.querySelector("#pbTemplateJerseySubtitle").value=
+                item.parts.find(p=>p.slot==="subtitle")?.text||"ATHLETIC DEPT.";
         }
         updateTemplatePreviewArtwork();
         previewDialog.querySelector("#pbTemplatePreviewTitle").textContent=item.name;
-        previewDialog.querySelector("#pbTemplatePreviewCategory").textContent=item.category;
+        previewDialog.querySelector("#pbTemplatePreviewCategory").textContent=
+            item.jerseyStyle ? item.category+" · "+item.jerseyStyle : item.category;
         previewDialog.querySelector("#pbTemplatePreviewDescription").textContent=item.description;
         const list=getFilteredTemplates();
         const position=list.findIndex(t=>t.id===item.id);
