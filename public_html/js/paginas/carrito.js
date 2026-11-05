@@ -145,68 +145,98 @@ async function cargarItemCompleto(item, productosPorId = new Map()) {
     return {item, producto, solicitud: null};
 }
 
-function renderizarItem({item, producto, solicitud}) {
-    if (item.personalizado) return renderizarPersonalizado(item, producto, solicitud);
-
-    const precio = Number(producto.precio || 0);
-    const cantidad = Number(item.cantidad || 1);
-    const subtotal = precio * cantidad;
-    const variantes = obtenerVariantesColorProducto(producto);
-    const varianteElegida = variantes.find(color => normalizarTexto(color.nombre) === normalizarTexto(item.color || ""));
-    const faltaColor = variantes.length > 0 && !varianteElegida;
-    const stockDisponible = variantes.length ? Number(varianteElegida?.stock || 0) : Number(producto.stock || 0);
-    const sinStock = !faltaColor && cantidad > stockDisponible;
-    const varianteInvalida = faltaColor || sinStock;
-    if (varianteInvalida) {
-        cantidadVariantesIncompletas++;
-    } else {
-        subtotalCarrito += subtotal;
-        itemsPagables.push({item, producto, solicitud: null, personalizado: false, subtotal});
-    }
-    const avisoVariante = faltaColor
-            ? "Debes elegir un color antes de comprar."
-            : (sinStock ? `Solo quedan ${stockDisponible} unidad(es) de esta variante.` : "");
-
-    return `<article class="producto-carrito ${varianteInvalida ? "producto-variante-invalida" : ""}">
-        <img src="${escaparAtributoCarrito(producto.imagenVariante || obtenerUrlImagen(producto.imagen))}" alt="${escaparAtributoCarrito(producto.nombre)}" onerror="manejarErrorImagen(this)">
-        <div class="producto-info">
-            <h3>${escaparCarrito(producto.nombre)}</h3>
-            ${variantes.length ? `<p>Color: <b>${escaparCarrito(item.color && item.color !== "SIN_COLOR" ? item.color : "No seleccionado")}</b></p>` : ""}
-            ${productoUsaTalla(producto.categoria, producto.nombre) ? `<p>Talla: ${escaparCarrito(item.talla || "No seleccionada")}</p>` : "<p>Presentación: Unidad</p>"}
-            ${varianteInvalida ? `<p class="aviso-variante-carrito"><i class="fa-solid fa-circle-exclamation"></i> ${escaparCarrito(avisoVariante)}</p><a class="btn-elegir-variante" href="detalles-producto.html?id=${encodeURIComponent(producto.id)}">Elegir variante</a>` : `<p class="precio">S/ ${precio.toFixed(2)}</p><p class="subtotal-linea">Subtotal: <b>S/ ${subtotal.toFixed(2)}</b></p>`}
+function renderizarCarritoVacio() {
+    return `<div class="pb-cart-empty">
+      <div class="pb-cart-empty__copy">
+        <span class="pb-cart-eyebrow">TU PRÓXIMA IDEA EMPIEZA AQUÍ</span>
+        <h3>Tu carrito espera algo único.</h3>
+        <p>Explora prendas con diseños exclusivos o crea una pieza completamente a tu estilo.</p>
+        <div class="pb-cart-empty__buttons">
+          <a href="productos.html"><i class="fa-solid fa-shirt" aria-hidden="true"></i> Ver productos</a>
+          <a href="personaliza.html"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Personalizar</a>
         </div>
-        <div class="cantidad-producto"><input type="number" min="1" max="20" value="${cantidad}" data-cantidad="${escaparAtributoCarrito(item.id)}" aria-label="Cantidad"></div>
-        <button class="btn-eliminar" data-eliminar="${escaparAtributoCarrito(item.id)}"><i class="fa-regular fa-trash-can"></i> Eliminar</button>
+      </div>
+      <div class="pb-cart-empty__art" aria-hidden="true">
+        <div class="pb-cart-empty__ring"></div><div class="pb-cart-empty__ring"></div>
+        <i class="fa-solid fa-bag-shopping"></i><span>PIXBEN · MADE FOR YOU</span>
+      </div>
+    </div>
+    <div class="pb-cart-empty-links" aria-label="Explorar otras opciones">
+      <a href="productos.html"><i class="fa-solid fa-shirt" aria-hidden="true"></i> Polos y poleras</a>
+      <a href="personaliza.html"><i class="fa-solid fa-palette" aria-hidden="true"></i> Crear un estampado</a>
+      <a href="productos.html"><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i> Accesorios</a>
+    </div>`;
+}
+
+function renderizarItem({item,producto,solicitud}) {
+    if(item.personalizado)return renderizarPersonalizado(item,producto,solicitud);
+    const precio=Number(producto.precio||0), cantidad=Number(item.cantidad||1),subtotal=precio*cantidad;
+    const variantes=obtenerVariantesColorProducto(producto);
+    const elegida=variantes.find(color=>normalizarTexto(color.nombre)===normalizarTexto(item.color||""));
+    const faltaColor=variantes.length>0&&!elegida;
+    const stock=variantes.length?Number(elegida?.stock||0):Number(producto.stock||0);
+    const sinStock=!faltaColor&&cantidad>stock;
+    const invalida=faltaColor||sinStock;
+    if(invalida)cantidadVariantesIncompletas++;
+    else{subtotalCarrito+=subtotal;itemsPagables.push({item,producto,solicitud:null,personalizado:false,subtotal})}
+    const aviso=faltaColor?"Debes elegir un color antes de comprar.":sinStock?`Solo quedan ${stock} unidad(es) de esta variante.`:"";
+    const id=escaparAtributoCarrito(item.id),nombre=escaparCarrito(producto.nombre);
+    const imagen=escaparAtributoCarrito(producto.imagenVariante||obtenerUrlImagen(producto.imagen));
+    const usaTalla=productoUsaTalla(producto.categoria,producto.nombre);
+    const color=item.color&&item.color!=="SIN_COLOR"?item.color:"No seleccionado";
+    const variantesHTML=`
+      ${variantes.length?`<span><i class="fa-solid fa-palette" aria-hidden="true"></i> Color <strong>${escaparCarrito(color)}</strong></span>`:""}
+      ${usaTalla?`<span><i class="fa-solid fa-ruler" aria-hidden="true"></i> Talla <strong>${escaparCarrito(item.talla||"No seleccionada")}</strong></span>`:`<span><i class="fa-solid fa-box" aria-hidden="true"></i> Unidad</span>`}`;
+    const max=Math.min(20,Math.max(1,stock));
+    return `<article class="producto-carrito ${invalida?"producto-variante-invalida":""}">
+      <a href="detalles-producto.html?id=${encodeURIComponent(producto.id)}" class="pb-cart-image" aria-label="Ver ${escaparAtributoCarrito(producto.nombre)}">
+        <img src="${imagen}" alt="${escaparAtributoCarrito(producto.nombre)}" loading="lazy" onerror="manejarErrorImagen(this)">
+      </a>
+      <div class="producto-info">
+        <span class="pb-cart-product-eyebrow">${escaparCarrito(producto.categoria||"COLECCIÓN PIXBEN")}</span>
+        <h3>${nombre}</h3>
+        <div class="pb-cart-product-variant">${variantesHTML}</div>
+        ${invalida?`<p class="aviso-variante-carrito"><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> ${escaparCarrito(aviso)}</p><a class="btn-elegir-variante" href="detalles-producto.html?id=${encodeURIComponent(producto.id)}">Corregir variante</a>`:
+         `<div class="pb-cart-price-line"><p class="precio">S/ ${precio.toFixed(2)}</p><small>Precio unitario</small></div>`}
+      </div>
+      <div class="pb-cart-item-controls">
+        <button type="button" class="btn-eliminar" data-eliminar="${id}" aria-label="Eliminar ${escaparAtributoCarrito(producto.nombre)}"><i class="fa-regular fa-trash-can" aria-hidden="true"></i> Eliminar</button>
+        <div class="cantidad-producto" aria-label="Cantidad de ${escaparAtributoCarrito(producto.nombre)}">
+          <button type="button" data-paso-cantidad="menos" ${cantidad<=1?"disabled":""} aria-label="Reducir cantidad"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
+          <input type="number" inputmode="numeric" min="1" max="20" value="${cantidad}" data-cantidad="${id}" aria-label="Cantidad de ${escaparAtributoCarrito(producto.nombre)}">
+          <button type="button" data-paso-cantidad="mas" ${cantidad>=20||(!faltaColor&&cantidad>=max)?"disabled":""} aria-label="Aumentar cantidad"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+        </div>
+        <div class="pb-cart-line-total"><small>Subtotal</small><strong>${invalida?"Por corregir":"S/ "+subtotal.toFixed(2)}</strong></div>
+      </div>
     </article>`;
 }
 
-function renderizarPersonalizado(item, producto, solicitud) {
-    const estado = solicitud?.estado || "PENDIENTE_COTIZACION";
-    const precio = solicitud?.precio == null ? null : Number(solicitud.precio);
-    const aprobado = ["APROBADO", "EN_PRODUCCION", "LISTO", "ENVIADO"].includes(estado) && Number.isFinite(precio);
-    const cotizado = estado === "COTIZADO" && Number.isFinite(precio);
-
-    if (aprobado) {
-        subtotalCarrito += precio;
-        itemsPagables.push({item, producto, solicitud, personalizado: true, subtotal: precio});
-    } else {
-        cantidadPendientes++;
-    }
-
-    const imagen = solicitud?.imagenFrente || producto.imagen;
+function renderizarPersonalizado(item,producto,solicitud){
+    const estado=solicitud?.estado||"PENDIENTE_COTIZACION";
+    const precio=solicitud?.precio==null?null:Number(solicitud.precio);
+    const aprobado=["APROBADO","EN_PRODUCCION","LISTO","ENVIADO"].includes(estado)&&Number.isFinite(precio);
+    const cotizado=estado==="COTIZADO"&&Number.isFinite(precio);
+    if(aprobado){subtotalCarrito+=precio;itemsPagables.push({item,producto,solicitud,personalizado:true,subtotal:precio})}
+    else cantidadPendientes++;
+    const imagen=solicitud?.imagenFrente||producto.imagen;
     return `<article class="producto-carrito producto-personalizado">
-        <img src="${escaparAtributoCarrito(obtenerUrlImagen(imagen))}" alt="Diseño personalizado" onerror="manejarErrorImagen(this)">
-        <div class="producto-info">
-            <span class="etiqueta-personalizado">Personalizado</span>
-            <h3>${escaparCarrito(solicitud?.productoNombre || producto.nombre)}</h3>
-            <p>${escaparCarrito(solicitud?.color || "Color por confirmar")} · ${escaparCarrito(solicitud?.talla || item.talla || "Unidad")}</p>
-            <p>Estado: <b>${escaparCarrito(formatearEstadoCarrito(estado))}</b></p>
-            <p class="precio ${precio == null ? "precio-pendiente" : ""}">${precio == null ? "Precio por procesar" : `S/ ${precio.toFixed(2)}`}</p>
-            ${solicitud?.mensajeAdmin ? `<p class="mensaje-admin-carrito">${escaparCarrito(solicitud.mensajeAdmin)}</p>` : ""}
-            ${cotizado ? `<button class="btn-aceptar-cotizacion" data-aceptar-cotizacion="${escaparAtributoCarrito(solicitud.id)}">Aceptar cotización</button>` : ""}
+      <div class="pb-cart-image pb-cart-image--custom"><img src="${escaparAtributoCarrito(obtenerUrlImagen(imagen))}" alt="Vista del diseño personalizado" loading="lazy" onerror="manejarErrorImagen(this)"></div>
+      <div class="producto-info">
+        <span class="etiqueta-personalizado"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Diseño personalizado</span>
+        <h3>${escaparCarrito(solicitud?.productoNombre||producto.nombre)}</h3>
+        <div class="pb-cart-product-variant">
+          <span><i class="fa-solid fa-palette" aria-hidden="true"></i> ${escaparCarrito(solicitud?.color||"Color por confirmar")}</span>
+          <span><i class="fa-solid fa-ruler" aria-hidden="true"></i> ${escaparCarrito(solicitud?.talla||item.talla||"Unidad")}</span>
         </div>
-        <div class="cantidad-producto"><span>${Number(solicitud?.cantidad || item.cantidad || 1)} unidad(es)</span></div>
-        <button class="btn-eliminar" data-eliminar="${escaparAtributoCarrito(item.id)}"><i class="fa-regular fa-trash-can"></i> Eliminar</button>
+        <p class="pb-cart-item-status">Estado: ${escaparCarrito(formatearEstadoCarrito(estado))}</p>
+        ${solicitud?.mensajeAdmin?`<p class="mensaje-admin-carrito">${escaparCarrito(solicitud.mensajeAdmin)}</p>`:""}
+        ${cotizado?`<button type="button" class="btn-aceptar-cotizacion" data-aceptar-cotizacion="${escaparAtributoCarrito(solicitud.id)}">Aceptar cotización</button>`:""}
+      </div>
+      <div class="pb-cart-item-controls">
+        <button type="button" class="btn-eliminar" data-eliminar="${escaparAtributoCarrito(item.id)}" aria-label="Eliminar diseño personalizado"><i class="fa-regular fa-trash-can" aria-hidden="true"></i> Eliminar</button>
+        <span class="pb-cart-fixed-quantity">${Number(solicitud?.cantidad||item.cantidad||1)} unidad(es) · cantidad de la solicitud</span>
+        <div class="pb-cart-line-total"><small>${aprobado?"Total cotizado":"En revisión"}</small><strong>${precio==null?"Por cotizar":"S/ "+precio.toFixed(2)}</strong></div>
+      </div>
     </article>`;
 }
 
