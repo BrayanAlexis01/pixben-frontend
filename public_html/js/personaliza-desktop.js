@@ -227,7 +227,7 @@
         if (!templatePackRequest) {
             templatePackRequest = new Promise((resolve,reject)=>{
                 const script=document.createElement("script");
-                script.src="../js/personaliza-template-library.js?v=1";
+                script.src="../js/personaliza-template-library.js?v=2";
                 script.async=true;
                 script.onload=()=>{
                     if (window.PixBenTemplateLibrary) resolve(window.PixBenTemplateLibrary);
@@ -440,7 +440,7 @@
             updateTemplatePreviewArtwork();
         });
         nameInput.addEventListener("input",()=>{
-            nameInput.value=nameInput.value.replace(/[<>\\x00-\\x1f\\x7f]/g,"").slice(0,18);
+            nameInput.value=nameInput.value.replace(/[<>]/g,"").slice(0,18);
             updateTemplatePreviewArtwork();
         });
     }
