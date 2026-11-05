@@ -1,7 +1,8 @@
+<!DOCTYPE html>
 <html lang="es">
     <head>
         <link href="../css/css carrito de compras.css?v=9" rel="stylesheet" type="text/css"/>
-        <title>PixBen</title>
+        <title>Mi carrito | PixBen</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../imagensponsor/favicon.ico" sizes="any">
@@ -21,6 +22,10 @@
     <script src="../js/pwa-premium.js?v=3" defer></script>
     <link href="../css/header-global.css?v=2" rel="stylesheet">
     <link rel="stylesheet" href="../css/accessibility.css?v=6">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/carrito-pixben-premium.css?v=1">
 </head>
     <body>
 
@@ -62,76 +67,53 @@
 
         <main class="carrito-container">
 
-            <!-- TITULO -->
-            <section class="carrito-titulo">
-                <h1>MI CARRITO</h1>
-                <p>Revisa tus productos antes de finalizar la compra.</p>
+            <section class="carrito-titulo" aria-labelledby="tituloCarrito">
+                <div class="pb-cart-heading">
+                    <div class="pb-cart-heading__copy">
+                        <span class="pb-cart-eyebrow"><i class="fa-solid fa-sparkles" aria-hidden="true"></i> TU SELECCIÓN PIXBEN</span>
+                        <h1 id="tituloCarrito">Tu carrito<span class="pb-cart-heading__period">.</span></h1>
+                        <p>Revisa tus prendas y diseños antes de completar tu pedido.</p>
+                    </div>
+                    <a href="productos.html" class="pb-cart-back"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Seguir explorando</a>
+                </div>
+                <nav class="pb-cart-progress" aria-label="Etapas de compra">
+                    <div class="pb-cart-step pb-cart-step--active" aria-current="step"><span>01</span><div><strong>Tu carrito</strong><small>Revisa tus productos</small></div></div>
+                    <div class="pb-cart-progress__line" aria-hidden="true"></div>
+                    <div class="pb-cart-step"><span>02</span><div><strong>Datos y pago</strong><small>Completa tus datos</small></div></div>
+                    <div class="pb-cart-progress__line" aria-hidden="true"></div>
+                    <div class="pb-cart-step"><span>03</span><div><strong>Confirmación</strong><small>Registramos el pedido</small></div></div>
+                </nav>
             </section>
 
-            <!-- CONTENIDO -->
-            <section class="carrito-contenido">
-
-                <!-- LISTA PRODUCTOS -->
-                <div class="lista-carrito" id="listaCarrito">
-
-                
-
+            <section class="carrito-contenido" aria-label="Productos y resumen de compra">
+                <div class="pb-cart-list-column">
+                    <div class="pb-cart-section-heading"><div><span class="pb-cart-eyebrow">TU COMPRA</span><h2>Productos seleccionados <span id="contadorCarrito" class="pb-cart-count">0</span></h2></div><span class="pb-cart-section-hint">Edita tus cantidades aquí</span></div>
+                    <div class="lista-carrito" id="listaCarrito" aria-live="polite"></div>
+                    <div class="pb-cart-service" id="pbCartService"><i class="fa-solid fa-heart" aria-hidden="true"></i><span>Tu estilo es único. Si necesitas una prenda personalizada, puedes crearla desde <a href="personaliza.html">PixBen Studio</a>.</span></div>
                 </div>
 
-
-
-
                 <!-- RESUMEN -->
-                <aside class="resumen-carrito">
-
-                    <h2>Resumen del pedido</h2>
-
-                    <div class="resumen-item">
-                        <p>Subtotal</p>
-                        <p id="subtotal">S/ 0.00</p>
-                    </div>
-
-                    <div class="resumen-item">
-                        <p>Envío</p>
-                        <p id="envioResumen">Pago directo al transportista</p>
-                    </div>
-
-                    <div class="resumen-item total">
-                        <p>Total a pagar a PixBen</p>
-                        <p id="total">S/ 0.00</p>
-                    </div>
-
+                <aside class="resumen-carrito" aria-label="Resumen del pedido">
+                    <div class="pb-cart-summary-head"><div><span class="pb-cart-eyebrow">TU PEDIDO</span><h2>Resumen de compra</h2></div><div class="pb-cart-summary-icon"><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i></div></div>
+                    <div class="resumen-item"><p>Subtotal de productos</p><p id="subtotal">S/ 0.00</p></div>
+                    <div class="resumen-item"><p>Envío <i class="fa-solid fa-circle-info" aria-hidden="true" title="Lo pagarás directamente al transportista"></i></p><p id="envioResumen">Pago directo al transportista</p></div>
+                    <div class="resumen-item total"><p>Total a pagar a PixBen</p><p id="total">S/ 0.00</p></div>
+                    <p class="pb-cart-summary-note"><i class="fa-solid fa-truck-fast" aria-hidden="true"></i> El transporte no se cobra aquí: lo coordinaremos contigo y lo pagarás directamente al transportista.</p>
                     <p id="resumenPendientes" class="resumen-pendientes"></p>
-                    <div id="avisoCompraInvitado" class="aviso-compra-invitado" hidden>
-                        <i class="fa-solid fa-user-check"></i>
-                        <span>Puedes pagar como invitado. No es necesario crear una cuenta.</span>
-                    </div>
-
-                    <button
-                        class="btn-checkout"
-                        id="btnAbrirCheckout">
-                        Pagar productos
-                    </button>
-
-                    <button class="btn-vaciar"
-                            id="btnVaciarCarrito">
-                        Vaciar carrito
-                    </button>
-
-
-                    <a href="productos.html" class="seguir-comprando">
-                        Seguir comprando
-                    </a>
-
+                    <div id="avisoCompraInvitado" class="aviso-compra-invitado" hidden><i class="fa-solid fa-user-check" aria-hidden="true"></i><span>Puedes comprar como invitado. No necesitas crear una cuenta.</span></div>
+                    <button type="button" class="btn-checkout" id="btnAbrirCheckout"><i class="fa-solid fa-lock" aria-hidden="true"></i> Continuar con el pago <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                    <a href="productos.html" class="seguir-comprando">Seguir comprando</a>
+                    <button type="button" class="btn-vaciar" id="btnVaciarCarrito"><i class="fa-regular fa-trash-can" aria-hidden="true"></i> Vaciar carrito</button>
+                    <div class="pb-cart-assurance"><span><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Verificación de pago</span><span><i class="fa-solid fa-shirt" aria-hidden="true"></i> Diseños originales</span></div>
                 </aside>
-
             </section>
 
+            <div id="pbCartMobileBar" class="pb-cart-mobile-bar" hidden>
+                <div><small>Total a PixBen</small><strong id="pbCartMobileTotal">S/ 0.00</strong></div>
+                <button type="button" id="pbCartMobileCheckout">Continuar <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+            </div>
+
         </main>
-
-
-
-
         <!-- FOOTER -->
         <footer>
 
@@ -225,7 +207,7 @@
 <script src="../js/config.js?v=19"></script>
 <script src="../js/header-global.js?v=2"></script>
 <script src="../js/analitica.js?v=3"></script>
-<script src="../js/paginas/carrito.js?v=11" type="text/javascript"></script>
+<script src="../js/paginas/carrito.js?v=12" type="text/javascript"></script>
 
 
 <script src="../js/paginas/carrito-metodo-pago.js?v=3" type="text/javascript"></script>
