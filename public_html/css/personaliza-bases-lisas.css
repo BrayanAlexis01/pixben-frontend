@@ -1,0 +1,46 @@
+
+/* PixBen Studio · lienzos textiles listos para personalizar */
+.pb-base-intro{margin:0 0 10px}
+.pb-base-intro>span{font:850 9px/1.5 'DM Sans',sans-serif;color:#9050b2;letter-spacing:.11em}
+.pb-base-intro p{font-size:11px;line-height:1.55;color:#74667d;margin:6px 0 0}
+.pb-base-quick-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:12px 0 14px}
+.pb-base-quick-list button{display:flex;flex-direction:column;align-items:center;justify-content:start;min-width:0;gap:3px;border:1px solid #e3d5ea;background:#faf8fb;padding:5px 5px 8px;border-radius:13px;cursor:pointer;color:#382542;transition:border-color .15s ease,box-shadow .15s ease,transform .15s ease}
+.pb-base-quick-list button[aria-pressed="true"]{border:2px solid #8646af;padding:4px 4px 7px;background:#f5eafa;box-shadow:0 0 0 2px #a969c820}
+.pb-base-quick-list button:hover{border-color:#ae7dcc;transform:translateY(-2px)}
+.pb-base-quick-list button:focus-visible{outline:3px solid #a565d6;outline-offset:2px}
+.pb-base-quick-image{display:flex;width:100%;height:76px;overflow:hidden;align-items:center;justify-content:center;border-radius:9px;background:#eeebee}
+.pb-base-quick-image img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 30%;border-radius:0}
+.pb-base-quick-list strong{display:block;max-width:100%;overflow-wrap:break-word;text-align:center;font:850 10px/1.2 'Outfit',sans-serif}
+.pb-base-quick-list small{text-align:center;font:650 9px/1.3 'DM Sans',sans-serif;color:#85748b}
+.pb-base-product-label{margin-top:4px!important}
+.pb-base-reference-note{display:flex;align-items:start;gap:8px;margin:9px 0 8px;padding:11px;border:1px solid #d9c9e4;border-radius:11px;background:#f8f2fb;color:#6c4e7f;font-size:10px;line-height:1.5}
+.pb-base-reference-note i{color:#8040a8;margin-top:3px}
+.pb-base-reference-note[hidden]{display:none!important}
+#productoSelect optgroup{color:#6d387e;font-weight:850}
+#productoSelect option{color:#241b2c;font-weight:500}
+#coloresProductoVisual .color-visual{min-height:37px}
+#coloresProductoVisual .color-visual .swatch{border-color:#aaa4aab0}
+#coloresProductoVisual .color-visual.activo{box-shadow:0 0 0 2px #9e4fc528}
+body.pb-studio-page .pb-base-quick-list button{font-family:inherit}
+@media(min-width:1321px){
+  body.pb-studio-page .pb-base-quick-image{height:74px}
+  body.pb-studio-page .pb-base-quick-list{gap:6px}
+  body.pb-studio-page .pb-base-quick-list button{border-radius:10px}
+}
+@media(max-width:1320px){
+  .pb-base-quick-image{height:100px}
+  .pb-base-quick-list button{padding:7px}
+  .pb-base-quick-list strong{font-size:12px}
+  .pb-base-quick-list small{font-size:10px}
+}
+@media(max-width:480px){
+  .pb-base-quick-list{gap:7px}
+  .pb-base-quick-image{height:82px}
+  .pb-base-quick-list button{padding:5px 4px 8px}
+  .pb-base-quick-list strong{font-size:11px}
+  .pb-base-intro p,.pb-base-reference-note{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){
+  .pb-base-quick-list button{transition:none}
+  .pb-base-quick-list button:hover{transform:none}
+}
