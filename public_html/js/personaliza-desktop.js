@@ -227,7 +227,7 @@
         if (!templatePackRequest) {
             templatePackRequest = new Promise((resolve,reject)=>{
                 const script=document.createElement("script");
-                script.src="../js/personaliza-template-library.js?v=1";
+                script.src="../js/personaliza-template-library.js?v=2";
                 script.async=true;
                 script.onload=()=>{
                     if (window.PixBenTemplateLibrary) resolve(window.PixBenTemplateLibrary);
@@ -295,6 +295,12 @@
         const label=document.createElement("span");
         label.className="pb-template-card__category";
         label.textContent=template.category;
+        if(template.parts.some(p=>p.slot==="number")) {
+            const editable=document.createElement("span");
+            editable.className="pb-template-card__editable";
+            editable.innerHTML='<i class="fa-solid fa-pen" aria-hidden="true"></i> Número editable';
+            info.append(editable);
+        }
         const title=document.createElement("strong");
         title.textContent=template.name;
         const description=document.createElement("small");
@@ -396,6 +402,14 @@
            '    <span class="pb-template-preview__label" id="pbTemplatePreviewCategory"></span>',
            '    <h3 class="pb-template-preview__title" id="pbTemplatePreviewTitle"></h3>',
            '    <p class="pb-template-preview__description" id="pbTemplatePreviewDescription"></p>',
+           '    <div class="pb-template-preview__customize" id="pbTemplateJerseyCustomize" hidden>',
+           '      <strong><i class="fa-solid fa-shirt" aria-hidden="true"></i> Personaliza tu dorsal</strong>',
+           '      <div class="pb-template-preview__fields">',
+           '        <label for="pbTemplateJerseyNumber">Número (1 a 3 dígitos)<input type="text" id="pbTemplateJerseyNumber" inputmode="numeric" pattern="[0-9]{1,3}" maxlength="3" autocomplete="off" placeholder="23"></label>',
+           '        <label for="pbTemplateJerseyName">Nombre o equipo<input type="text" id="pbTemplateJerseyName" maxlength="18" autocomplete="off" placeholder="TU EQUIPO"></label>',
+           '      </div>',
+           '      <small>Visualiza el resultado al escribir. Después podrás editar cada texto en el lienzo.</small>',
+           '    </div>',
            '    <p class="pb-template-preview__tip"><strong>Diseño ampliado:</strong> comprueba las letras, la composición y los detalles antes de elegir. Cada parte se puede editar en PixBen Studio.</p>',
            '    <div class="pb-template-preview__actions">',
            '      <button type="button" data-pb-preview-action="use"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Usar este diseño</button>',
@@ -419,12 +433,44 @@
         previewDialog.querySelector('[data-pb-preview-action="download"]').addEventListener("click",event=>{
             if(previewItem)downloadLibraryTemplate(previewItem,true);
         });
+        const dorsalInput=previewDialog.querySelector("#pbTemplateJerseyNumber");
+        const nameInput=previewDialog.querySelector("#pbTemplateJerseyName");
+        dorsalInput.addEventListener("input",()=>{
+            dorsalInput.value=dorsalInput.value.replace(/[^0-9]/g,"").slice(0,3);
+            updateTemplatePreviewArtwork();
+        });
+        nameInput.addEventListener("input",()=>{
+            nameInput.value=nameInput.value.replace(/[<>]/g,"").slice(0,18);
+            updateTemplatePreviewArtwork();
+        });
+    }
+    function getTemplateOptions(item,fromPreview=false){
+        if(!item?.parts.some(p=>p.slot==="number")||!fromPreview||!previewDialog)return {};
+        return {
+            number:previewDialog.querySelector("#pbTemplateJerseyNumber")?.value||undefined,
+            name:previewDialog.querySelector("#pbTemplateJerseyName")?.value||undefined
+        };
+    }
+    function updateTemplatePreviewArtwork(){
+        if(!previewDialog||!previewItem)return;
+        const lib=window.PixBenTemplateLibrary;
+        const customized=lib.customize(previewItem,getTemplateOptions(previewItem,true));
+        previewDialog.querySelector("#pbTemplatePreviewArt").innerHTML=lib.renderSvg(customized);
     }
     function fillTemplatePreview(item){
         const pack=window.PixBenTemplateLibrary;
         if(!item||!pack||!previewDialog)return;
         previewItem=item;
-        previewDialog.querySelector("#pbTemplatePreviewArt").innerHTML=pack.renderSvg(item);
+        const editableNumber=item.parts.some(p=>p.slot==="number");
+        const editPanel=previewDialog.querySelector("#pbTemplateJerseyCustomize");
+        editPanel.hidden=!editableNumber;
+        if(editableNumber){
+            previewDialog.querySelector("#pbTemplateJerseyNumber").value=
+                item.parts.find(p=>p.slot==="number")?.text||"23";
+            previewDialog.querySelector("#pbTemplateJerseyName").value=
+                item.parts.find(p=>p.slot==="name")?.text||"TU EQUIPO";
+        }
+        updateTemplatePreviewArtwork();
         previewDialog.querySelector("#pbTemplatePreviewTitle").textContent=item.name;
         previewDialog.querySelector("#pbTemplatePreviewCategory").textContent=item.category;
         previewDialog.querySelector("#pbTemplatePreviewDescription").textContent=item.description;
@@ -490,7 +536,8 @@
     function downloadLibraryTemplate(item,inPreview=false){
         const pack=window.PixBenTemplateLibrary;
         try{
-            pack?.downloadTemplate(item);
+            const personalized=pack?.customize(item,getTemplateOptions(item,inPreview))||item;
+            pack?.downloadTemplate(personalized);
             const status="Se solicitó la descarga de «"+item.name+"» en SVG de muestra.";
             if(libraryMessage)libraryMessage.textContent=status;
             if(inPreview&&previewDialog)previewDialog.querySelector("#pbTemplatePreviewStatus").textContent=status;
@@ -506,7 +553,7 @@
         const original=button.innerHTML;
         button.innerHTML='<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Añadiendo...';
         try{
-            const applied=await studio.aplicarPlantillaEstudio(item.id);
+            const applied=await studio.aplicarPlantillaEstudio(item.id,getTemplateOptions(item,fromPreview));
             if(applied){
                 if(templateFeedback)templateFeedback.textContent=
                   "Plantilla «"+item.name+"» añadida. Ya puedes editar sus textos y formas.";
@@ -567,7 +614,9 @@
         if(!button||button.disabled)return;
         const item=window.PixBenTemplateLibrary?.get(button.dataset.templateId);
         if(!item)return;
-        if(button.dataset.templateAction==="preview") {
+        const jersey=item.parts.some(part=>part.slot==="number");
+        if(button.dataset.templateAction==="preview" || jersey) {
+            // Los dorsales se personalizan antes de aplicar o descargar.
             openTemplatePreview(item,button);
         } else if(button.dataset.templateAction==="download") {
             downloadLibraryTemplate(item);

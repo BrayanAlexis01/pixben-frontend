@@ -2257,9 +2257,12 @@
         return true;
     }
 
-    async function aplicarPlantillaEstudio(clave) {
+    async function aplicarPlantillaEstudio(clave, personalizacion = {}) {
         const nuevo = window.PixBenTemplateLibrary?.get(clave);
-        if (nuevo) return aplicarPlantillaBiblioteca(nuevo);
+        if (nuevo) {
+            const personalizado = window.PixBenTemplateLibrary?.customize(nuevo, personalizacion) || nuevo;
+            return aplicarPlantillaBiblioteca(personalizado);
+        }
         const diseños = {
             urbano: {principal:"STREET", secundario:"OWN YOUR WAY", letra:"Bebas Neue",
                 tinta:"#242029", detalle:"#9a46cb", tamano:52},
