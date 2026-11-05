@@ -365,6 +365,9 @@
     }
 
     async function cargarProductos() {
+        document.querySelectorAll("[data-preview-base]").forEach(img => {
+            img.src = basesLisas?.image(img.dataset.previewBase, "frente", basesLisas.palette[0].hex) || "";
+        });
         productoSelect.innerHTML = '<option value="">Lienzo libre (sin prenda)</option>';
         const optBases = document.createElement("optgroup");
         optBases.label = "Prendas lisas para empezar";
