@@ -102,6 +102,25 @@
 
     let productos = [];
     let productoActual = null;
+    const basesLisas = window.PixBenBlankBases;
+    const esBaseLisa = () => Boolean(productoActual?.esBaseReferencia);
+    const valorProductoActual = () => esBaseLisa() ? "base:" + productoActual.fit
+        : productoActual?.id ? String(productoActual.id) : "";
+
+    // Los mockups sin código de catálogo son referencias para cotizar, no inventario.
+    function seleccionarBaseLisa(fit) {
+        const modelo = basesLisas?.fits.find(item => item.fit === fit);
+        return modelo ? basesLisas.reference(modelo.fit) : null;
+    }
+    function actualizarTarjetasBase() {
+        document.querySelectorAll("[data-base-prenda]").forEach(boton => {
+            const activa = esBaseLisa() && boton.dataset.basePrenda === productoActual.fit;
+            boton.classList.toggle("activo", activa);
+            boton.setAttribute("aria-pressed", String(activa));
+        });
+        const nota = document.getElementById("notaBaseReferencia");
+        if (nota) nota.hidden = !esBaseLisa();
+    }
     let variantesColor = [];
     let galeriaProducto = [];
     let ladoActual = "frente";
@@ -207,13 +226,19 @@
     function conectarEventos() {
         productoSelect.addEventListener("change", async () => {
             if (tieneElementosUsuario() && !confirm("Cambiar el producto base iniciará un diseño nuevo. Tu borrador actual seguirá guardado hasta que confirmes el cambio. ¿Continuar?")) {
-                productoSelect.value = productoActual?.id ? String(productoActual.id) : "";
+                productoSelect.value = valorProductoActual();
                 return;
             }
             await aplicarProductoSeleccionado(true);
             programarBorrador();
         });
 
+        document.getElementById("selectorBasesLisas")?.addEventListener("click", evento => {
+            const boton = evento.target.closest("[data-base-prenda]");
+            if (!boton || boton.disabled || productoSelect.value === "base:" + boton.dataset.basePrenda) return;
+            productoSelect.value = "base:" + boton.dataset.basePrenda;
+            productoSelect.dispatchEvent(new Event("change", {bubbles:true}));
+        });
         tallaProducto.addEventListener("change", () => { actualizarResumen(); programarBorrador(); });
         cantidadProducto.addEventListener("input", () => {
             normalizarCantidad();
@@ -340,29 +365,54 @@
     }
 
     async function cargarProductos() {
-        productoSelect.innerHTML = '<option value="" selected>Lienzo libre (sin producto base)</option>';
+        productoSelect.innerHTML = '<option value="">Lienzo libre (sin prenda)</option>';
+        const optBases = document.createElement("optgroup");
+        optBases.label = "Prendas lisas para empezar";
+        for(const base of basesLisas?.fits || []){
+            const option = document.createElement("option");
+            option.value = "base:" + base.fit;
+            option.textContent = base.nombre;
+            optBases.appendChild(option);
+        }
+        productoSelect.appendChild(optBases);
         botonSolicitar.disabled = false;
         try {
-            const respuesta = await fetchConReintentos(`${API_URL}/productos/personalizables`, {cache: "no-store"}, 3, 1300);
-            if (!respuesta.ok) throw new Error("No se pudieron cargar los productos personalizables");
-            productos = await respuesta.json();
-            productoSelect.insertAdjacentHTML("beforeend", productos
-                .map(p => `<option value="${p.id}">${escapar(p.nombre)}</option>`).join(""));
-        } catch (error) {
-            console.warn(error);
-            mostrarEstado("Puedes diseñar en lienzo libre. Los productos base no pudieron cargarse por ahora.", false);
+            // La lista general incluye exactamente el mismo indicador que ve Admin.
+            // No se confía en que /personalizables filtre correctamente por sí solo.
+            const respuesta = await fetchConReintentos(`${API_URL}/productos`, {cache:"no-store"}, 3, 1300);
+            if (!respuesta.ok) throw new Error("No se pudo consultar el catálogo");
+            const catalogo = await respuesta.json();
+            if (!Array.isArray(catalogo)) throw new Error("La respuesta del catálogo no es válida");
+            productos = catalogo.filter(p => p && p.personalizable === true && p.id != null);
+            if (productos.length) {
+                const grupo = document.createElement("optgroup");
+                grupo.label = "Productos habilitados por administración";
+                productos.forEach(p=>{
+                    const option = document.createElement("option");
+                    option.value = String(p.id);
+                    option.textContent = p.nombre || "Producto " + p.id;
+                    grupo.appendChild(option);
+                });
+                productoSelect.appendChild(grupo);
+            }
+        } catch(error) {
+            console.warn("No se pudieron consultar los productos habilitados:", error);
+            mostrarEstado("Puedes diseñar con nuestras prendas lisas mientras se recupera el catálogo habilitado.", false);
         }
-
         const restaurado = await restaurarBorrador();
-        if (!restaurado) {
-            productoSelect.value = "";
+        if(!restaurado){
+            productoSelect.value = basesLisas ? "base:clasico" : "";
             await aplicarProductoSeleccionado(true);
         }
     }
 
     async function aplicarProductoSeleccionado(reiniciarDiseno = true) {
-        productoActual = productos.find(p => String(p.id) === String(productoSelect.value)) || null;
+        const seleccionado = String(productoSelect.value);
+        productoActual = seleccionado.startsWith("base:")
+            ? seleccionarBaseLisa(seleccionado.slice(5))
+            : productos.find(p => String(p.id) === seleccionado) || null;
         if (reiniciarDiseno) reiniciarEstadosEditor();
+        actualizarTarjetasBase();
         editarProductoBase.checked = false;
         editarProductoBase.disabled = !productoActual;
         document.getElementById("btnRestablecerBase").disabled = !productoActual;
@@ -389,9 +439,15 @@
     }
 
     async function prepararProductoActual() {
-        variantesColor = productoActual ? obtenerVariantesColorProducto(productoActual) : [];
+        variantesColor = productoActual && !esBaseLisa() ? obtenerVariantesColorProducto(productoActual) : [];
         galeriaProducto = [];
-        if (productoActual) {
+        if(esBaseLisa()){
+            const hex = basesLisas.palette[0].hex;
+            galeriaProducto = [basesLisas.image(productoActual.fit,"frente",hex),
+                basesLisas.image(productoActual.fit,"espalda",hex)];
+            baseImagenIndicePorLado.frente = 0;
+            baseImagenIndicePorLado.espalda = 1;
+        } else if (productoActual) {
             try { galeriaProducto = await obtenerGaleriaProducto(productoActual); }
             catch { galeriaProducto = [obtenerUrlImagen(productoActual.imagen)].filter(Boolean); }
         }
@@ -405,7 +461,8 @@
     async function renderizarColoresProducto() {
         const contenedor = document.getElementById("coloresProductoVisual");
         const grupoColorLibre = document.getElementById("grupoColorLibre");
-        let opciones = variantesColor.length
+        let opciones = esBaseLisa() ? basesLisas.palette.map(c => ({...c, variante:false}))
+            : variantesColor.length
             ? variantesColor.map(v => ({nombre: v.nombre, hex: v.codigoHex, stock: v.stock, clave: v.clave, variante: true}))
             : coloresReferencia.map(c => ({...c, variante: false}));
 
@@ -417,7 +474,7 @@
             </button>`).join("");
 
         contenedor.querySelectorAll(".color-visual:not(:disabled)").forEach(boton => boton.addEventListener("click", () => seleccionarColorVisual(boton)));
-        grupoColorLibre.hidden = variantesColor.length > 0;
+        grupoColorLibre.hidden = variantesColor.length > 0 || esBaseLisa();
 
         const primero = contenedor.querySelector(".color-visual:not(:disabled)");
         if (primero) await seleccionarColorVisual(primero, true);
@@ -434,7 +491,14 @@
         colorProducto.value = nombre;
         marcarColorSeleccionado(nombre);
 
-        if (esVariante) {
+        if(esBaseLisa()){
+            galeriaProducto = [basesLisas.image(productoActual.fit,"frente",hex),
+                basesLisas.image(productoActual.fit,"espalda",hex)];
+            baseImagenIndicePorLado.frente = 0;
+            baseImagenIndicePorLado.espalda = 1;
+            colorFondoLienzo.value = "#ffffff";
+            if (!silencioso) await reemplazarBaseSiCorresponde();
+        } else if (esVariante) {
             try {
                 galeriaProducto = await obtenerGaleriaVarianteProducto(productoActual, nombre);
             } catch {
@@ -480,7 +544,7 @@
     function renderizarVistasProducto() {
         const grupo = document.getElementById("grupoVistasProducto");
         const contenedor = document.getElementById("vistasProductoBase");
-        if (!productoActual || galeriaProducto.length <= 1) {
+        if (!productoActual || galeriaProducto.length <= 1 || esBaseLisa()) {
             grupo.hidden = true;
             contenedor.innerHTML = "";
             return;
@@ -504,7 +568,7 @@
 
     function actualizarStockPersonalizable() {
         const texto = document.getElementById("stockPersonalizable");
-        if (!productoActual) {
+        if (!productoActual || esBaseLisa()) {
             texto.hidden = true;
             cantidadProducto.max = 50;
             return;
@@ -527,6 +591,7 @@
 
     function urlBaseDeseada() {
         if (!productoActual) return null;
+        if (esBaseLisa()) return galeriaProducto[ladoActual === "espalda" ? 1 : 0] || null;
         return galeriaProducto[baseImagenIndicePorLado[ladoActual]] || obtenerUrlImagen(productoActual.imagen);
     }
 
@@ -2009,6 +2074,7 @@
                 version: 2,
                 actualizado: Date.now(),
                 productoId: productoActual?.id || null,
+                baseReferenciaId: esBaseLisa() ? productoActual.fit : null,
                 color: colorProducto.value,
                 colorFondo: colorFondoLienzo.value,
                 talla: tallaProducto.value,
@@ -2078,9 +2144,13 @@
         const draft = await leerBorrador();
         if (!draft?.estados || Date.now() - Number(draft.actualizado || 0) > 1000 * 60 * 60 * 24 * 30) return false;
         if (draft.productoId && !productos.some(p => String(p.id) === String(draft.productoId))) return false;
+        if (draft.baseReferenciaId && !seleccionarBaseLisa(draft.baseReferenciaId)) return false;
 
-        productoSelect.value = draft.productoId ? String(draft.productoId) : "";
-        productoActual = productos.find(p => String(p.id) === String(draft.productoId)) || null;
+        productoSelect.value = draft.baseReferenciaId ? "base:" + draft.baseReferenciaId
+            : draft.productoId ? String(draft.productoId) : "";
+        productoActual = draft.baseReferenciaId ? seleccionarBaseLisa(draft.baseReferenciaId)
+            : productos.find(p => String(p.id) === String(draft.productoId)) || null;
+        actualizarTarjetasBase();
         reiniciarEstadosEditor();
         await prepararProductoActual();
 
@@ -2090,6 +2160,14 @@
         vistaManualPorLado.espalda = Boolean(draft.vistaManualPorLado?.espalda);
         colorProducto.value = draft.color || colorProducto.value;
         colorFondoLienzo.value = draft.colorFondo || "#ffffff";
+        if (esBaseLisa()) {
+            const selected = basesLisas.palette.find(c => c.nombre === colorProducto.value)
+                || basesLisas.palette[0];
+            colorProducto.value = selected.nombre;
+            galeriaProducto = [basesLisas.image(productoActual.fit,"frente",selected.hex),
+                basesLisas.image(productoActual.fit,"espalda",selected.hex)];
+            colorFondoLienzo.value = "#ffffff";
+        }
         marcarColorSeleccionado(colorProducto.value);
         if (Array.from(tallaProducto.options).some(o => o.value === draft.talla)) tallaProducto.value = draft.talla;
         cantidadProducto.value = draft.cantidad || "1";
