@@ -178,3 +178,24 @@ body .resumen-carrito .btn-vaciar[hidden]{display:none}
 @media(prefers-reduced-motion:reduce){
   .carrito-container .producto-carrito,.pb-cart-empty__buttons a,.resumen-carrito .btn-checkout{transition:none!important;transform:none!important}
 }
+/* Mantener accesibles los botones flotantes cuando aparece la barra de pago. */
+@media(max-width:680px) {
+    body:has(#pbCartMobileBar:not([hidden])) .pixben-pwa-layer {
+        bottom:calc(90px + env(safe-area-inset-bottom))!important;
+    }
+    body:has(#pbCartMobileBar:not([hidden])) .a11y-flotante {
+        bottom:calc(94px + env(safe-area-inset-bottom))!important;
+    }
+}
+@media(max-width:400px) {
+    .carrito-container .pb-cart-item-controls {
+        flex-wrap:wrap;
+    }
+    .carrito-container .pb-cart-item-controls .pb-cart-line-total {
+        flex-basis:100%;
+        text-align:left;
+    }
+    .carrito-container .pb-cart-item-controls .btn-eliminar {
+        margin-left:auto;
+    }
+}
