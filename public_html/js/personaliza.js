@@ -1909,7 +1909,7 @@
                 ...crearReferenciaUsuario(usuario),
                 productoId: productoActual?.id || null,
                 productoNombre: productoActual?.nombre || "Diseño asistido",
-                categoria: productoActual?.categoria || "PERSONALIZADO_LIBRE",
+                categoria: esBaseLisa() ? "PERSONALIZADO_LIBRE" : (productoActual?.categoria || "PERSONALIZADO_LIBRE"),
                 color: colorProducto.value,
                 talla: productoActual && productoUsaTalla(productoActual.categoria, productoActual.nombre)
                         ? tallaProducto.value : "POR_DEFINIR",
@@ -2018,7 +2018,7 @@
                 ...crearReferenciaUsuario(usuario),
                 productoId: productoActual?.id || null,
                 productoNombre: productoActual?.nombre || "Diseño libre",
-                categoria: productoActual?.categoria || "PERSONALIZADO_LIBRE",
+                categoria: esBaseLisa() ? "PERSONALIZADO_LIBRE" : (productoActual?.categoria || "PERSONALIZADO_LIBRE"),
                 color: colorProducto.value,
                 talla: productoActual && productoUsaTalla(productoActual.categoria, productoActual.nombre) ? tallaProducto.value : "POR_DEFINIR",
                 cantidad: Number(cantidadProducto.value),
