@@ -16,7 +16,7 @@ const personalizerHTML = read("public_html/htmls/personaliza.html");
 
 assert.ok(!accessibilityCSS.includes("#ffe45c"), "El modo alto contraste aun usa amarillo");
 assert.ok(!accessibilityCSS.includes("--a11y-focus:#ffcc33"), "El foco sigue siendo amarillo");
-assert.match(contactHTML, /<a class="faq-cta-link" href="preguntas frecuentes.html">/);
+assert.match(contactHTML, /<a href="preguntas frecuentes\\.html">Ir a preguntas frecuentes/, "Contacto debe tener un enlace navegable hacia preguntas frecuentes");
 assert.doesNotMatch(contactHTML, /<button[^>]*>\s*<a[^>]*preguntas frecuentes/i);
 assert.ok(favoritesHTML.includes("cuenta-listados.css?v=7"));
 assert.ok(personalizerHTML.includes("accessibility.css?v=6"));
