@@ -3,6 +3,7 @@
 const VERSION = "pixben-pwa-v21";
 const CACHE_ESTATICO = `${VERSION}-static`;
 const CACHE_PAGINAS = `${VERSION}-pages`;
+const CACHE_IMAGENES = `${VERSION}-images`;
 const CACHE_META = "pixben-meta";
 
 const RECURSOS_BASE = [
@@ -43,7 +44,7 @@ self.addEventListener("activate", (event) => {
         await Promise.all(
             nombres
                 .filter((nombre) => nombre.startsWith("pixben-pwa-") &&
-                    nombre !== CACHE_ESTATICO && nombre !== CACHE_PAGINAS)
+                    nombre !== CACHE_ESTATICO && nombre !== CACHE_PAGINAS && nombre !== CACHE_IMAGENES)
                 .map((nombre) => caches.delete(nombre))
         );
         await self.clients.claim();
@@ -95,9 +96,10 @@ async function guardarRecursoAcotado(cache, request, response) {
 async function recursoCachePrimero(request) {
     // No volver a descargar la misma imagen en segundo plano en cada visita:
     // las imágenes locales del deploy se actualizan al renovar VERSION.
-    const cache = await caches.open(CACHE_ESTATICO);
-    const guardado = await cache.match(request);
-    if (guardado) return guardado;
+    // Mantener los recursos precargados de la app fuera de la caché rotativa.
+    const precargado = await caches.match(request);
+    if (precargado) return precargado;
+    const cache = await caches.open(CACHE_IMAGENES);
 
     try {
         const respuesta = await fetch(request);
