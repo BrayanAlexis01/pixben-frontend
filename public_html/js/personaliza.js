@@ -380,9 +380,9 @@
         productoSelect.appendChild(optBases);
         botonSolicitar.disabled = false;
         try {
-            // La lista general incluye exactamente el mismo indicador que ve Admin.
-            // No se confía en que /personalizables filtre correctamente por sí solo.
-            const respuesta = await fetchConReintentos(`${API_URL}/productos`, {cache:"no-store"}, 3, 1300);
+            // Endpoint filtrado en PostgreSQL, más pequeño que descargar todo el catálogo.
+            // Comprobación adicional de la bandera para respetar siempre el ajuste del administrador.
+            const respuesta = await fetchConReintentos(`${API_URL}/productos/personalizables`, {cache:"no-store"}, 3, 1300);
             if (!respuesta.ok) throw new Error("No se pudo consultar el catálogo");
             const catalogo = await respuesta.json();
             if (!Array.isArray(catalogo)) throw new Error("La respuesta del catálogo no es válida");

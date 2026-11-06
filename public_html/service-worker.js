@@ -1,8 +1,9 @@
 "use strict";
 
-const VERSION = "pixben-pwa-v20";
+const VERSION = "pixben-pwa-v21";
 const CACHE_ESTATICO = `${VERSION}-static`;
 const CACHE_PAGINAS = `${VERSION}-pages`;
+const CACHE_IMAGENES = `${VERSION}-images`;
 const CACHE_META = "pixben-meta";
 
 const RECURSOS_BASE = [
@@ -43,7 +44,7 @@ self.addEventListener("activate", (event) => {
         await Promise.all(
             nombres
                 .filter((nombre) => nombre.startsWith("pixben-pwa-") &&
-                    nombre !== CACHE_ESTATICO && nombre !== CACHE_PAGINAS)
+                    nombre !== CACHE_ESTATICO && nombre !== CACHE_PAGINAS && nombre !== CACHE_IMAGENES)
                 .map((nombre) => caches.delete(nombre))
         );
         await self.clients.claim();
@@ -76,34 +77,43 @@ async function recursoRedPrimero(request) {
     }
 }
 
-async function recursoCachePrimero(request) {
-    const guardado = await caches.match(request, {ignoreSearch: true});
-    if (guardado) {
-        actualizarEnSegundoPlano(request);
-        return guardado;
+// Limitar datos offline: las imágenes del catálogo pueden ser numerosas.
+const MAX_RECURSOS_CACHE = 100;
+
+async function guardarRecursoAcotado(cache, request, response) {
+    try {
+        await cache.put(request, response);
+        const keys = await cache.keys();
+        const excess = keys.length - MAX_RECURSOS_CACHE;
+        if (excess > 0) {
+            await Promise.all(keys.slice(0, excess).map(key => cache.delete(key)));
+        }
+    } catch {
+        // Si el dispositivo no tiene espacio, la navegación online sigue funcionando.
     }
+}
+
+async function recursoCachePrimero(request) {
+    // No volver a descargar la misma imagen en segundo plano en cada visita:
+    // las imágenes locales del deploy se actualizan al renovar VERSION.
+    // Mantener los recursos precargados de la app fuera de la caché rotativa.
+    const precargado = await caches.match(request);
+    if (precargado) return precargado;
+    const cache = await caches.open(CACHE_IMAGENES);
 
     try {
         const respuesta = await fetch(request);
         if (respuesta?.ok) {
-            const cache = await caches.open(CACHE_ESTATICO);
-            cache.put(request, respuesta.clone());
+            await guardarRecursoAcotado(cache, request, respuesta.clone());
         }
         return respuesta;
     } catch {
         if (request.destination === "image") {
-            return caches.match("/imagensponsor/polo-ocean.webp");
+            return (await caches.match("/imagensponsor/polo-ocean.webp")) ||
+                   Response.error();
         }
         throw new Error("Recurso no disponible sin conexión");
     }
-}
-
-function actualizarEnSegundoPlano(request) {
-    fetch(request).then(async (respuesta) => {
-        if (!respuesta?.ok) return;
-        const cache = await caches.open(CACHE_ESTATICO);
-        await cache.put(request, respuesta.clone());
-    }).catch(() => {});
 }
 
 self.addEventListener("fetch", (event) => {
