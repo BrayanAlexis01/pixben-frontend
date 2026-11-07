@@ -1,6 +1,6 @@
 "use strict";
 
-const VERSION = "pixben-pwa-v23";
+const VERSION = "pixben-pwa-v24";
 const CACHE_ESTATICO = `${VERSION}-static`;
 const CACHE_PAGINAS = `${VERSION}-pages`;
 const CACHE_IMAGENES = `${VERSION}-images`;
@@ -25,8 +25,7 @@ const RECURSOS_BASE = [
     "/htmls/productos.html",
     "/htmls/personaliza.html",
     "/htmls/carrito%20de%20compras.html",
-    "/htmls/login.html",
-    "/htmls/mis-pedidos.html"
+    "/htmls/login.html"
 ];
 
 self.addEventListener("install", (event) => {
@@ -123,6 +122,23 @@ self.addEventListener("fetch", (event) => {
     const url = new URL(request.url);
     if (url.origin !== self.location.origin) return;
     if (url.pathname === "/service-worker.js") return;
+
+    // Pedidos y pantallas de cuenta nunca deben servirse desde caché de páginas:
+    // evita mostrar una interfaz antigua o datos privados después de actualizar.
+    if (request.mode === "navigate" &&
+        ["/htmls/mis-pedidos.html", "/htmls/perfil.html", "/htmls/historial.html", "/htmls/favoritos.html"].includes(url.pathname)) {
+        event.respondWith((async () => {
+            try {
+                return await fetch(request, {cache: "no-store"});
+            } catch {
+                return (await caches.match("/offline.html")) ||
+                    new Response("No hay conexión. Vuelve a intentarlo en línea.", {
+                        status: 503, headers: {"Content-Type": "text/plain; charset=utf-8"}
+                    });
+            }
+        })());
+        return;
+    }
 
     if (request.mode === "navigate") {
         event.respondWith(paginaConRedPrimero(request));
