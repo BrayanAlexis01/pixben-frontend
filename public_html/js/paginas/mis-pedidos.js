@@ -171,12 +171,14 @@ async function cargarPedidosCuenta() {
             mostrarEstadoPedidos("");
         }
         detectarCambiosPedidos(normales, personalizados);
-        if (!normales.length && !personalizados.length) {
+        if (window.PixBenPedidosPremium) {
+            window.PixBenPedidosPremium.actualizar(normales, personalizados);
+        } else if (!normales.length && !personalizados.length) {
             listaPedidos.innerHTML = '<div class="sin-pedidos"><i class="fa-solid fa-box-open"></i><h2>Todavía no tienes pedidos</h2><p>Tus compras y solicitudes personalizadas aparecerán aquí.</p></div>';
-            return;
+        } else {
+            listaPedidos.innerHTML = personalizados.map(renderizarPedidoPersonalizado).join("")
+                    + normales.slice().reverse().map(renderizarPedidoNormal).join("");
         }
-        listaPedidos.innerHTML = personalizados.map(renderizarPedidoPersonalizado).join("")
-                + normales.slice().reverse().map(renderizarPedidoNormal).join("");
     } catch (error) {
         console.error(error);
         mostrarEstadoPedidos(error.message || "No se pudieron cargar tus pedidos", true);
@@ -222,7 +224,8 @@ async function cargarPedidosInvitadoGuardados() {
     renderizarReferenciasInvitado();
     if (!referencias.length) {
         mostrarEstadoPedidos("Escribe los datos de tu pedido para consultarlo.");
-        listaPedidos.innerHTML = "";
+        if (window.PixBenPedidosPremium) window.PixBenPedidosPremium.actualizar([], [], {modo: "invitado"});
+        else listaPedidos.innerHTML = "";
         return;
     }
 
@@ -234,9 +237,13 @@ async function cargarPedidosInvitadoGuardados() {
         return;
     }
     mostrarEstadoPedidos("");
-    listaPedidos.innerHTML = pedidos
-            .sort((a, b) => String(b.fecha || "").localeCompare(String(a.fecha || "")))
-            .map(renderizarPedidoNormal).join("");
+    if (window.PixBenPedidosPremium) {
+        window.PixBenPedidosPremium.actualizar(pedidos, [], {modo: "invitado"});
+    } else {
+        listaPedidos.innerHTML = pedidos
+                .sort((a, b) => String(b.fecha || "").localeCompare(String(a.fecha || "")))
+                .map(renderizarPedidoNormal).join("");
+    }
 }
 
 function configurarVistaInvitado() {
@@ -255,7 +262,11 @@ function configurarVistaInvitado() {
         try {
             const pedido = await consultarPedidoInvitado(codigo, correo);
             mostrarEstadoPedidos("");
-            listaPedidos.innerHTML = renderizarPedidoNormal(pedido);
+            if (window.PixBenPedidosPremium) {
+                window.PixBenPedidosPremium.actualizar([pedido], [], {modo: "invitado"});
+            } else {
+                listaPedidos.innerHTML = renderizarPedidoNormal(pedido);
+            }
             renderizarReferenciasInvitado();
             const url = new URL(window.location.href);
             url.searchParams.set("codigo", pedido.codigoSeguimiento || pedido.id);

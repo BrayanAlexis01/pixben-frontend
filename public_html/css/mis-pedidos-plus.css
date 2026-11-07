@@ -1,0 +1,87 @@
+/* Mejoras de Mis pedidos: capa visual aislada para no alterar cabecera o carrito */
+.pagina-pedidos{--pb-ink:#1a1720;--pb-muted:#6f6b76;--pb-line:#e9e7ec;--pb-purple:#7431a9;background:#f7f7f9;color:var(--pb-ink)}
+.contenedor-pedidos{width:min(1100px,calc(100% - 36px));padding-top:49px}
+.encabezado-pedidos{margin-bottom:27px}
+.encabezado-pedidos h1{font-size:clamp(2.1rem,4.6vw,3.05rem);letter-spacing:-.045em;line-height:1.1}
+.encabezado-pedidos p{line-height:1.55}
+.etiqueta-pedidos{font-size:.71rem;letter-spacing:.17em;color:#665477}
+.boton-volver{border-radius:12px;min-height:43px;transition:transform .2s,background .2s}
+.boton-volver:hover{background:#303035;transform:translateY(-1px)}
+.pb-orders-overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:0 0 25px}
+.pb-orders-overview[hidden],.pb-orders-tools[hidden]{display:none!important}
+.pb-orders-stat{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--pb-line);padding:18px 21px;border-radius:16px;min-width:0}
+.pb-orders-stat-icon{width:43px;height:43px;flex:none;border-radius:12px;background:#f5f3f7;display:flex;align-items:center;justify-content:center;color:#33303a;font-size:18px}
+.pb-orders-stat--pending .pb-orders-stat-icon{color:#8541ae;background:#f4edf9}
+.pb-orders-stat--done .pb-orders-stat-icon{color:#1b7967;background:#e9f6f1}
+.pb-orders-stat-copy{display:flex;flex-direction:column;gap:2px;min-width:0}
+.pb-orders-stat-copy strong{font-size:1.48rem;line-height:1.13;font-weight:800;font-variant-numeric:tabular-nums}
+.pb-orders-stat-copy small{font-size:.84rem;color:var(--pb-muted)}
+.pb-orders-tools{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:0 0 15px}
+.pb-orders-tabs{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.pb-orders-tab{border:1px solid transparent;border-radius:9px;background:transparent;color:#615d66;padding:10px 14px;font:700 .86rem Arial,sans-serif;cursor:pointer;transition:background .2s,color .2s}
+.pb-orders-tab:hover{background:#eceaf0;color:#221f26}
+.pb-orders-tab[aria-pressed=true]{background:#18171b;color:white}
+.pb-orders-search{min-width:200px;max-width:290px;flex:1;display:flex;align-items:center;gap:9px;border:1px solid #e4e1e8;background:white;border-radius:11px;padding:0 13px;color:#706b74;transition:border-color .2s}
+.pb-orders-search:focus-within{border-color:#8443b2;box-shadow:0 0 0 3px rgba(132,67,178,.1)}
+.pb-orders-search input{width:100%;height:43px;border:0;outline:0;background:transparent;font:inherit;font-size:.86rem;color:var(--pb-ink);min-width:0}
+.pb-orders-results-label{font-size:.78rem;color:var(--pb-muted);margin:0 0 14px}
+.pagina-pedidos .lista-pedidos.pb-order-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px;align-items:start}
+.pagina-pedidos .lista-pedidos.pb-order-results.is-single{grid-template-columns:minmax(0,1fr)}
+.pagina-pedidos .lista-pedidos.pb-order-results.is-single .pb-order-card{max-width:850px}
+.pb-order-card{background:#fff;border:1px solid var(--pb-line);border-radius:17px;padding:22px;min-width:0;box-shadow:0 6px 24px rgba(21,17,28,.035)}
+.pb-order-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.pb-order-head-copy{min-width:0}
+.pb-order-type{display:inline-flex;align-items:center;gap:6px;background:#f2edf7;color:#6e3498;border-radius:999px;padding:5px 9px;font-size:.71rem;font-weight:800;margin:0 0 10px}
+.pb-order-type.is-normal{background:#f0f2f5;color:#3d4b5f}
+.pb-order-head h2{font-size:1.17rem;letter-spacing:-.015em;line-height:1.35;margin:0 0 6px;overflow-wrap:anywhere}
+.pb-order-date{color:var(--pb-muted);font-size:.81rem}
+.pb-order-status{display:inline-flex;align-items:center;gap:6px;flex:none;max-width:48%;font-size:.73rem;font-weight:750;border-radius:999px;padding:8px 10px;line-height:1.25;background:#f5edf9;color:#703499;text-align:center}
+.pb-order-status::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+.pb-order-status.is-done{background:#e9f6f0;color:#24745d}
+.pb-order-status.is-process{background:#edf3fb;color:#295e93}
+.pb-order-status.is-cancelled{background:#f9eded;color:#a54747}
+.pb-order-main{display:flex;align-items:center;gap:17px;margin:21px 0;min-width:0}
+.pb-order-preview{display:flex;align-items:center;justify-content:center;flex:none;position:relative;overflow:hidden;width:115px;height:125px;border:1px solid #f0eef0;border-radius:12px;background:#f8f7f8}
+.pb-order-preview img{display:block;width:100%;height:100%;object-fit:contain}
+.pb-order-preview i{font-size:32px;color:#9d97a3}
+.pb-order-watermark{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-24deg);white-space:nowrap;font-size:9px;font-weight:800;color:rgba(113,38,160,.52);text-shadow:0 1px 1px white;pointer-events:none}
+.pb-order-description{min-width:0;flex:1}
+.pb-order-description strong{display:block;font-size:.95rem;line-height:1.4;overflow-wrap:anywhere}
+.pb-order-description p{font-size:.86rem;line-height:1.5;color:#696572;margin-top:5px;overflow-wrap:anywhere}
+.pb-order-description .pb-order-note{font-size:.82rem;color:#5c5662}
+.pb-order-tracker{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin:0 0 20px}
+.pb-order-step{min-width:0;position:relative}
+.pb-order-step-bar{display:block;height:4px;background:#efedf1;border-radius:999px;margin-bottom:9px}
+.pb-order-step.is-complete .pb-order-step-bar{background:#29262d}
+.pb-order-step.is-current .pb-order-step-bar{background:#8b47b1}
+.pb-order-step small{font-size:.68rem;line-height:1.25;color:#9a95a0;display:block;overflow-wrap:anywhere}
+.pb-order-step.is-complete small{color:#4f4b54}
+.pb-order-step.is-current small{color:#6e3197;font-weight:800}
+.pb-order-bottom{border-top:1px solid #f0edf2;padding-top:17px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.pb-order-price{display:flex;flex-direction:column;gap:5px;min-width:0}
+.pb-order-price span{font-size:.77rem;color:#77707d}
+.pb-order-price strong{font-size:1.06rem;font-weight:800;overflow-wrap:anywhere}
+.pb-order-hint{color:#74707a;font-size:.73rem;text-align:right;line-height:1.4}
+.pb-order-details{margin-top:17px;border-top:1px solid #f0edf2;padding-top:12px}
+.pb-order-details summary{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;list-style:none;color:#27232d;font-size:.87rem;font-weight:800;padding:7px 0;user-select:none}
+.pb-order-details summary::-webkit-details-marker{display:none}
+.pb-order-details summary i{transition:transform .2s}
+.pb-order-details[open] summary i{transform:rotate(180deg)}
+.pb-order-detail-content{margin-top:15px;padding:16px;background:#faf9fb;border-radius:11px;font-size:.85rem;line-height:1.65;color:#57525b}
+.pb-order-detail-content p+p{margin-top:7px}
+.pb-order-detail-content b{color:#27232d}
+.pb-order-detail-content .pedido-items{margin:10px 0 0}
+.pb-order-images{display:flex;gap:11px;flex-wrap:wrap;margin-top:12px}
+.pb-order-images figure{width:102px}
+.pb-order-images img{width:100%;height:110px;object-fit:contain;border:1px solid #e6e2eb;background:white;border-radius:8px}
+.pb-order-images figcaption{font-size:.72rem;text-align:center;color:#716c77;margin-top:4px}
+.pb-orders-empty{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:52px 24px;border:1px solid var(--pb-line);border-radius:17px;background:#fff;gap:10px}
+.pb-orders-empty>i{font-size:32px;color:#8c6b9f;margin-bottom:5px}
+.pb-orders-empty h2{font-size:1.15rem}
+.pb-orders-empty p{font-size:.9rem;color:var(--pb-muted);line-height:1.55}
+.pb-orders-reset{border:1px solid #ded7e5;background:white;border-radius:9px;padding:9px 15px;font-weight:800;margin-top:8px;cursor:pointer}
+.pagina-pedidos :is(.pb-orders-tab,.pb-orders-reset,.boton-volver,.pb-order-details summary):focus-visible{outline:3px solid #9b5cc0;outline-offset:3px}
+.pagina-pedidos .estado-pedidos{margin-bottom:15px;border:1px solid #ece7f0;box-shadow:none;font-size:.88rem}
+@media(max-width:850px){.pagina-pedidos .lista-pedidos.pb-order-results{grid-template-columns:1fr}.pagina-pedidos .lista-pedidos.pb-order-results .pb-order-card{max-width:none}}
+@media(max-width:650px){.contenedor-pedidos{width:min(100% - 28px,1100px);padding-top:30px}.encabezado-pedidos{gap:16px}.pb-orders-overview{gap:8px}.pb-orders-stat{padding:13px 10px;gap:8px;flex-direction:column;text-align:center}.pb-orders-stat-icon{width:35px;height:35px;font-size:15px}.pb-orders-stat-copy strong{font-size:1.28rem}.pb-orders-stat-copy small{font-size:.73rem}.pb-orders-tools{align-items:stretch;flex-direction:column}.pb-orders-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.pb-orders-tab{padding:11px 8px}.pb-orders-search{min-width:0;max-width:none;width:100%;flex:auto}.pb-order-card{padding:17px}.pb-order-head{flex-wrap:wrap}.pb-order-status{max-width:100%}.pb-order-preview{width:92px;height:108px}.pb-order-main{gap:12px}.pb-order-description strong{font-size:.87rem}.pb-order-description p{font-size:.8rem}.pb-order-step small{font-size:.6rem}.pb-order-hint{max-width:125px}}
+@media(prefers-reduced-motion:reduce){.pagina-pedidos .boton-volver,.pb-orders-tab,.pb-order-details summary i{transition:none}}

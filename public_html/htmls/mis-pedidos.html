@@ -17,6 +17,7 @@
     <title>Mis pedidos | PixBen</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
     <link rel="stylesheet" href="../css/mis-pedidos.css?v=6">
+    <link rel="stylesheet" href="../css/mis-pedidos-plus.css?v=1">
     <link rel="stylesheet" href="../css/responsive-global.css?v=4">
     <link rel="stylesheet" href="../css/pwa-premium.css?v=2">
     <script src="../js/pwa-premium.js?v=4" defer></script>
@@ -89,6 +90,22 @@
             <div id="pedidosGuardadosInvitado" class="pedidos-guardados-invitado"></div>
         </section>
 
+        <section id="resumenPedidosCuenta" class="pb-orders-overview" aria-label="Resumen de pedidos" hidden>
+            <div class="pb-orders-stat"><span class="pb-orders-stat-icon"><i class="fa-solid fa-box" aria-hidden="true"></i></span><div class="pb-orders-stat-copy"><strong id="pbTotalPedidos">0</strong><small>Total de pedidos</small></div></div>
+            <div class="pb-orders-stat pb-orders-stat--pending"><span class="pb-orders-stat-icon"><i class="fa-regular fa-clock" aria-hidden="true"></i></span><div class="pb-orders-stat-copy"><strong id="pbPedidosPendientes">0</strong><small>En seguimiento</small></div></div>
+            <div class="pb-orders-stat pb-orders-stat--done"><span class="pb-orders-stat-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></span><div class="pb-orders-stat-copy"><strong id="pbPedidosCompletados">0</strong><small>Finalizados</small></div></div>
+        </section>
+        <div id="filtrosPedidos" class="pb-orders-tools" hidden>
+            <div class="pb-orders-tabs" aria-label="Filtrar pedidos">
+                <button type="button" class="pb-orders-tab" data-pb-filtro="todos" aria-pressed="true">Todos</button>
+                <button type="button" class="pb-orders-tab" data-pb-filtro="cotizaciones" aria-pressed="false">Cotizaciones</button>
+                <button type="button" class="pb-orders-tab" data-pb-filtro="proceso" aria-pressed="false">En proceso</button>
+                <button type="button" class="pb-orders-tab" data-pb-filtro="finalizados" aria-pressed="false">Finalizados</button>
+                <button type="button" class="pb-orders-tab" data-pb-filtro="cancelados" aria-pressed="false">Cancelados</button>
+            </div>
+            <label class="pb-orders-search"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input id="buscarPedido" type="search" autocomplete="off" placeholder="Buscar pedido o producto" aria-label="Buscar pedido o producto"></label>
+        </div>
+        <p id="cantidadResultados" class="pb-orders-results-label" aria-live="polite" hidden></p>
         <p id="estadoPedidos" class="estado-pedidos">Cargando pedidos...</p>
         <section id="listaPedidos" class="lista-pedidos" aria-live="polite"></section>
     </main>
@@ -96,7 +113,8 @@
 <script src="../js/config.js?v=20"></script>
 <script src="../js/header-global.js?v=3"></script>
 <script src="../js/analitica.js?v=3"></script>
-<script src="../js/paginas/mis-pedidos.js?v=8"></script>
+<script src="../js/paginas/mis-pedidos-plus.js?v=1"></script>
+<script src="../js/paginas/mis-pedidos.js?v=9"></script>
     <script src="../js/eventos-html.js?v=3"></script>
 <script src="../js/responsive-menu.js?v=4"></script>
 <script src="../js/accessibility.js?v=1"></script>
