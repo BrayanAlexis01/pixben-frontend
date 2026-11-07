@@ -630,7 +630,13 @@
             renderTemplateCards();
             if (templateFeedback) templateFeedback.textContent=
                 pack.items.length+" plantillas disponibles. Puedes elegir o descargar una muestra.";
-            templateSearch?.focus({preventScroll:true});
+            // No activar el teclado virtual al abrir la biblioteca en teléfonos.
+            // El cliente solo escribe cuando toca explícitamente el buscador.
+            if (window.matchMedia("(min-width:821px)").matches) {
+                templateSearch?.focus({preventScroll:true});
+            } else {
+                closeLibraryButton?.focus({preventScroll:true});
+            }
         } catch(err) {
             if (templateFeedback) templateFeedback.textContent=
                 err.message||"No pudimos cargar la biblioteca. Intenta de nuevo.";
