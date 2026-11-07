@@ -15,15 +15,15 @@ const bases = sandbox.window.PixBenBlankBases;
 assert.ok(bases,"Faltan los mockups de PixBen");
 assert.equal(bases.fits.length,3);
 assert.equal(bases.palette.length,9);
-assert.match(html,/personaliza-bases-lisas\.js\?v=2/,"Se debe invalidar la caché del JS nuevo");
+assert.match(html,/personaliza-bases-lisas\.js\?v=3/,"Se debe invalidar la caché del JS nuevo");
 assert.match(html,/personaliza-desktop\.js\?v=6/,"Se debe invalidar la caché del JS del móvil");
 assert.doesNotMatch(html,/id="pbTemplateSearch"[^>]*autofocus/,"La búsqueda no debe iniciar con autofocus");
 
 let validated=0;
 for(const {fit} of bases.fits) for(const {hex} of bases.palette) for(const side of ["frente","espalda"]){
     const url = bases.image(fit,side,hex);
-    assert.match(url,/^\.\.\/assets\/mockups\/[\w-]+\.webp$/);
-    const filename = path.resolve(path.dirname(htmlPath),url);
+    assert.match(url,/^\.\.\/assets\/mockups\/[\w-]+\.webp\?v=3$/);
+    const filename = path.resolve(path.dirname(htmlPath),url.split("?")[0]);
     assert.ok(filename.startsWith(root),"Ruta fuera del proyecto");
     const file=fs.readFileSync(filename);
     assert.equal(file.toString("ascii",0,4),"RIFF",filename);
@@ -32,6 +32,9 @@ for(const {fit} of bases.fits) for(const {hex} of bases.palette) for(const side 
     validated++;
 }
 assert.equal(validated,54,"Deben existir todas las combinaciones de cortes, lados y colores");
+// Los tres cortes siguen siendo distintos, con los mismos nueve colores de catálogo.
+assert.match(bases.fits.find(x=>x.fit==="boxy").descripcion,/corto/i);
+assert.match(bases.fits.find(x=>x.fit==="oversize").descripcion,/hombros/i);
 const openBlock=desktop.slice(desktop.indexOf('libraryButton?.addEventListener("click"'),
     desktop.indexOf('templateSearch?.addEventListener("input"'));
 assert.ok(openBlock.includes('window.matchMedia("(min-width:821px)")'),
