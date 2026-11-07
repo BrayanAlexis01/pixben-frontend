@@ -137,6 +137,7 @@
     const vistaManualPorLado = {frente: false, espalda: false};
     let guiasMagneticasActivas = true;
     let capturandoVista = false;
+    let secuenciaCargaBase = 0;
 
     // API de alcance limitado para la interfaz profesional. El editor Fabric,
     // el borrador, el historial y las cotizaciones permanecen en este módulo.
@@ -632,28 +633,38 @@
 
     async function reemplazarProductoBase(url, anterior) {
         if (!url) return;
+        const version = ++secuenciaCargaBase;
         const transformacion = anterior ? {
             left: anterior.left, top: anterior.top, scaleX: anterior.scaleX, scaleY: anterior.scaleY,
             angle: anterior.angle, flipX: anterior.flipX, flipY: anterior.flipY,
             originX: anterior.originX || "center", originY: anterior.originY || "center"
         } : null;
-        if (anterior) canvas.remove(anterior);
-
+        const anchoAnterior = Number(anterior?.width || 0);
+        const altoAnterior = Number(anterior?.height || 0);
+        // Mantener el polo anterior visible hasta que cargue la fotografía nueva.
+        // Si el cliente cambia colores rápido, solo se aplica la última selección.
         await new Promise(resolve => {
             fabric.Image.fromURL(url, imagen => {
-                if (!imagen) return resolve();
-                imagen.set({dataTipo: "producto-base", crossOrigin: "anonymous", originX: "center", originY: "center"});
-                if (transformacion) imagen.set(transformacion);
-                else {
+                if (!imagen || version !== secuenciaCargaBase) return resolve();
+                imagen.set({dataTipo: "producto-base", crossOrigin: "anonymous",
+                    originX: "center", originY: "center"});
+                if (transformacion) {
+                    imagen.set({
+                        ...transformacion,
+                        scaleX: transformacion.scaleX * (anchoAnterior > 0 ? anchoAnterior / imagen.width : 1),
+                        scaleY: transformacion.scaleY * (altoAnterior > 0 ? altoAnterior / imagen.height : 1)
+                    });
+                } else {
                     imagen.set({left: canvas.width / 2, top: canvas.height / 2});
                     const escala = Math.min((canvas.width * 0.92) / imagen.width, (canvas.height * 0.92) / imagen.height);
                     imagen.scale(Number.isFinite(escala) && escala > 0 ? escala : 1);
                 }
+                if (anterior && canvas.getObjects().includes(anterior)) canvas.remove(anterior);
                 canvas.add(imagen);
                 configurarInteraccionBase(imagen);
                 canvas.sendToBack(imagen);
                 imagen.setCoords();
-                canvas.renderAll();
+                canvas.requestRenderAll();
                 resolve();
             }, {crossOrigin: "anonymous"});
         });
