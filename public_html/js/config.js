@@ -303,7 +303,11 @@ function guardarUsuarioSesion(datos) {
     if (!usuarioNuevo) return null;
 
     const actual = obtenerUsuarioSesion();
-    if (!usuarioNuevo.token && actual?.token) usuarioNuevo.token = actual.token;
+    // Nunca reutilizar el token de otra cuenta al refrescar los datos del perfil.
+    if (!usuarioNuevo.token && actual?.token
+            && actual.id === usuarioNuevo.id && actual.rol === usuarioNuevo.rol) {
+        usuarioNuevo.token = actual.token;
+    }
 
     const token = usuarioNuevo.token;
     if (usuarioNuevo.rol === "admin") {
@@ -365,6 +369,73 @@ function crearReferenciaUsuario(usuario = obtenerUsuarioSesion()) {
 
 function tieneSesionValida(usuario = obtenerUsuarioSesion()) {
     return Boolean(usuario?.id && usuario?.token);
+}
+
+// Por seguridad, la sesión del administrador se guarda solo en sessionStorage.
+// Cuando se abre una pestaña nueva, sessionStorage puede estar vacío aunque
+// la pestaña original conserve una sesión válida. Sincronizarla únicamente
+// entre pestañas del mismo origen, no persistir tokens admin en localStorage.
+const PIXBEN_ADMIN_CHANNEL_NAME = "pixben-admin-tab-session-v1";
+const pixbenAdminChannel = (() => {
+    try {
+        return typeof BroadcastChannel === "function"
+            ? new BroadcastChannel(PIXBEN_ADMIN_CHANNEL_NAME) : null;
+    } catch {
+        return null;
+    }
+})();
+
+if (pixbenAdminChannel) {
+    pixbenAdminChannel.addEventListener("message", event => {
+        const solicitud = event.data;
+        if (solicitud?.tipo !== "solicitar-sesion-admin"
+                || typeof solicitud.nonce !== "string" || solicitud.nonce.length > 120) return;
+        const presente = obtenerUsuarioSesion();
+        if (presente?.rol !== "admin" || !tieneSesionValida(presente)
+                || presente.id !== solicitud.usuarioId) return;
+        pixbenAdminChannel.postMessage({
+            tipo: "compartir-sesion-admin",
+            nonce: solicitud.nonce,
+            usuarioId: presente.id,
+            token: presente.token
+        });
+    });
+}
+
+async function recuperarSesionPixben() {
+    const existente = obtenerUsuarioSesion();
+    if (tieneSesionValida(existente)) return existente;
+    if (existente?.rol !== "admin" || !existente.id || !pixbenAdminChannel) return null;
+
+    const nonce = typeof crypto?.randomUUID === "function"
+        ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    return new Promise(resolve => {
+        let terminado = false;
+        let plazo;
+        function finalizar(usuario) {
+            if (terminado) return;
+            terminado = true;
+            clearTimeout(plazo);
+            pixbenAdminChannel.removeEventListener("message", recibir);
+            resolve(usuario);
+        }
+        function recibir(event) {
+            const dato = event.data;
+            if (dato?.tipo !== "compartir-sesion-admin"
+                    || dato.nonce !== nonce || dato.usuarioId !== existente.id
+                    || typeof dato.token !== "string" || !dato.token) return;
+            sessionStorage.setItem(PIXBEN_TOKEN_ADMIN_KEY, dato.token);
+            const usuario = obtenerUsuarioSesion();
+            if (!tieneSesionValida(usuario)) return;
+            window.dispatchEvent(new Event("pixben:sesion-recuperada"));
+            finalizar(usuario);
+        }
+        pixbenAdminChannel.addEventListener("message", recibir);
+        plazo = setTimeout(() => finalizar(null), 600);
+        pixbenAdminChannel.postMessage({
+            tipo: "solicitar-sesion-admin", nonce, usuarioId: existente.id
+        });
+    });
 }
 
 function cabecerasSesion(headersIniciales = {}) {
