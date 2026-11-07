@@ -21,3 +21,5 @@ jobs:
         run: node tests/production-audit.cjs
       - name: Verify photo bases and mobile template focus
         run: node tests/photo-mockups-mobile.cjs
+      - name: Verify shirt-fit color preservation
+        run: node tests/studio-color-preservation.cjs
