@@ -15,7 +15,7 @@
             mostrar("btnLogin",true); mostrar("btnRegistro",true); mostrar("btnPerfil",false); mostrar("btnHistorial",false); mostrar("btnFavoritos",false); mostrar("btnCerrarSesion",false);
             const pedidos=document.getElementById("btnPedidos"); if(pedidos) pedidos.textContent="Consultar pedido";
         }
-        mostrar("btnAdmin",Boolean(usuario&&usuario.rol==="admin"));
+        mostrar("btnAdmin",Boolean(tieneSesionValida(usuario) && usuario.rol==="admin"));
         window.toggleMenuUsuario=function(){
             const abierto=menu.classList.toggle("abierto");
             const boton=document.getElementById("btnUsuarioMenu");
@@ -24,6 +24,8 @@
         window.cerrarSesion=async function(){
             if(typeof cerrarSesionPixben==="function") await cerrarSesionPixben(window.location.href);
         };
+        if (menu.dataset.pbHeaderBound === "true") return;
+        menu.dataset.pbHeaderBound = "true";
         document.addEventListener("click",e=>{
             if(!e.target.closest(".usuario-menu")){
                 menu.classList.remove("abierto");
@@ -33,4 +35,5 @@
         document.addEventListener("keydown",e=>{if(e.key==="Escape"){menu.classList.remove("abierto");document.getElementById("btnUsuarioMenu")?.setAttribute("aria-expanded","false");}});
     }
     if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",iniciar);else iniciar();
+    window.addEventListener("pixben:sesion-recuperada",iniciar);
 })();
