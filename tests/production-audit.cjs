@@ -15,7 +15,7 @@ assert.match(editor, /\/productos\/personalizables/, "El personalizador debe con
 assert.match(editor, /personalizable\s*===\s*true/, "No incluir artículos deshabilitados por el administrador");
 assert.doesNotMatch(editor, /fetchConReintentos\(\x60\$\{API_URL\}\/productos\x60/,
   "No descargar todo el catálogo para poblar un solo selector");
-assert.match(html, /personaliza\.js\?v=23/, "Debe invalidarse la versión JS al cambiar el endpoint");
+assert.match(html, /personaliza\.js\?v=24/, "Debe invalidarse la versión JS al cambiar el endpoint");
 assert.match(worker, /CACHE_IMAGENES/, "Separar caché de imágenes de archivos esenciales offline");
 assert.match(worker, /MAX_RECURSOS_CACHE\s*=\s*100/, "Limitar el crecimiento del almacenamiento offline");
 assert.doesNotMatch(worker, /actualizarEnSegundoPlano\(/,
