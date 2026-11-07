@@ -28,7 +28,7 @@ const item='<article class="producto-carrito">'+
     '<div class="pb-cart-item-controls"><div class="cantidad-producto"><input type="number" value="1" aria-label="Cantidad"></div>'+
     '<div class="pb-cart-line-total"><small>Subtotal</small><strong>S/ 49.00</strong></div>'+
     '<button class="btn-eliminar">Eliminar</button></div></article>';
-const target=/<div\\b[^>]*\\bid="listaCarrito"[^>]*>/;
+const target=/<div\b[^>]*\bid="listaCarrito"[^>]*>/;
 cartMain=cartMain.replace(target,match=>match+item);
 assert.ok(cartMain.includes('Polo de prueba'),"Debe inyectarse una tarjeta de producto en el carrito dinámico");
 const fixtures=[
