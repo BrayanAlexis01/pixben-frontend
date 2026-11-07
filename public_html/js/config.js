@@ -407,7 +407,7 @@ async function recuperarSesionPixben() {
     if (tieneSesionValida(existente)) return existente;
     if (existente?.rol !== "admin" || !existente.id || !pixbenAdminChannel) return null;
 
-    const nonce = typeof crypto?.randomUUID === "function"
+    const nonce = typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
         ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
     return new Promise(resolve => {
         let terminado = false;
