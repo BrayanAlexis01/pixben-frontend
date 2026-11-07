@@ -19,3 +19,5 @@ jobs:
         run: node tests/orders-smoke.cjs
       - name: Verify performance and privacy contract
         run: node tests/production-audit.cjs
+      - name: Verify photo bases and mobile template focus
+        run: node tests/photo-mockups-mobile.cjs
