@@ -1,0 +1,49 @@
+name: Refresh flat garment mockups for PixBen
+on:
+  push:
+    branches:
+      - fix/studio-mockups-color-preserve-20261106
+    paths:
+      - tools/rebuild_pixben_mockups.py
+permissions:
+  contents: write
+jobs:
+  build-mockups:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install image processing
+        run: python -m pip install --disable-pip-version-check pillow numpy
+      - name: Rebuild garment images
+        run: python tools/rebuild_pixben_mockups.py
+      - name: Validate output
+        run: |
+          python - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          p=Path('public_html/assets/mockups')
+          names=list(p.glob('*.webp'))
+          assert len(names)==54, f'Expected 54 photos, got {len(names)}'
+          for x in names:
+              with Image.open(x) as im:
+                  assert im.size == (480,600), str(x)
+                  im.verify()
+          print('Validated',len(names),'WebP images')
+          PY
+      - name: Commit photo improvements to feature branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public_html/assets/mockups
+          if git diff --cached --quiet; then
+            echo "Mockups already up to date"
+          else
+            git commit -m "assets: differentiated boxy/oversize fits, clean shadows and white shirt contrast"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
