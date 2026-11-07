@@ -34,6 +34,12 @@
     Cache-Control = "no-cache, no-store, must-revalidate"
 
 [[headers]]
+  for = "/htmls/mis-pedidos.html"
+  [headers.values]
+    Cache-Control = "no-store"
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
   for = "/htmls/admin.html"
   [headers.values]
     Cache-Control = "no-store"
