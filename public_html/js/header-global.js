@@ -36,4 +36,8 @@
     }
     if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",iniciar);else iniciar();
     window.addEventListener("pixben:sesion-recuperada",iniciar);
+    // Mantener un encabezado coherente también en pestañas nuevas.
+    if (typeof recuperarSesionPixben === "function") {
+        recuperarSesionPixben().catch(() => {});
+    }
 })();
