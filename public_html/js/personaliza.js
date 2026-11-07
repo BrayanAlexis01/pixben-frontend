@@ -1,7 +1,7 @@
 "use strict";
 
 (() => {
-    const usuario = obtenerUsuarioSesion();
+    let usuario = obtenerUsuarioSesion();
     const canvas = new fabric.Canvas("editorCanvas", {
         preserveObjectStacking: true,
         selection: true,
@@ -1875,13 +1875,17 @@
             <img src="${opcion.imagen}" alt="Datos para ${opcion.titulo}">`;
     }
 
+    async function verificarSesionParaCotizar() {
+        usuario = await recuperarSesionPixben();
+        if (tieneSesionValida(usuario)) return true;
+        await guardarBorradorAhora();
+        mostrarEstado("Inicia sesión para enviar tu diseño. Guardamos tu avance para que puedas continuar después.", true);
+        window.location.href = "login.html?return=personaliza.html";
+        return false;
+    }
+
     async function abrirDisenoAsistido() {
-        if (!usuario?.id) {
-            await guardarBorradorAhora();
-            alert("Para solicitar el trabajo del diseñador debes iniciar sesión. Tu borrador quedará guardado.");
-            window.location.href = "login.html";
-            return;
-        }
+        if (!await verificarSesionParaCotizar()) return;
         const idea = document.getElementById("ideaDisenador");
         if (!idea.value.trim()) idea.value = document.getElementById("notasPedido").value.trim();
         document.getElementById("contadorIdeaDisenador").textContent = `${idea.value.length}/800`;
@@ -1898,11 +1902,7 @@
     }
 
     async function enviarSolicitudDisenoAsistido() {
-        if (!usuario?.id) {
-            await guardarBorradorAhora();
-            window.location.href = "login.html";
-            return;
-        }
+        if (!await verificarSesionParaCotizar()) return;
 
         const idea = document.getElementById("ideaDisenador").value.trim();
         const metodoPagoDiseno = document.getElementById("metodoPagoDiseno").value;
@@ -2011,19 +2011,29 @@
         return dataUrl;
     }
 
+    // Leer la imagen generada en memoria, sin fetch(data:).
+    // La CSP permite conexiones al backend pero bloquea fetch hacia URLs data:.
+    // Por eso la conversión anterior fallaba con "Failed to fetch" antes de cotizar.
+    function imagenDataUrlABlob(dataUrl) {
+        const resultado = /^data:(image\/(?:png|jpeg|webp));base64,([A-Za-z0-9+/=]+)$/.exec(dataUrl);
+        if (!resultado) throw new Error("No se pudo preparar la imagen del estampado.");
+        const datos = atob(resultado[2]);
+        const bytes = new Uint8Array(datos.length);
+        for (let i = 0; i < datos.length; i++) bytes[i] = datos.charCodeAt(i);
+        const archivo = new Blob([bytes], {type: resultado[1]});
+        if (archivo.size > 8 * 1024 * 1024) {
+            throw new Error("La vista previa supera 8 MB. Reduce las imágenes del diseño antes de cotizar.");
+        }
+        return archivo;
+    }
+
     async function exportarLadoBlob(lado) {
-        const dataUrl = await exportarLadoDataUrl(lado);
-        return fetch(dataUrl).then(respuesta => respuesta.blob());
+        return imagenDataUrlABlob(await exportarLadoDataUrl(lado));
     }
 
     async function enviarSolicitud() {
         cerrarVistaPrevia();
-        if (!usuario?.id) {
-            alert("Debes iniciar sesión para enviar una solicitud personalizada. Tu diseño queda guardado como borrador.");
-            await guardarBorradorAhora();
-            window.location.href = "login.html";
-            return;
-        }
+        if (!await verificarSesionParaCotizar()) return;
         guardarEstadoActual();
         const tieneFrente = contarObjetos(estados.frente) > 0;
         const tieneEspalda = contarObjetos(estados.espalda) > 0;
@@ -2058,27 +2068,42 @@
             if (!respuesta.ok) throw new Error(await obtenerMensajeError(respuesta));
             const solicitud = await respuesta.json();
 
-            const respuestaCarrito = await fetchConSesion(`${API_URL}/carrito`, {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({
-                    productoId: productoActual?.id || null,
-                    ...crearReferenciaUsuario(usuario),
-                    cantidad: Number(cantidadProducto.value),
-                    talla: datos.talla,
-                    color: datos.color,
-                    personalizado: true,
-                    pedidoPersonalizadoId: solicitud.id
-                })
-            });
-            if (!respuestaCarrito.ok) throw new Error("La solicitud se guardó, pero no pudo agregarse al carrito");
+            // Si la cotización ya existe, un fallo posterior del carrito NO debe
+            // presentarse como fallo del envío ni invitar a crear un duplicado.
+            let agregadoAlCarrito = false;
+            try {
+                const respuestaCarrito = await fetchConSesion(`${API_URL}/carrito`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        productoId: productoActual?.id || null,
+                        ...crearReferenciaUsuario(usuario),
+                        cantidad: Number(cantidadProducto.value),
+                        talla: datos.talla,
+                        color: datos.color,
+                        personalizado: true,
+                        pedidoPersonalizadoId: solicitud.id
+                    })
+                });
+                agregadoAlCarrito = respuestaCarrito.ok;
+            } catch (errorCarrito) {
+                console.warn("Cotización guardada, pero no se sincronizó el carrito:", errorCarrito);
+            }
 
             await borrarBorrador();
-            mostrarEstado("Diseño enviado. Te avisaremos cuando PixBen termine la cotización.", false, true);
-            setTimeout(() => { window.location.href = "carrito de compras.html"; }, 1300);
+            if (agregadoAlCarrito) {
+                mostrarEstado("Diseño enviado. Te avisaremos cuando PixBen termine la cotización.", false, true);
+                setTimeout(() => { window.location.href = "carrito de compras.html"; }, 1300);
+            } else {
+                mostrarEstado("Tu solicitud se registró correctamente, pero no se pudo agregar al carrito. Revísala en Mis pedidos y no la envíes otra vez.", false, true);
+                setTimeout(() => { window.location.href = "mis-pedidos.html"; }, 3000);
+            }
         } catch (error) {
             console.error(error);
-            mostrarEstado(error.message || "No se pudo enviar la solicitud", true);
+            const mensaje = error instanceof TypeError && /fetch|network|conexi[oó]n/i.test(error.message)
+                ? "No se pudo conectar con PixBen. Revisa Mis pedidos antes de intentar enviar otra vez para evitar solicitudes duplicadas."
+                : error.message || "No se pudo enviar la solicitud";
+            mostrarEstado(mensaje, true);
         } finally {
             botonSolicitar.disabled = false;
             botonSolicitar.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Enviar diseño para cotizar';

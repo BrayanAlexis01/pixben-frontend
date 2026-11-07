@@ -23,3 +23,5 @@ jobs:
         run: node tests/photo-mockups-mobile.cjs
       - name: Verify shirt-fit color preservation
         run: node tests/studio-color-preservation.cjs
+      - name: Quote export and session regression
+        run: node tests/quote-profile-session.cjs

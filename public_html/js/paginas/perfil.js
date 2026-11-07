@@ -1,12 +1,18 @@
 "use strict";
 
-let usuarioPerfil = obtenerUsuarioSesion();
-if (!tieneSesionValida(usuarioPerfil)) {
-    alert("Debes iniciar sesión para ver tu perfil");
-    window.location.replace("login.html");
-} else {
+let usuarioPerfil = null;
+(async function cargarSesionDePerfil() {
+    // Permitir recuperar la sesión de administrador desde otra pestaña abierta.
+    usuarioPerfil = await recuperarSesionPixben();
+    if (!tieneSesionValida(usuarioPerfil)) {
+        window.location.replace("login.html?return=perfil.html");
+        return;
+    }
     iniciarPerfil();
-}
+})().catch(error => {
+    console.warn("No se pudo verificar la sesión del perfil", error);
+    window.location.replace("login.html?return=perfil.html");
+});
 
 function iniciarPerfil() {
     renderizarUsuario(usuarioPerfil);
@@ -26,6 +32,9 @@ async function cargarUsuarioActualizado() {
         renderizarUsuario(usuarioPerfil);
     } catch (error) {
         console.warn("No se pudo actualizar el perfil desde el servidor", error);
+        if (!tieneSesionValida(obtenerUsuarioSesion())) {
+            window.location.replace("login.html?return=perfil.html");
+        }
     }
 }
 
