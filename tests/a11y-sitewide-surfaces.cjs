@@ -12,6 +12,7 @@ const privacyHTML=read("public_html/htmls/politica de privacidad.html");
 const faqHTML=read("public_html/htmls/preguntas frecuentes.html");
 const shippingHTML=read("public_html/htmls/politica de envios.html");
 const cartCSS=read("public_html/css/css carrito de compras.css");
+const premiumCartCSS=read("public_html/css/carrito-pixben-premium.css");
 const legalCSS=read("public_html/css/politicas.css");
 const shippingCSS=read("public_html/css/css politica de envios.css");
 
@@ -22,20 +23,20 @@ function mainFrom(html) {
 }
 let cartMain=mainFrom(cartHTML);
 const item='<article class="producto-carrito">'+
-    '<img alt="Polo de prueba" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==">'+
-    '<div class="producto-info"><h3>Polo Money Crazy</h3>'+
-    '<p>Color: <b>Beige crema / Hueso</b></p><p>Talla: M</p>'+
-    '<p class="precio">S/ 49.00</p><p class="subtotal-linea">Subtotal: S/ 49.00</p></div>'+
-    '<div class="cantidad-producto"><input type="number" value="1" aria-label="Cantidad"></div>'+
-    '<button class="btn-eliminar">Eliminar</button></article>';
-cartMain=cartMain.replace(/(<div class="lista-carrito" id="listaCarrito">)/,'$1'+item);
-assert.ok(cartMain.includes('Polo Money Crazy'));
+    '<div class="pb-cart-image"><img alt="Polo de prueba" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></div>'+
+    '<div class="producto-info"><h3>Polo de prueba</h3><div class="pb-cart-price-line"><p class="precio">S/ 49.00</p></div></div>'+
+    '<div class="pb-cart-item-controls"><div class="cantidad-producto"><input type="number" value="1" aria-label="Cantidad"></div>'+
+    '<div class="pb-cart-line-total"><small>Subtotal</small><strong>S/ 49.00</strong></div>'+
+    '<button class="btn-eliminar">Eliminar</button></div></article>';
+const target=/<div\\b[^>]*\\bid="listaCarrito"[^>]*>/;
+cartMain=cartMain.replace(target,match=>match+item);
+assert.ok(cartMain.includes('Polo de prueba'),"Debe inyectarse una tarjeta de producto en el carrito dinámico");
 const fixtures=[
- {name:"Carrito",html:cartMain,css:cartCSS+"\n"+responsive,selectors:[
+ {name:"Carrito",html:cartMain,css:cartCSS+"\n"+premiumCartCSS+"\n"+responsive,selectors:[
     [".carrito-titulo p",null],
     [".producto-carrito",null],
     [".producto-info h3",null],
-    [".producto-info .subtotal-linea",null],
+    [".pb-cart-line-total strong",null],
     [".resumen-carrito h2",null],
     ["#envioResumen",null],
     [".resumen-carrito .btn-checkout",null],
