@@ -31,7 +31,11 @@ async function iniciarSesion() {
         if (!usuario) throw new Error("La respuesta de inicio de sesión no es válida");
 
         alert(`Bienvenido ${obtenerNombreVisible(usuario)}`);
-        window.location.href = usuario.rol === "admin" ? "admin.html" : "../index.html";
+        // Volver al perfil o al editor que solicitó iniciar sesión.
+        const retorno = new URLSearchParams(window.location.search).get("return");
+        const rutasPermitidas = new Set(["perfil.html", "personaliza.html"]);
+        window.location.href = rutasPermitidas.has(retorno)
+            ? retorno : usuario.rol === "admin" ? "admin.html" : "../index.html";
     } catch (error) {
         console.error(error);
         alert(error.message);
