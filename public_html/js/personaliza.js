@@ -412,16 +412,22 @@
 
     async function aplicarProductoSeleccionado(reiniciarDiseno = true) {
         const seleccionado = String(productoSelect.value);
+        // Un cambio entre cortes lisos NO cambia el color elegido por el cliente.
+        // Los productos del catálogo siguen teniendo sus variantes independientes.
+        const colorAnterior = esBaseLisa() ? colorProducto.value : null;
         productoActual = seleccionado.startsWith("base:")
             ? seleccionarBaseLisa(seleccionado.slice(5))
             : productos.find(p => String(p.id) === seleccionado) || null;
+        const colorConservado = esBaseLisa() && basesLisas.palette.some(
+            color => normalizarTexto(color.nombre) === normalizarTexto(colorAnterior)
+        ) ? colorAnterior : null;
         if (reiniciarDiseno) reiniciarEstadosEditor();
         actualizarTarjetasBase();
         editarProductoBase.checked = false;
         editarProductoBase.disabled = !productoActual;
         document.getElementById("btnRestablecerBase").disabled = !productoActual;
 
-        await prepararProductoActual();
+        await prepararProductoActual(colorConservado);
         ladoActual = "frente";
         actualizarBotonesLado();
         await cargarLado("frente", true);
@@ -442,11 +448,14 @@
         vistaManualPorLado.espalda = false;
     }
 
-    async function prepararProductoActual() {
+    async function prepararProductoActual(colorPreferido = null) {
         variantesColor = productoActual && !esBaseLisa() ? obtenerVariantesColorProducto(productoActual) : [];
         galeriaProducto = [];
         if(esBaseLisa()){
-            const hex = basesLisas.palette[0].hex;
+            const seleccionado = basesLisas.palette.find(
+                color => normalizarTexto(color.nombre) === normalizarTexto(colorPreferido)
+            ) || basesLisas.palette[0];
+            const hex = seleccionado.hex;
             galeriaProducto = [basesLisas.image(productoActual.fit,"frente",hex),
                 basesLisas.image(productoActual.fit,"espalda",hex)];
             baseImagenIndicePorLado.frente = 0;
@@ -456,13 +465,13 @@
             catch { galeriaProducto = [obtenerUrlImagen(productoActual.imagen)].filter(Boolean); }
         }
 
-        await renderizarColoresProducto();
+        await renderizarColoresProducto(colorPreferido);
         renderizarTallasProducto();
         renderizarVistasProducto();
         actualizarStockPersonalizable();
     }
 
-    async function renderizarColoresProducto() {
+    async function renderizarColoresProducto(colorPreferido = null) {
         const contenedor = document.getElementById("coloresProductoVisual");
         const grupoColorLibre = document.getElementById("grupoColorLibre");
         let opciones = esBaseLisa() ? basesLisas.palette.map(c => ({...c, variante:false}))
@@ -480,8 +489,11 @@
         contenedor.querySelectorAll(".color-visual:not(:disabled)").forEach(boton => boton.addEventListener("click", () => seleccionarColorVisual(boton)));
         grupoColorLibre.hidden = variantesColor.length > 0 || esBaseLisa();
 
-        const primero = contenedor.querySelector(".color-visual:not(:disabled)");
-        if (primero) await seleccionarColorVisual(primero, true);
+        const habilitados = [...contenedor.querySelectorAll(".color-visual:not(:disabled)")];
+        const elegido = habilitados.find(boton =>
+            normalizarTexto(boton.dataset.color) === normalizarTexto(colorPreferido)
+        ) || habilitados[0];
+        if (elegido) await seleccionarColorVisual(elegido, true);
         else {
             colorProducto.value = productoActual ? "POR_DEFINIR" : "Blanco";
             colorFondoLienzo.value = "#ffffff";
