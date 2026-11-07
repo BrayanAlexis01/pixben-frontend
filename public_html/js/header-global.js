@@ -6,7 +6,7 @@
         const usuario=typeof obtenerUsuarioSesion==="function"?obtenerUsuarioSesion():null;
         const mostrar=(id,visible=true)=>{const el=document.getElementById(id);if(!el)return;el.classList.toggle("sesion-oculto",!visible);el.setAttribute("aria-hidden",visible?"false":"true");};
         const nombre=document.getElementById("nombreUsuarioHeader");
-        if(usuario){
+        if(usuario && typeof tieneSesionValida==="function" && tieneSesionValida(usuario)){
             if(nombre) nombre.textContent=typeof obtenerNombreVisible==="function"?obtenerNombreVisible(usuario):(usuario.nombre||usuario.alias||"");
             mostrar("btnLogin",false); mostrar("btnRegistro",false);
             mostrar("btnPerfil",true); mostrar("btnPedidos",true); mostrar("btnHistorial",true); mostrar("btnFavoritos",true); mostrar("btnCerrarSesion",true);
