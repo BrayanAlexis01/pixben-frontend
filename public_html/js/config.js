@@ -312,9 +312,11 @@ function guardarUsuarioSesion(datos) {
     const token = usuarioNuevo.token;
     if (usuarioNuevo.rol === "admin") {
         localStorage.removeItem(PIXBEN_TOKEN_CLIENTE_KEY);
+        sessionStorage.removeItem(PIXBEN_TOKEN_ADMIN_KEY);
         if (token) sessionStorage.setItem(PIXBEN_TOKEN_ADMIN_KEY, token);
     } else {
         sessionStorage.removeItem(PIXBEN_TOKEN_ADMIN_KEY);
+        localStorage.removeItem(PIXBEN_TOKEN_CLIENTE_KEY);
         if (token) localStorage.setItem(PIXBEN_TOKEN_CLIENTE_KEY, token);
     }
 
