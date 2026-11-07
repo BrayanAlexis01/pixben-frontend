@@ -25,7 +25,7 @@
         const corte = fitsPermitidos.has(fit) ? fit : "clasico";
         const lado = side === "espalda" ? "espalda" : "frente";
         const color = tonos.get(String(hex || "").toLowerCase()) || "negro";
-        return `../assets/mockups/${corte}-${lado}-${color}.webp`;
+        return `../assets/mockups/${corte}-${lado}-${color}.webp?v=3`;
     }
     function reference(fit) {
         const corte = fits.find(item => item.fit === fit) || fits[0];
