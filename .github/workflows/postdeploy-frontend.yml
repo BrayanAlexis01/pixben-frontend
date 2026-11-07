@@ -41,15 +41,18 @@ jobs:
               "css/accessibility.css?v=4": "CONTRASTE ALTO PREMIUM",
               "css/accessibility.css?v=6": "CONTRASTE ALTO UNIFICADO",
               "index.html": "accessibility.css?v=6",
-              "htmls/contacto.html": "faq-cta-link",
+              "htmls/contacto.html": "Ir a preguntas frecuentes",
               "htmls/favoritos.html": "cuenta-listados.css?v=7",
               "js/paginas/favoritos.js?v=7": "productos/por-ids",
               "css/cuenta-listados.css?v=7": "tarjeta-favorito-no-disponible",
               "htmls/perfil.html": "accessibility.css?v=6",
-              "htmls/productos.html": "productos.js?v=12",
+              "htmls/productos.html": "productos.js?v=14",
               "js/productos.js?v=12": "primeraPagina.content",
               "htmls/mis-pedidos.html": "mis-pedidos.js?v=8",
-              "htmls/personaliza.html": "accessibility.css?v=6",
+              "htmls/personaliza.html": "personaliza-bases-lisas.js?v=2",
+              "js/personaliza-bases-lisas.js?v=2": "../assets/mockups/",
+              "js/personaliza-desktop.js?v=6": "closeLibraryButton?.focus",
+              "js/personaliza.js?v=24": "/productos/personalizables",
               "htmls/carrito de compras.html": "accessibility.css?v=6",
               "htmls/politica de privacidad.html": "accessibility.css?v=6",
               "htmls/preguntas frecuentes.html": "accessibility.css?v=6",
@@ -70,6 +73,17 @@ jobs:
                           if response.status != 200 or substring not in body:
                               raise RuntimeError(f"Unexpected deployed content in {path}")
                           print(f"PASS {path} HTTP {response.status}",flush=True)
+                  # Comprobar el archivo real, no solo el HTML: los mockups
+                  # de PixBen deben existir en Netlify y ser WebP auténticos.
+                  for image_path in ("assets/mockups/clasico-frente-negro.webp",
+                                     "assets/mockups/boxy-frente-arena.webp",
+                                     "assets/mockups/oversize-espalda-beige-claro.webp"):
+                      request=urllib.request.Request(BASE+quote(image_path,safe="/"),headers={"User-Agent":"PixBenNetlifyPostDeployCheck/1.0","Cache-Control":"no-cache"})
+                      with urllib.request.urlopen(request,timeout=15) as response:
+                          image=response.read()
+                          if response.status != 200 or image[:4] != b"RIFF" or image[8:12] != b"WEBP":
+                              raise RuntimeError(f"Mockup WEBP no publicado: {image_path}")
+                          print(f"PASS {image_path} WEBP ({len(image)} bytes)",flush=True)
                   print("NETLIFY_DEPLOY_VERIFIED",flush=True)
                   break
               except Exception as exc:
