@@ -20,6 +20,6 @@ assert.match(worker, /CACHE_IMAGENES/, "Separar caché de imágenes de archivos 
 assert.match(worker, /MAX_RECURSOS_CACHE\s*=\s*100/, "Limitar el crecimiento del almacenamiento offline");
 assert.doesNotMatch(worker, /actualizarEnSegundoPlano\(/,
   "No volver a descargar los mismos recursos tras cada lectura del caché");
-assert.match(worker, /pixben-pwa-v23/, "Renovar la caché PWA en el siguiente despliegue");
+assert.match(worker, /pixben-pwa-v24/, "Renovar la caché PWA en el siguiente despliegue");
 assert.match(netlify, /Content-Security-Policy\s*=/, "Conservar la CSP de Netlify");
 console.log("PASS: selector de productos, caché PWA acotada y CSP conservada");
