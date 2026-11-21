@@ -562,7 +562,7 @@ function renderizarCatalogo() {
                 </div>
                 <div class="producto-info">
                     <span class="producto-categoria">${escaparHtmlSeguro(categoria)}</span>
-                    <h3>${escaparHtmlSeguro(producto.nombre)}</h3>
+                    <h3><a href="detalles-producto.html?id=${encodeURIComponent(identificador)}" class="enlace-producto-seo" style="color:inherit;text-decoration:none">${escaparHtmlSeguro(producto.nombre)}</a></h3>
                     <p class="precio">S/ ${precio}</p>
                 </div>
             </article>`;

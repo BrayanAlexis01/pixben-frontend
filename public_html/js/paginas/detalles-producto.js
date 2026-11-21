@@ -224,8 +224,13 @@ async function cargarProducto() {
         document.title = `${producto.nombre || "Producto personalizado"} | PixBen`;
         const descripcionSeo = document.querySelector('meta[name="description"]');
         if (descripcionSeo) descripcionSeo.content = String(producto.descripcion || `Compra ${producto.nombre} personalizado en PixBen`).slice(0, 155);
-        const canonical = document.querySelector('link[rel="canonical"]');
-        if (canonical) canonical.href = `https://pixben.netlify.app/htmls/detalles-producto.html?id=${encodeURIComponent(id)}`;
+        let canonical = document.querySelector('link[rel="canonical"]');
+        if (!canonical) {
+            canonical = document.createElement("link");
+            canonical.rel = "canonical";
+            document.head.appendChild(canonical);
+        }
+        canonical.href = `https://pixben.netlify.app/htmls/detalles-producto.html?id=${encodeURIComponent(id)}`;
         const ogTitulo = document.querySelector('meta[property="og:title"]');
         if (ogTitulo) ogTitulo.content = `${producto.nombre || "Producto"} | PixBen`;
         const ogImagen = document.querySelector('meta[property="og:image"]');
@@ -233,6 +238,8 @@ async function cargarProducto() {
         const ogUrl = document.querySelector('meta[property="og:url"]');
         const urlProducto = `https://pixben.netlify.app/htmls/detalles-producto.html?id=${encodeURIComponent(id)}`;
         if (ogUrl) ogUrl.content = urlProducto;
+        const ogDescripcion = document.querySelector('meta[property="og:description"]');
+        if (ogDescripcion) ogDescripcion.content = String(producto.descripcion || `Explora ${producto.nombre} en PixBen.`).slice(0, 155);
 
         let datosEstructurados = document.getElementById("seoProductoJsonLd");
         if (!datosEstructurados) {
@@ -249,15 +256,17 @@ async function cargarProducto() {
             image: [obtenerUrlImagen(producto.imagen)],
             ...(producto.sku ? {sku: producto.sku} : {}),
             brand: {"@type": "Brand", name: "PixBen"},
-            offers: {
-                "@type": "Offer",
-                url: urlProducto,
-                priceCurrency: "PEN",
-                price: Number(producto.precio || 0).toFixed(2),
-                availability: Number(producto.stock || 0) > 0
-                        ? "https://schema.org/InStock"
-                        : "https://schema.org/OutOfStock"
-            }
+            ...(producto.precio != null && Number.isFinite(Number(producto.precio)) && Number(producto.precio) > 0 ? {
+                offers: {
+                    "@type": "Offer",
+                    url: urlProducto,
+                    priceCurrency: "PEN",
+                    price: Number(producto.precio).toFixed(2),
+                    availability: Number(producto.stock || 0) > 0
+                            ? "https://schema.org/InStock"
+                            : "https://schema.org/OutOfStock"
+                }
+            } : {})
         });
 
         document.getElementById("stockProducto").textContent = `${producto.stock} unidades`;
