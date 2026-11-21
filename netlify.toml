@@ -54,3 +54,41 @@
   for = "/htmls/registro.html"
   [headers.values]
     Cache-Control = "no-store"
+
+# Sitemap de productos servido por Spring Boot a través del dominio público.
+[[redirects]]
+  from = "/sitemap-productos.xml"
+  to = "https://pixben-backend.onrender.com/seo/sitemap-productos.xml"
+  status = 200
+  force = true
+
+# No indexar páginas privadas, de sesión o de compra.
+[[headers]]
+  for = "/htmls/perfil.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/htmls/favoritos.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/htmls/historial.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/htmls/carrito*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/htmls/login.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/htmls/registro.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
