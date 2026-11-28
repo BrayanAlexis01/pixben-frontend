@@ -1,6 +1,6 @@
 const API_URL = "https://pixben-backend.onrender.com";
 const IMAGEN_FALLBACK = "/imagensponsor/polo-ocean.webp";
-const PIXBEN_WHATSAPP_MAYOR = "51947565664";
+const PIXBEN_WHATSAPP_MAYOR = "51921491541";
 
 function abrirWhatsAppPixBen(mensaje) {
     const url = `https://wa.me/${PIXBEN_WHATSAPP_MAYOR}?text=${encodeURIComponent(mensaje)}`;
